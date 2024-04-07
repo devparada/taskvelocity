@@ -1,0 +1,15 @@
+{
+    "name": "com/daw2",
+    "description": "Gestor de tareas y proyectos",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Com\\Daw2\\": "app/"
+        }
+    },
+    "require": {
+        "steampixel/simple-php-router": "^0.7.1",
+        "vlucas/phpdotenv": "^5.5"
+    }
+}
