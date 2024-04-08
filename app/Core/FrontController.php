@@ -22,6 +22,20 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/usuarios/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->mostrarAdd();
+                }
+                , 'get');
+
+        Route::add('/usuarios/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->procesarAdd();
+                }
+                , 'post');
+
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\Daw2\Controllers\ErroresController();
