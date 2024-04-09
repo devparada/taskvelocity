@@ -10,4 +10,14 @@ class RolModel extends \Com\Daw2\Core\BaseModel {
         $stmt = $this->pdo->query("SELECT * FROM roles");
         return $stmt->fetchAll();
     }
+
+    public function comprobarRol(string $idRol): bool {
+        $stmt = $this->pdo->prepare("SELECT * FROM roles WHERE id_rol = ?");
+        $stmt->execute([$idRol]);
+
+        if (!$stmt->fetch()) {
+            return false;
+        }
+        return true;
+    }
 }

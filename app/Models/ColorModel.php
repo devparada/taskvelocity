@@ -10,4 +10,14 @@ class ColorModel extends \Com\Daw2\Core\BaseModel {
         $stmt = $this->pdo->query("SELECT * FROM colores");
         return $stmt->fetchAll();
     }
+
+    public function comprobarColor($idColor): bool {
+        $stmt = $this->pdo->prepare("SELECT * FROM colores WHERE id_color = ?");
+        $stmt->execute([$idColor]);
+
+        if (!$stmt->fetch()) {
+            return false;
+        }
+        return true;
+    }
 }
