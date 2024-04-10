@@ -68,6 +68,11 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
     }
 
+    public function procesarDelete(int $id) {
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario->deleteUsuario($id);
+    }
+
     private function comprobarAdd(array $data): array {
         $errores = [];
 

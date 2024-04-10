@@ -36,6 +36,13 @@ class FrontController {
                 }
                 , 'post');
 
+        Route::add('/usuarios/delete/([0-9]+)',
+                function ($id) {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->procesarDelete($id);
+                }
+                , 'get');
+
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\Daw2\Controllers\ErroresController();

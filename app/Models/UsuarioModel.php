@@ -48,7 +48,6 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function crearAvatar(string $email): void {
-
         $directorio = "./assets/img/users/";
 
         // Si la carpeta no existe se crea
@@ -76,5 +75,10 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
             // La imagen por defecto se copia con el id del usuario
             copy($directorio . "avatar-default.jpg", $directorioArchivo);
         }
+    }
+
+    public function deleteUsuario(int $idUsuario) {
+        $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+        $stmt->execute([$idUsuario]);
     }
 }
