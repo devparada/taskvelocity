@@ -9,7 +9,7 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <form action="<?php echo $seccion; ?>" method="post">         
+                <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
                     <div class="row">
                         <div class="mb-3 col-sm-4">
                             <label for="username">Nombre de usuario *</label>

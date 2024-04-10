@@ -52,6 +52,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         if (empty($errores)) {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
             if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["idRol"], $datos["fechaNac"], $datos["descripcion"], $datos["idColorFav"])) {
+                $modeloUsuario->crearAvatar($datos["email"]);
                 header("location: /usuarios");
             }
         } else {
@@ -74,12 +75,24 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloRol = new \Com\Daw2\Models\RolModel();
         $modeloColor = new \Com\Daw2\Models\ColorModel();
 
+        define('MB', 1048576);
+
         if (empty($data["username"])) {
             $errores["username"] = "El nombre de usuario no debe estar vacío";
         } else if (!is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
             $errores["username"] = "El nombre de usuario ya existe";
-        } else if (!preg_match("/[A-Za-z0-9]{4,}/", $data["username"])) {
+        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
             $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
+        }
+
+        if (!empty($_FILES["avatar"]["name"])) {
+            if ($_FILES["avatar"]["type"] != "image/jpeg" && $_FILES["avatar"]["type"] != "image/png") {
+                $errores["avatar"] = "Tipo de imagen no aceptado";
+            } else if (getimagesize($_FILES["avatar"]["tmp_name"])[0] > 256 || getimagesize($_FILES["avatar"]["tmp_name"])[1] > 256) {
+                $errores["avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
+            } else if ($_FILES["avatar"]["size"] > 20 * MB) {
+                $errores["avatar"] = "Imagen demasiada pesada";
+            }
         }
 
         if (empty($data["idRol"])) {

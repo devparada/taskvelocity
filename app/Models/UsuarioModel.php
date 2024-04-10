@@ -46,4 +46,35 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
         return false;
     }
+
+    public function crearAvatar(string $email): void {
+
+        $directorio = "./assets/img/users/";
+
+        // Si la carpeta no existe se crea
+        if (!file_exists($directorio)) {
+            mkdir($directorio, 0755, true);
+        }
+
+        $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios us WHERE us.email = ?");
+        $stmt->execute([$email]);
+
+        $usuarioId = $stmt->fetch()["id_usuario"];
+
+        if (!empty($_FILES["avatar"])) {
+            // Si la imagen es subida la extension puede ser jpg o png
+            $directorioArchivo = $directorio . "avatar-" . $usuarioId . "." . pathinfo($_FILES["avatar"]["name"])["extension"];
+        } else {
+            // Si la imagen es por defecto la extension es jpg
+            $directorioArchivo = $directorio . "avatar-" . $usuarioId . ".jpg";
+        }
+
+        if (!empty($_FILES["avatar"])) {
+            // La imagen subida se mueve al directorio y se llama con el id del usuario
+            move_uploaded_file($_FILES["avatar"]["tmp_name"], $directorioArchivo);
+        } else {
+            // La imagen por defecto se copia con el id del usuario
+            copy($directorio . "avatar-default.jpg", $directorioArchivo);
+        }
+    }
 }
