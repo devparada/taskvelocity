@@ -7,40 +7,40 @@
                 </div>
                 <div class="col-6">
                     <div class="m-0 font-weight-bold justify-content-end">
-                        <a href="/tareas/add/" class="btn btn-success ml-1 float-right"> Nueva tarea <i class="fas fa-plus-circle"></i></a>
+                        <a href="/proyectos/add/" class="btn btn-success ml-1 float-right"> Nuevo proyecto <i class="fas fa-plus-circle"></i></a>
                     </div>
                 </div>
             </div>
             <!-- Card Body -->
             <div class="card-body table-responsive" id="card_table">
                 <?php
-                if (count($tareas) > 0) {
+                if (count($proyectos) > 0) {
                     ?>
                     <table id="tabladatos" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Proyecto asociado</th>
+                                <th>Descripcion</th>
                                 <th>Propietario</th>
-                                <th>Color</th>
+                                <th>Fecha límite</th>
                                 <th>Usuarios asociados</th>                    
                                 <th>Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            foreach ($tareas as $t) {
+                            foreach ($proyectos as $p) {
                                 ?>
                                 <tr>
-                                    <td><?php echo $t['nombre_tarea']; ?></td>
-                                    <td><?php echo $t['nombre_proyecto']; ?></a></td>
-                                    <td><?php echo $t['username']; ?></td>  
-                                    <td><?php echo $t['nombre_color']; ?></td>
-                                    <td><?php echo $t["nombresUsuarios"]; ?></td>
+                                    <td><?php echo $p['nombre_proyecto']; ?></td>
+                                    <td><?php echo $p['descripcion_proyecto']; ?></a></td>
+                                    <td><?php echo $p['username']; ?></td>  
+                                    <td><?php echo $p['fecha_limite_proyecto']; ?></td>
+                                    <td><?php echo $p["nombresUsuarios"]; ?></td>
                                     <td>
-                                        <a href="/tareas/view/<?php echo $t['id_tarea']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/tareas/edit/<?php echo $t['id_tarea']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
-                                        <a href="/tareas/delete/<?php echo $t['id_tarea']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
+                                        <a href="/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
+                                        <a href="/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
+                                        <a href="/proyectos/delete/<?php echo $p['id_proyecto']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php
@@ -48,13 +48,13 @@
                             ?>
                         </tbody>
                         <tfoot>
-                        <p>Total de tareas: <?php echo count($tareas); ?></p>
+                        <p>Total de proyectos: <?php echo count($proyectos); ?></p>
                         </tfoot>
                     </table>
                     <?php
                 } else {
                     ?>
-                    <p class="text-danger">No existen tareas que cumplan los requisitos.</p>
+                    <p class="text-danger">No existen proyectos que cumplan los requisitos.</p>
                     <?php
                 }
                 ?>

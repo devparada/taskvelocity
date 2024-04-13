@@ -50,6 +50,13 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/proyectos',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\ProyectosController();
+                    $controlador->mostrarProyectos();
+                }
+                , 'get');
+
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\Daw2\Controllers\ErroresController();

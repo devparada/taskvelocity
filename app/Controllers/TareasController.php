@@ -11,8 +11,8 @@ class TareasController extends \Com\Daw2\Core\BaseController {
         $data['titulo'] = 'Todas las tareas';
         $data['seccion'] = '/tareas';
 
-        $modeloUsuario = new \Com\Daw2\Models\TareasModel();
-        $data['tareas'] = $modeloUsuario->mostrarTareas();
+        $modeloTarea = new \Com\Daw2\Models\TareasModel();
+        $data['tareas'] = $modeloTarea->mostrarTareas();
 
         $this->view->showViews(array('templates/header.view.php', 'tareas.view.php', 'templates/footer.view.php'), $data);
     }
