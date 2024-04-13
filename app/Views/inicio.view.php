@@ -2,13 +2,13 @@
 <div class="row">
     <div class="col-lg col-12">
         <!-- small box -->
-        <div class="small-box bg-info">
+        <div class="small-box bg-purple">
             <div class="inner">
                 <h3><?php echo $numProyectos; ?></h3>
                 <p>Proyectos</p>
             </div>
             <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="ion ion-folder"></i>
             </div>
             <a href="/proyectos" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
         </div>
@@ -16,7 +16,7 @@
     <!-- ./col -->
     <div class="col-lg col-12">
         <!-- small box -->
-        <div class="small-box bg-success">
+        <div class="small-box bg-green">
             <div class="inner">
                 <h3><?php echo $numTareas; ?></h3>
                 <p>Tareas</p>
@@ -30,7 +30,7 @@
     <!-- ./col -->
     <div class="col-lg col-12">
         <!-- small box -->
-        <div class="small-box bg-warning">
+        <div class="small-box bg-info">
             <div class="inner">
                 <h3><?php echo $numUsuarios; ?></h3>
                 <p>Usuarios</p>

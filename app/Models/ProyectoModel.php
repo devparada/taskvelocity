@@ -36,6 +36,11 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
+    public function contador(): int {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
+        return $stmt->fetchColumn();
+    }
+
     public function deleteProyecto(int $idProyecto): void {
         $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
         $stmt->execute([$idProyecto]);

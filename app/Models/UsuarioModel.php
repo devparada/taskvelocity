@@ -77,6 +77,11 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    public function contador(): int {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
+        return $stmt->fetchColumn();
+    }
+
     public function deleteUsuario(int $idUsuario) {
         $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);

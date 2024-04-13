@@ -9,11 +9,14 @@ class InicioController extends \Com\Daw2\Core\BaseController {
             'titulo' => 'Página de inicio',
             'breadcrumb' => ['Inicio']
         );
-        $data['numProyectos'] = 1;
+        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $data['numProyectos'] = $modeloProyecto->contador();
 
-        $data['numTareas'] = 2;
+        $modeloTareas = new \Com\Daw2\Models\TareaModel();
+        $data['numTareas'] = $modeloTareas->contador();
 
-        $data['numUsuarios'] = 3;
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $data['numUsuarios'] = $modeloUsuario->contador();
 
         $this->view->showViews(array('templates/header.view.php', 'inicio.view.php', 'templates/footer.view.php'), $data);
     }
