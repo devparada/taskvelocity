@@ -37,9 +37,9 @@ class FrontController {
                 , 'post');
 
         Route::add('/usuarios/delete/([0-9]+)',
-                function ($id) {
+                function ($idUsuario) {
                     $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->procesarDelete($id);
+                    $controlador->procesarDelete($idUsuario);
                 }
                 , 'get');
 
@@ -50,10 +50,24 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/tareas/delete/([0-9]+)',
+                function ($idTarea) {
+                    $controlador = new \Com\Daw2\Controllers\TareaController();
+                    $controlador->procesarDelete($idTarea);
+                }
+                , 'get');
+
         Route::add('/proyectos',
                 function () {
                     $controlador = new \Com\Daw2\Controllers\ProyectoController();
                     $controlador->mostrarProyectos();
+                }
+                , 'get');
+
+        Route::add('/proyectos/delete/([0-9]+)',
+                function ($idProyecto) {
+                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                    $controlador->procesarDelete($idProyecto);
                 }
                 , 'get');
 

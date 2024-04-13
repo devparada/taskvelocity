@@ -35,4 +35,9 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
         return $usuarios;
     }
+
+    public function deleteTarea(int $idTarea): void {
+        $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
+        $stmt->execute([$idTarea]);
+    }
 }

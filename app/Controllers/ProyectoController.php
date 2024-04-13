@@ -16,4 +16,10 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
         $this->view->showViews(array('templates/header.view.php', 'proyectos.view.php', 'templates/footer.view.php'), $data);
     }
+
+    public function procesarDelete(int $idProyecto) {
+        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto->deleteProyecto($idProyecto);
+        header("location: /proyectos");
+    }
 }
