@@ -36,7 +36,15 @@
                                     <td><?php echo $p['descripcion_proyecto']; ?></a></td>
                                     <td><?php echo $p['username']; ?></td>  
                                     <td><?php echo $p['fecha_limite_proyecto']; ?></td>
-                                    <td><?php echo $p["nombresUsuarios"]; ?></td>
+                                    <td><?php
+                                        for ($index = 0; $index < count($p["nombresUsuarios"]); $index++) {
+                                            if ($index < 3) {
+                                                echo $p["nombresUsuarios"][$index];
+                                            } else if ($index == 3) {
+                                                echo "...";
+                                            }
+                                        }
+                                        ?></td>
                                     <td>
                                         <a href="/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
                                         <a href="/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>

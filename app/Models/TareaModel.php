@@ -14,22 +14,23 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
         for ($i = 0; $i < count($datos); $i++) {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
-                $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario "
-                        . "WHERE id_tareaTAsoc =" . $datos[$i]["id_tareaTAsoc"]);
+                $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
+                        . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
+                        . " WHERE id_tareaTAsoc =" . $datos[$i]["id_tareaTAsoc"]);
 
                 $usuariosTareas = $stmt->fetchAll();
 
-                $datos[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas, $datos);
+                $datos[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
             }
         }
         return $datos;
     }
 
-    private function mostrarUsernamesTarea(array $usuariosTareas): string {
-        $usuarios = "";
+    private function mostrarUsernamesTarea(array $usuariosTareas): array {
+        $usuarios = [];
 
-        foreach ($usuariosTareas as $usuariosTarea) {
-            $usuarios .= $usuariosTarea["username"] . " ";
+        for ($index = 0; $index < count($usuariosTareas); $index++) {
+            $usuarios[$index] = $usuariosTareas[$index]["username"] . " ";
         }
 
         return $usuarios;

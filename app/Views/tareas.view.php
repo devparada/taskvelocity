@@ -36,8 +36,15 @@
                                     <td><?php echo $t['nombre_proyecto']; ?></a></td>
                                     <td><?php echo $t['username']; ?></td>  
                                     <td><?php echo $t['nombre_color']; ?></td>
-                                    <td><?php echo $t["nombresUsuarios"]; ?></td>
-                                    <td>
+                                    <td><?php
+                                        for ($index = 0; $index < count($t["nombresUsuarios"]); $index++) {
+                                            if ($index < 3) {
+                                                echo $t["nombresUsuarios"][$index];
+                                            } else if ($index == 3) {
+                                                echo "...";
+                                            }
+                                        }
+                                        ?></td>                                    <td>
                                         <a href="/tareas/view/<?php echo $t['id_tarea']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
                                         <a href="/tareas/edit/<?php echo $t['id_tarea']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
                                         <a href="/tareas/delete/<?php echo $t['id_tarea']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
