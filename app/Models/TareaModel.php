@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Com\Daw2\Models;
 
-class TareasModel extends \Com\Daw2\Core\BaseModel {
+class TareaModel extends \Com\Daw2\Core\BaseModel {
 
     public function mostrarTareas(): array {
         $stmt = $this->pdo->query("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "

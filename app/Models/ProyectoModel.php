@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Com\Daw2\Models;
 
-class ProyectosModel extends \Com\Daw2\Core\BaseModel {
+class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
     public function mostrarProyectos(): array {
         $stmt = $this->pdo->query("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"

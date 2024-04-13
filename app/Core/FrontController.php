@@ -45,14 +45,14 @@ class FrontController {
 
         Route::add('/tareas',
                 function () {
-                    $controlador = new \Com\Daw2\Controllers\TareasController();
+                    $controlador = new \Com\Daw2\Controllers\TareaController();
                     $controlador->mostrarTareas();
                 }
                 , 'get');
 
         Route::add('/proyectos',
                 function () {
-                    $controlador = new \Com\Daw2\Controllers\ProyectosController();
+                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
                     $controlador->mostrarProyectos();
                 }
                 , 'get');
