@@ -43,6 +43,13 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/tareas',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\TareasController();
+                    $controlador->mostrarTareas();
+                }
+                , 'get');
+
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\Daw2\Controllers\ErroresController();
