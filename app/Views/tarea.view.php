@@ -55,7 +55,8 @@
                                                 echo "...";
                                             }
                                         }
-                                        ?></td>                                    <td>
+                                        ?></td>  
+                                    <td>
                                         <a href="/tareas/view/<?php echo $t['id_tarea']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
                                         <a href="/tareas/edit/<?php echo $t['id_tarea']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
                                         <a href="/tareas/delete/<?php echo $t['id_tarea']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>

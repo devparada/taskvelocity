@@ -29,7 +29,6 @@ class TareaController extends \Com\Daw2\Core\BaseController {
             $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " no ha sido eliminado correctamente";
         }
 
-        $data = [];
         $data['titulo'] = 'Todas las tareas';
         $data['seccion'] = '/tareas';
 
