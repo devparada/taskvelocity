@@ -1,4 +1,15 @@
 <div class="row">           
+    <?php
+    if (isset($informacion)) {
+        ?>
+        <div class="col-12">
+            <div class="alert alert-<?php echo $informacion["estado"]; ?>">
+                <p><?php echo $informacion["texto"]; ?></p>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
     <div class="col-12">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">

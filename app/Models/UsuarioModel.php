@@ -11,6 +11,19 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    public function buscarUsuarioPorId(int $idUsuario): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE id_usuario = ?");
+        $stmt->execute([$idUsuario]);
+
+        $usuarioEncontrado = $stmt->fetch();
+
+        if ($usuarioEncontrado) {
+            return $usuarioEncontrado;
+        } else {
+            return null;
+        }
+    }
+
     public function buscarUsuarioPorUsername(string $username): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE username = ?");
         $stmt->execute([$username]);
@@ -77,13 +90,40 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    public function eliminarAvatar(int $idUsuario): bool {
+        $directorio = "./assets/img/users/";
+
+        $imagen = $directorio . "avatar-" . $idUsuario . ".";
+
+        // Para obtener la extension de la imagen se comprueba si es png o jpg
+        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
+
+        $imagenRuta = $imagen . $extension;
+
+        // Si se puede escribir o borrar la imagen
+        if (is_writable($imagenRuta)) {
+            // Se borra la imagen
+            unlink($imagenRuta);
+            return true;
+        }
+
+        return false;
+    }
+
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
         return $stmt->fetchColumn();
     }
 
-    public function deleteUsuario(int $idUsuario) {
-        $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
-        $stmt->execute([$idUsuario]);
+    public function deleteUsuario(int $idUsuario): bool {
+        if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
+            $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+            $stmt->execute([$idUsuario]);
+            if ($this->eliminarAvatar($idUsuario)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -36,13 +36,33 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
+    public function buscarProyectoPorId(int $idProyecto): ?array {
+        $stmt = $this->pdo->prepare("SELECT * FROM proyectos pr LEFT JOIN usuarios us"
+                . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
+                . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ?");
+        $stmt->execute([$idProyecto]);
+
+        $usuarioEncontrado = $stmt->fetch();
+
+        if ($usuarioEncontrado) {
+            return $usuarioEncontrado;
+        } else {
+            return null;
+        }
+    }
+
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
         return $stmt->fetchColumn();
     }
 
-    public function deleteProyecto(int $idProyecto): void {
-        $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
-        $stmt->execute([$idProyecto]);
+    public function deleteProyecto(int $idProyecto): bool {
+        if (!is_null($this->buscarProyectoPorId($idProyecto))) {
+            $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
+            $stmt->execute([$idProyecto]);
+            return true;
+        }
+
+        return false;
     }
 }

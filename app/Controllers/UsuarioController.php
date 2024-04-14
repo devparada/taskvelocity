@@ -68,10 +68,24 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarDelete(int $idUsuario) {
+    public function procesarDelete(int $idUsuario): void {
+        $data = [];
+
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
-        $modeloUsuario->deleteUsuario($idUsuario);
-        header("location: /usuarios");
+        if ($modeloUsuario->deleteUsuario($idUsuario)) {
+            $data["informacion"]["estado"] = "success";
+            $data["informacion"]["texto"] = "El usuario con el id " . $idUsuario . " ha sido eliminado correctamente";
+        } else {
+            $data["informacion"]["estado"] = "danger";
+            $data["informacion"]["texto"] = "El usuario con el id " . $idUsuario . " no ha sido eliminado correctamente";
+        }
+
+        $data['titulo'] = 'Todos los usuarios';
+        $data['seccion'] = '/usuarios';
+
+        $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
+
+        $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
     }
 
     private function comprobarAdd(array $data): array {
