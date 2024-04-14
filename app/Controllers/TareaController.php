@@ -14,7 +14,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $modeloTarea = new \Com\Daw2\Models\TareaModel();
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
-        $this->view->showViews(array('templates/header.view.php', 'tareas.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('templates/header.view.php', 'tarea.view.php', 'templates/footer.view.php'), $data);
     }
 
     public function procesarDelete(int $idTarea) {
@@ -35,6 +35,6 @@ class TareaController extends \Com\Daw2\Core\BaseController {
 
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
-        $this->view->showViews(array('templates/header.view.php', 'tareas.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('templates/header.view.php', 'tarea.view.php', 'templates/footer.view.php'), $data);
     }
 }

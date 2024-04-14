@@ -14,7 +14,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $this->view->showViews(array('templates/header.view.php', 'proyectos.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('templates/header.view.php', 'proyecto.view.php', 'templates/footer.view.php'), $data);
     }
 
     public function procesarDelete(int $idProyecto) {
@@ -34,6 +34,6 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $this->view->showViews(array('templates/header.view.php', 'proyectos.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('templates/header.view.php', 'proyecto.view.php', 'templates/footer.view.php'), $data);
     }
 }
