@@ -36,6 +36,13 @@ class FrontController {
                 }
                 , 'post');
 
+        Route::add('/usuarios/view/([0-9]+)',
+                function ($idUsuario) {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->verUsuario($idUsuario);
+                }
+                , 'get');
+
         Route::add('/usuarios/delete/([0-9]+)',
                 function ($idUsuario) {
                     $controlador = new \Com\Daw2\Controllers\UsuarioController();

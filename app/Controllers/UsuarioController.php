@@ -40,8 +40,9 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         unset($_POST["enviar"]);
 
-        if ($_POST["idColorFav"] == "") {
-            $_POST["idColorFav"] = "1";
+        // Si id_color está vacio se añade el 1 que es el color por defecto
+        if ($_POST["id_color"] == "") {
+            $_POST["id_color"] = "1";
         }
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -51,7 +52,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         if (empty($errores)) {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
-            if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["idRol"], $datos["fechaNac"], $datos["descripcion"], $datos["idColorFav"])) {
+            if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
                 $modeloUsuario->crearAvatar($datos["email"]);
                 header("location: /usuarios");
             }
@@ -66,6 +67,25 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
             $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
         }
+    }
+
+    public function verUsuario(int $idUsuario): void {
+        $data = [];
+        $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
+        $data['seccion'] = '/usuarios/view/' . $idUsuario;
+        $data['tituloDiv'] = 'Ver usuario';
+
+        $modeloRol = new \Com\Daw2\Models\RolModel();
+        $data["roles"] = $modeloRol->mostrarRoles();
+
+        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $data["colores"] = $modeloColor->mostrarColores();
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+        $data["modoVer"] = true;
+
+        $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
     }
 
     public function procesarDelete(int $idUsuario): void {
@@ -115,12 +135,12 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             }
         }
 
-        if (empty($data["idRol"])) {
-            $errores["idRol"] = "Debes seleccionar un rol";
-        } else if (!filter_var($data["idRol"], FILTER_VALIDATE_INT)) {
-            $errores["idRol"] = "El rol debe ser un número";
-        } else if (!$modeloRol->comprobarRol($data["idRol"])) {
-            $errores["idRol"] = "Debes seleccionar un rol válido";
+        if (empty($data["id_rol"])) {
+            $errores["id_rol"] = "Debes seleccionar un rol";
+        } else if (!filter_var($data["id_rol"], FILTER_VALIDATE_INT)) {
+            $errores["id_rol"] = "El rol debe ser un número";
+        } else if (!$modeloRol->comprobarRol($data["id_rol"])) {
+            $errores["id_rol"] = "Debes seleccionar un rol válido";
         }
 
         if (empty($data["email"])) {
@@ -147,16 +167,16 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             }
         }
 
-        if (empty($data["fechaNac"])) {
+        if (empty($data["fecha_nacimiento"])) {
             $errores["fechaNac"] = "La fecha de nacimiento no debe estar vacía";
-        } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fechaNac"])) {
-            $errores["fechaNac"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
+        } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
+            $errores["fecha_nacimiento"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
         }
 
-        if (!filter_var($data["idColorFav"], FILTER_VALIDATE_INT)) {
-            $errores["idColorFav"] = "El color debe ser un número";
-        } else if (!empty($data["idColorFav"]) && !$modeloColor->comprobarColor($data["idColorFav"])) {
-            $errores["idColorFav"] = "Debes seleccionar un color válido";
+        if (!filter_var($data["id_color"], FILTER_VALIDATE_INT)) {
+            $errores["id_color"] = "El color debe ser un número";
+        } else if (!empty($data["id_color"]) && !$modeloColor->comprobarColor($data["id_color"])) {
+            $errores["id_color"] = "Debes seleccionar un color válido";
         }
 
         return $errores;

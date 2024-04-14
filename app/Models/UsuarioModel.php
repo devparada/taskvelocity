@@ -50,11 +50,11 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    public function addUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColorFav): bool {
+    public function addUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor): bool {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios (id_usuario, username, password, email, id_rol, fecha_nacimiento, fecha_login, 
             descripcion_usuario, id_color_favorito) VALUES (0, ?, ?, ?, ?, ?, NULL, ?, ?)");
 
-        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColorFav])) {
+        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor])) {
             return true;
         }
         return false;
@@ -73,7 +73,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
 
         $usuarioId = $stmt->fetch()["id_usuario"];
 
-        if (!empty($_FILES["avatar"])) {
+        if (!empty($_FILES["avatar"]["name"])) {
             // Si la imagen es subida la extension puede ser jpg o png
             $directorioArchivo = $directorio . "avatar-" . $usuarioId . "." . pathinfo($_FILES["avatar"]["name"])["extension"];
         } else {
@@ -81,7 +81,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
             $directorioArchivo = $directorio . "avatar-" . $usuarioId . ".jpg";
         }
 
-        if (!empty($_FILES["avatar"])) {
+        if (!empty($_FILES["avatar"]["name"])) {
             // La imagen subida se mueve al directorio y se llama con el id del usuario
             move_uploaded_file($_FILES["avatar"]["tmp_name"], $directorioArchivo);
         } else {
