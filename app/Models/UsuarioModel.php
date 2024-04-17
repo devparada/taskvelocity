@@ -60,6 +60,16 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
+    public function editUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
+        $stmt = $this->pdo->prepare("UPDATE usuarios SET username=?, password=?, email=?, id_rol=?, fecha_nacimiento=?, "
+                . "fecha_login=current_timestamp(), descripcion_usuario=?, id_color_favorito=? WHERE id_usuario=?");
+
+        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
+            return true;
+        }
+        return false;
+    }
+
     public function crearAvatar(string $email): void {
         $directorio = "./assets/img/users/";
 
@@ -88,6 +98,30 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
             // La imagen por defecto se copia con el id del usuario
             copy($directorio . "avatar-default.jpg", $directorioArchivo);
         }
+    }
+
+    public function updateAvatar(int $idUsuario): bool {
+        $directorio = "./assets/img/users/";
+
+        $imagen = $directorio . "avatar-" . $idUsuario . ".";
+
+        // Para obtener la extension de la imagen se comprueba si es png o jpg
+        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
+
+        $imagenRuta = $imagen . $extension;
+
+        // Si se puede escribir o borrar la imagen
+        if (is_writable($directorio)) {
+            if (file_exists($imagenRuta)) {
+                // Se borra la imagen
+                unlink($imagenRuta);
+            }
+
+            move_uploaded_file($_FILES["avatar"]["tmp_name"], $imagenRuta);
+            return true;
+        }
+
+        return false;
     }
 
     public function eliminarAvatar(int $idUsuario): bool {

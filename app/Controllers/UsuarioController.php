@@ -69,6 +69,67 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
     }
 
+    public function mostrarEdit(int $idUsuario) {
+        $data = [];
+        $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
+        $data['seccion'] = '/usuarios/edit/' . $idUsuario;
+        $data['tituloDiv'] = 'Editar usuario';
+
+        $modeloRol = new \Com\Daw2\Models\RolModel();
+        $data["roles"] = $modeloRol->mostrarRoles();
+
+        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $data["colores"] = $modeloColor->mostrarColores();
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+
+        $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+    }
+
+    public function procesarEdit(int $idUsuario) {
+        $data = [];
+        $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
+        $data['seccion'] = '/usuarios/edit/' . $idUsuario;
+        $data['tituloDiv'] = 'Editar usuario';
+
+        unset($_POST["enviar"]);
+
+        // Si id_color está vacio se añade el 1 que es el color por defecto
+        if ($_POST["id_color"] == "") {
+            $_POST["id_color"] = "1";
+        }
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
+        $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+        $datos["contrasena"] = $modeloUsuario->buscarUsuarioPorId($idUsuario)["password"];
+        $data["datos"] = $datos;
+
+        $errores = $this->comprobarEdit($datos);
+
+        if (empty($errores)) {
+            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
+            if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
+                if (!is_null($_FILES["avatar"]["name"])) {
+                    $modeloUsuario->updateAvatar($idUsuario);
+                }
+                header("location: /usuarios");
+            }
+        } else {
+            $modeloRol = new \Com\Daw2\Models\RolModel();
+            $data["roles"] = $modeloRol->mostrarRoles();
+
+            $modeloColor = new \Com\Daw2\Models\ColorModel();
+            $data["colores"] = $modeloColor->mostrarColores();
+
+            $data["errores"] = $errores;
+
+            $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+        }
+    }
+
     public function verUsuario(int $idUsuario): void {
         $data = [];
         $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
@@ -106,6 +167,12 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
         $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
+    }
+
+    private function comprobarEdit(array $data): array {
+        $errores = [];
+
+        return $errores;
     }
 
     private function comprobarAdd(array $data): array {

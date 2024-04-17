@@ -43,6 +43,20 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/usuarios/edit/([0-9]+)',
+                function ($idUsuario) {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->mostrarEdit($idUsuario);
+                }
+                , 'get');
+
+        Route::add('/usuarios/edit/([0-9]+)',
+                function ($idUsuario) {
+                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                    $controlador->procesarEdit($idUsuario);
+                }
+                , 'post');
+
         Route::add('/usuarios/delete/([0-9]+)',
                 function ($idUsuario) {
                     $controlador = new \Com\Daw2\Controllers\UsuarioController();
