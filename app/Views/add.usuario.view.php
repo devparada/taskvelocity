@@ -12,7 +12,7 @@
                     <div class="row">
                         <div class="mb-3 col-sm-4">
                             <label for="username">Nombre de usuario *</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduzca un username" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?> >
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduzca un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['username']) ? $errores['username'] : ''; ?></p>
                         </div>
 
@@ -60,7 +60,7 @@
                         <div class="mb-3 col-sm-3">
                             <label for="id_color">Color favorito</label>
                             <select class="form-control" id="id_color" name="id_color"  <?php echo isset($modoVer) ? "disabled" : "" ?>>
-                                <option value=""></option>
+                                <option value="">Selecciona un color</option>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color"]) && $color["id_color"] == $datos["id_color"] ? "selected" : "" ?>><?php echo $color["nombre_color"]; ?></option>
                                 <?php } ?>

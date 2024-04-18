@@ -6,6 +6,8 @@ namespace Com\Daw2\Controllers;
 
 class UsuarioController extends \Com\Daw2\Core\BaseController {
 
+    private const MB = 1048576;
+
     public function mostrarUsuarios() {
         $data = [];
         $data['titulo'] = 'Todos los usuarios';
@@ -84,6 +86,8 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
+        $data["modoEdit"] = true;
+
         $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
     }
 
@@ -103,8 +107,10 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
-        $datos["contrasena"] = $modeloUsuario->buscarUsuarioPorId($idUsuario)["password"];
+
         $data["datos"] = $datos;
+
+        $data["modoEdit"] = true;
 
         $errores = $this->comprobarEdit($datos);
 
@@ -153,6 +159,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data = [];
 
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
         if ($modeloUsuario->deleteUsuario($idUsuario)) {
             $data["informacion"]["estado"] = "success";
             $data["informacion"]["texto"] = "El usuario con el id " . $idUsuario . " ha sido eliminado correctamente";
@@ -169,35 +176,20 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
     }
 
-    private function comprobarEdit(array $data): array {
+    private function comprobarComun(array $data): array {
         $errores = [];
 
-        return $errores;
-    }
-
-    private function comprobarAdd(array $data): array {
-        $errores = [];
-
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $modeloRol = new \Com\Daw2\Models\RolModel();
         $modeloColor = new \Com\Daw2\Models\ColorModel();
 
-        define('MB', 1048576);
-
-        if (empty($data["username"])) {
-            $errores["username"] = "El nombre de usuario no debe estar vacío";
-        } else if (!is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
-            $errores["username"] = "El nombre de usuario ya existe";
-        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
-            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
-        }
+        $dimensionesAvatar = 256;
 
         if (!empty($_FILES["avatar"]["name"])) {
             if ($_FILES["avatar"]["type"] != "image/jpeg" && $_FILES["avatar"]["type"] != "image/png") {
                 $errores["avatar"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["avatar"]["tmp_name"])[0] > 256 || getimagesize($_FILES["avatar"]["tmp_name"])[1] > 256) {
+            } else if (getimagesize($_FILES["avatar"]["tmp_name"])[0] > $dimensionesAvatar || getimagesize($_FILES["avatar"]["tmp_name"])[1] > $dimensionesAvatar) {
                 $errores["avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
-            } else if ($_FILES["avatar"]["size"] > 20 * MB) {
+            } else if ($_FILES["avatar"]["size"] > 10 * self::MB) {
                 $errores["avatar"] = "Imagen demasiada pesada";
             }
         }
@@ -208,6 +200,60 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             $errores["id_rol"] = "El rol debe ser un número";
         } else if (!$modeloRol->comprobarRol($data["id_rol"])) {
             $errores["id_rol"] = "Debes seleccionar un rol válido";
+        }
+
+        if (empty($data["fecha_nacimiento"])) {
+            $errores["fechaNac"] = "La fecha de nacimiento no debe estar vacía";
+        } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
+            $errores["fecha_nacimiento"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
+        }
+
+        if (!filter_var($data["id_color"], FILTER_VALIDATE_INT)) {
+            $errores["id_color"] = "El color debe ser un número";
+        } else if (!empty($data["id_color"]) && !$modeloColor->comprobarColor($data["id_color"])) {
+            $errores["id_color"] = "Debes seleccionar un color válido";
+        }
+
+        return $errores;
+    }
+
+    private function comprobarEdit(array $data): array {
+        $errores = $this->comprobarComun($data);
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
+        if (!is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"])) && $data["email"] != $modeloUsuario->buscarUsuarioPorEmail($data["email"])["email"]) {
+            $errores["email"] = "El email ya existe";
+        }
+
+        if (!empty($data["contrasena"]) && !preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,15}$/", $data["contrasena"])) {
+            $errores["contrasena"] = "La contraseña no cumple los mínimos. Tiene que contener 1 letra mayúscula, 1 minúscula y 1 número. Mínimo 8 caracteres";
+        }
+
+        if (!empty($data["contrasena"]) && empty($data["confirmarContrasena"])) {
+            $errores["confirmarContrasena"] = "La confirmación de la contraseña no debe estar vacía";
+        }
+
+        if (!empty($data["contrasena"]) && !empty($data["confirmarContrasena"])) {
+            if ($data["contrasena"] != $data["confirmarContrasena"]) {
+                $errores["confirmarContrasena"] = "La contraseña y la confirmación de la contraseña debe ser la misma";
+            }
+        }
+
+        return $errores;
+    }
+
+    private function comprobarAdd(array $data): array {
+        $errores = $this->comprobarComun($data);
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
+        if (empty($data["username"])) {
+            $errores["username"] = "El nombre de usuario no debe estar vacío";
+        } else if (!is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
+            $errores["username"] = "El nombre de usuario ya existe";
+        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
+            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
         }
 
         if (empty($data["email"])) {
@@ -232,18 +278,6 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             if ($data["contrasena"] != $data["confirmarContrasena"]) {
                 $errores["confirmarContrasena"] = "La contraseña y la confirmación de la contraseña debe ser la misma";
             }
-        }
-
-        if (empty($data["fecha_nacimiento"])) {
-            $errores["fechaNac"] = "La fecha de nacimiento no debe estar vacía";
-        } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
-            $errores["fecha_nacimiento"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
-        }
-
-        if (!filter_var($data["id_color"], FILTER_VALIDATE_INT)) {
-            $errores["id_color"] = "El color debe ser un número";
-        } else if (!empty($data["id_color"]) && !$modeloColor->comprobarColor($data["id_color"])) {
-            $errores["id_color"] = "Debes seleccionar un color válido";
         }
 
         return $errores;
