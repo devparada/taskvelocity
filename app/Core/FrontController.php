@@ -71,6 +71,20 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/tareas/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\TareaController();
+                    $controlador->mostrarAdd();
+                }
+                , 'get');
+
+        Route::add('/tareas/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\TareaController();
+                    $controlador->procesarAdd();
+                }
+                , 'post');
+
         Route::add('/tareas/delete/([0-9]+)',
                 function ($idTarea) {
                     $controlador = new \Com\Daw2\Controllers\TareaController();

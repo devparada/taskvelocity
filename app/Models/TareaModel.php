@@ -51,6 +51,35 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, array $id_usuarios_asociados, string $descripcionTarea): bool {
+        $stmt = $this->pdo->prepare("INSERT INTO tareas "
+                . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite, id_usuario_tarea_prop, id_proyecto) "
+                . "VALUES (?, ?, ?, ?, ?, ?)");
+
+        // Si la fecha límite no se especifica se cambia por null
+        if ($fechaLimite == "") {
+            $fechaLimite = null;
+        }
+
+        if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, 1, $idProyecto])) {
+            // Se consigue el id de la tarea debido a que es la última tarea insertada
+            $idTarea = $this->pdo->lastInsertId();
+            $this->addTareaUsuarios($id_usuarios_asociados, $idTarea);
+            // $this->crearImagen($idTarea);
+            return true;
+        }
+        return false;
+    }
+
+    private function addTareaUsuarios(array $idUsuarios, string $idTarea): void {
+        foreach ($idUsuarios as $idUsuario) {
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+                    . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+
+            $stmt->execute([$idUsuario, $idTarea]);
+        }
+    }
+
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM tareas");
         return $stmt->fetchColumn();
