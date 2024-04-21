@@ -50,6 +50,24 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    /**
+     * Comprueba si los datos introducidos en el login existen en un usuario y hace login en caso afirmativo
+     * @param string $email El email introducido
+     * @param string $password La contraseña introducida
+     * @return bool Retorna true si se hace el login o false si no
+     */
+    public function procesarLogin(string $email, string $password): bool {
+        $usuarioEncontrado = $this->buscarUsuarioPorEmail($email);
+
+        if (!is_null($usuarioEncontrado)) {
+            if ($email == $usuarioEncontrado["email"] && password_verify($password, $usuarioEncontrado["password"])) {
+                $_SESSION["usuario"] = $usuarioEncontrado;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function addUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor): bool {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios (id_usuario, username, password, email, id_rol, fecha_nacimiento, fecha_login, 
             descripcion_usuario, id_color_favorito) VALUES (0, ?, ?, ?, ?, ?, NULL, ?, ?)");

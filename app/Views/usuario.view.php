@@ -46,8 +46,8 @@
                                     <td><img src="assets/img/users/avatar-<?php echo $u['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $u["id_usuario"] . ".png") ? "png" : "jpg" ?>" alt="Avatar usuario <?php echo $u['id_usuario'] ?>"></td>
                                     <td><?php echo $u['username']; ?></td>
                                     <td><a href="mailto: <?php echo $u['email']; ?>"><?php echo $u['email']; ?></a></td>
-                                    <td><?php echo $u['nombre_rol']; ?></td>  
-                                    <td><?php echo $u['fecha_login']; ?></td>                
+                                    <td><?php echo $u['nombre_rol']; ?></td>
+                                    <td><?php echo $u['fecha_login']; ?></td>
                                     <td>
                                         <a href="/usuarios/view/<?php echo $u['id_usuario']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
                                         <a href="/usuarios/edit/<?php echo $u['id_usuario']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>

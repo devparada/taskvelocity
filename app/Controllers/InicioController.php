@@ -20,4 +20,13 @@ class InicioController extends \Com\Daw2\Core\BaseController {
 
         $this->view->showViews(array('templates/header.view.php', 'inicio.view.php', 'templates/footer.view.php'), $data);
     }
+
+    /**
+     * Cierra la sesión del usuario
+     * @return void
+     */
+    public function logout(): void {
+        session_destroy();
+        header("location: /");
+    }
 }

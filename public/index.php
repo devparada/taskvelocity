@@ -1,6 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-        
+session_start();
+
 try{
     $dotenv = Dotenv\Dotenv::createImmutable('../');
     $dotenv->load();

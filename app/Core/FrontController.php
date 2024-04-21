@@ -8,118 +8,140 @@ class FrontController {
 
     static function main() {
 
-        Route::add('/',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\InicioController();
-                    $controlador->index();
-                }
-                , 'get');
+        if (isset($_SESSION["usuario"])) {
+            Route::add('/',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\InicioController();
+                        $controlador->index();
+                    }
+                    , 'get');
 
-        Route::add('/usuarios',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->mostrarUsuarios();
-                }
-                , 'get');
+            Route::add('/logout',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\InicioController();
+                        $controlador->logout();
+                    }
+                    , 'get');
 
-        Route::add('/usuarios/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->mostrarAdd();
-                }
-                , 'get');
+            Route::add('/usuarios',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->mostrarUsuarios();
+                    }
+                    , 'get');
 
-        Route::add('/usuarios/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->procesarAdd();
-                }
-                , 'post');
+            Route::add('/usuarios/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->mostrarAdd();
+                    }
+                    , 'get');
 
-        Route::add('/usuarios/view/([0-9]+)',
-                function ($idUsuario) {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->verUsuario($idUsuario);
-                }
-                , 'get');
+            Route::add('/usuarios/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->procesarAdd();
+                    }
+                    , 'post');
 
-        Route::add('/usuarios/edit/([0-9]+)',
-                function ($idUsuario) {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->mostrarEdit($idUsuario);
-                }
-                , 'get');
+            Route::add('/usuarios/view/([0-9]+)',
+                    function ($idUsuario) {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->verUsuario($idUsuario);
+                    }
+                    , 'get');
 
-        Route::add('/usuarios/edit/([0-9]+)',
-                function ($idUsuario) {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->procesarEdit($idUsuario);
-                }
-                , 'post');
+            Route::add('/usuarios/edit/([0-9]+)',
+                    function ($idUsuario) {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->mostrarEdit($idUsuario);
+                    }
+                    , 'get');
 
-        Route::add('/usuarios/delete/([0-9]+)',
-                function ($idUsuario) {
-                    $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                    $controlador->procesarDelete($idUsuario);
-                }
-                , 'get');
+            Route::add('/usuarios/edit/([0-9]+)',
+                    function ($idUsuario) {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->procesarEdit($idUsuario);
+                    }
+                    , 'post');
 
-        Route::add('/tareas',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\TareaController();
-                    $controlador->mostrarTareas();
-                }
-                , 'get');
+            Route::add('/usuarios/delete/([0-9]+)',
+                    function ($idUsuario) {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->procesarDelete($idUsuario);
+                    }
+                    , 'get');
 
-        Route::add('/tareas/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\TareaController();
-                    $controlador->mostrarAdd();
-                }
-                , 'get');
+            Route::add('/tareas',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\TareaController();
+                        $controlador->mostrarTareas();
+                    }
+                    , 'get');
 
-        Route::add('/tareas/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\TareaController();
-                    $controlador->procesarAdd();
-                }
-                , 'post');
+            Route::add('/tareas/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\TareaController();
+                        $controlador->mostrarAdd();
+                    }
+                    , 'get');
 
-        Route::add('/tareas/delete/([0-9]+)',
-                function ($idTarea) {
-                    $controlador = new \Com\Daw2\Controllers\TareaController();
-                    $controlador->procesarDelete($idTarea);
-                }
-                , 'get');
+            Route::add('/tareas/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\TareaController();
+                        $controlador->procesarAdd();
+                    }
+                    , 'post');
 
-        Route::add('/proyectos',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                    $controlador->mostrarProyectos();
-                }
-                , 'get');
+            Route::add('/tareas/delete/([0-9]+)',
+                    function ($idTarea) {
+                        $controlador = new \Com\Daw2\Controllers\TareaController();
+                        $controlador->procesarDelete($idTarea);
+                    }
+                    , 'get');
 
-        Route::add('/proyectos/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                    $controlador->mostrarAdd();
-                }
-                , 'get');
+            Route::add('/proyectos',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->mostrarProyectos();
+                    }
+                    , 'get');
 
-        Route::add('/proyectos/add',
-                function () {
-                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                    $controlador->procesarAdd();
-                }
-                , 'post');
+            Route::add('/proyectos/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->mostrarAdd();
+                    }
+                    , 'get');
 
-        Route::add('/proyectos/delete/([0-9]+)',
-                function ($idProyecto) {
-                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                    $controlador->procesarDelete($idProyecto);
-                }
-                , 'get');
+            Route::add('/proyectos/add',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->procesarAdd();
+                    }
+                    , 'post');
 
+            Route::add('/proyectos/delete/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->procesarDelete($idProyecto);
+                    }
+                    , 'get');
+        } else {
+            Route::add('/',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->login();
+                    }
+                    , 'get');
+
+            Route::add('/',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->procesarLogin();
+                    }
+                    , 'post');
+        }
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\Daw2\Controllers\ErroresController();
@@ -133,6 +155,7 @@ class FrontController {
                     $controller->error405();
                 }
         );
+
         Route::run();
     }
 }

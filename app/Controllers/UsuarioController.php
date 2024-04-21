@@ -19,6 +19,27 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
     }
 
+    public function login() {
+        $data = [];
+
+        $this->view->show('login.view.php', $data);
+    }
+
+    public function procesarLogin() {
+        $data = [];
+
+        $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+
+        if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
+            header("location: /");
+        } else {
+            $data["loginError"] = "Datos incorrectos";
+            $this->view->show('login.view.php', $data);
+        }
+    }
+
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir usuarios';
