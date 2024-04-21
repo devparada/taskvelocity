@@ -82,7 +82,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function contador(): int {
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM proyectos");
         return $stmt->fetchColumn();
     }
 
