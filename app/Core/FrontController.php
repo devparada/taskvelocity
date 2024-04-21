@@ -99,6 +99,20 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/proyectos/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                    $controlador->mostrarAdd();
+                }
+                , 'get');
+
+        Route::add('/proyectos/add',
+                function () {
+                    $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                    $controlador->procesarAdd();
+                }
+                , 'post');
+
         Route::add('/proyectos/delete/([0-9]+)',
                 function ($idProyecto) {
                     $controlador = new \Com\Daw2\Controllers\ProyectoController();

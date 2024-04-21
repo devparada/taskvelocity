@@ -51,6 +51,36 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    public function addProyecto(string $nombreProyecto, string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
+        $stmt = $this->pdo->prepare("INSERT INTO proyectos "
+                . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop) "
+                . "VALUES(?, ?, ?, ?)");
+
+        // Si la fecha límite del proyecto no se especifica se cambia por null
+        if ($fechaLimiteProyecto == "") {
+            $fechaLimiteProyecto = null;
+        }
+
+        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, 1])) {
+            // Se consigue el id del proyecto debido a que es la última tarea insertada
+            $idProyecto = $this->pdo->lastInsertId();
+            $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
+            // $this->crearImagen($idProyecto);
+            return true;
+        }
+        return false;
+    }
+
+    private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
+        foreach ($idUsuarios as $idUsuario) {
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
+                    . "(id_usuarioPAsoc, id_proyectoPAsoc) "
+                    . "VALUES(?, ?)");
+
+            $stmt->execute([$idUsuario, $idProyecto]);
+        }
+    }
+
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
         return $stmt->fetchColumn();
