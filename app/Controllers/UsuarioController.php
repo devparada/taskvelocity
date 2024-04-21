@@ -139,7 +139,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
 
             if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                if (!is_null($_FILES["avatar"]["name"])) {
+                if (!empty($_FILES["avatar"]["name"])) {
                     $modeloUsuario->updateAvatar($idUsuario);
                 }
                 header("location: /usuarios");
