@@ -160,4 +160,22 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
 
         return false;
     }
+
+    public function comprobarUsuariosNumero(array $idUsuarios): bool {
+        foreach ($idUsuarios as $idUsuario) {
+            if (!filter_var($idUsuario, FILTER_VALIDATE_INT)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function comprobarUsuarios(array $idUsuarios): bool {
+        foreach ($idUsuarios as $idUsuario) {
+            if (is_null($this->buscarUsuarioPorId((int) $idUsuario))) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
