@@ -65,7 +65,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
             $this->addTareaUsuarios($id_usuarios_asociados, $idTarea);
-            // $this->crearImagen($idTarea);
+            $this->crearImagen($idTarea);
             return true;
         }
         return false;
@@ -80,18 +80,75 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    private function crearImagen(string $idTarea): void {
+        $directorio = "./assets/img/tareas/";
+
+        // Si la carpeta no existe se crea
+        if (!file_exists($directorio)) {
+            mkdir($directorio, 0755, true);
+        }
+
+        if (!empty($_FILES["imagen_tarea"]["name"])) {
+            // Si la imagen es subida la extension puede ser jpg o png
+            $directorioArchivo = $directorio . "tarea-" . $idTarea . "." . pathinfo($_FILES["imagen_tarea"]["name"])["extension"];
+        } else {
+            // Si la imagen es por defecto la extension es jpg
+            $directorioArchivo = $directorio . "tarea-" . $idTarea . ".jpg";
+        }
+
+        if (!empty($_FILES["imagen_tarea"]["name"])) {
+            // La imagen subida se mueve al directorio y se llama con el id de la tarea
+            move_uploaded_file($_FILES["imagen_tarea"]["tmp_name"], $directorioArchivo);
+        }
+    }
+
+    private function buscarAvatar(int $idTarea): bool {
+        $imagenRuta = "./assets/img/tareas/tarea-" . $idTarea . ".";
+        if (file_exists($imagenRuta . "png") || file_exists($imagenRuta . "jpg")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function eliminarAvatar(int $idTarea): bool {
+        $directorio = "./assets/img/tareas/";
+
+        $imagen = $directorio . "tarea-" . $idTarea . ".";
+
+        // Para obtener la extension de la imagen se comprueba si es png o jpg
+        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
+
+        $imagenRuta = $imagen . $extension;
+
+        // Si se puede escribir o borrar la imagen
+        if (is_writable($imagenRuta)) {
+            // Se borra la imagen
+            unlink($imagenRuta);
+            return true;
+        }
+
+        return false;
+    }
+
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM tareas");
         return $stmt->fetchColumn();
     }
 
     public function deleteTarea(int $idTarea): bool {
+        $valorDevuelto = false;
+
         if (!is_null($this->buscarTareaPorId($idTarea))) {
             $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
             $stmt->execute([$idTarea]);
-            return true;
+            if ($this->buscarAvatar($idTarea) || $this->eliminarAvatar($idTarea)) {
+                $valorDevuelto = true;
+            } else {
+                $valorDevuelto = false;
+            }
         }
 
-        return false;
+        return $valorDevuelto;
     }
 }
