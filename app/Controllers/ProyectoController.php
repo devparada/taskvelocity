@@ -9,7 +9,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function mostrarProyectos(): void {
         $data = [];
         $data['titulo'] = 'Todos los proyectos';
-        $data['seccion'] = '/proyectos';
+        $data['seccion'] = '/admin/proyectos';
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
@@ -20,7 +20,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir proyectos';
-        $data['seccion'] = '/proyectos/add';
+        $data['seccion'] = '/admin/proyectos/add';
         $data['tituloDiv'] = 'Añadir proyecto';
 
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
@@ -32,7 +32,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function procesarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir proyectos';
-        $data['seccion'] = '/proyectos/add';
+        $data['seccion'] = '/admin/proyectos/add';
         $data['tituloDiv'] = 'Añadir proyecto';
 
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
@@ -49,7 +49,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
-                header("location: /proyectos");
+                header("location: /admin/proyectos");
             }
         } else {
 
@@ -75,10 +75,10 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         }
 
         $data['titulo'] = 'Todos los proyectos';
-        $data['seccion'] = '/proyectos';
+        $data['seccion'] = '/admin/proyectos';
 
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $this->view->showViews(array('templates/header.view.php', 'proyecto.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 }

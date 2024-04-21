@@ -10,7 +10,7 @@
             <div class="icon">
                 <i class="ion ion-folder"></i>
             </div>
-            <a href="/proyectos" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/admin/proyectos" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -24,7 +24,7 @@
             <div class="icon">
                 <i class="ion ion-stats-bars"></i>
             </div>
-            <a href="/tareas" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/admin/tareas" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <!-- ./col -->
@@ -38,7 +38,7 @@
             <div class="icon">
                 <i class="ion ion-person-add"></i>
             </div>
-            <a href="/usuarios" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/admin/usuarios" class="small-box-footer">Más información <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>       
     <!-- ./col -->

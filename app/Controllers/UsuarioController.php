@@ -11,7 +11,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function mostrarUsuarios() {
         $data = [];
         $data['titulo'] = 'Todos los usuarios';
-        $data['seccion'] = '/usuarios';
+        $data['seccion'] = '/admin/usuarios';
 
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
@@ -33,7 +33,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
 
         if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
-            header("location: /");
+            header("location: /admin");
         } else {
             $data["loginError"] = "Datos incorrectos";
             $this->view->show('admin/login.view.php', $data);
@@ -43,7 +43,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir usuarios';
-        $data['seccion'] = '/usuarios/add';
+        $data['seccion'] = '/admin/usuarios/add';
         $data['tituloDiv'] = 'Añadir usuario';
 
         $modeloRol = new \Com\Daw2\Models\RolModel();
@@ -58,7 +58,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function procesarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir usuarios';
-        $data['seccion'] = '/usuarios/add';
+        $data['seccion'] = '/admin/usuarios/add';
         $data['tituloDiv'] = 'Añadir usuario';
 
         unset($_POST["enviar"]);
@@ -95,7 +95,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function mostrarEdit(int $idUsuario) {
         $data = [];
         $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-        $data['seccion'] = '/usuarios/edit/' . $idUsuario;
+        $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
         $data['tituloDiv'] = 'Editar usuario';
 
         $modeloRol = new \Com\Daw2\Models\RolModel();
@@ -115,7 +115,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function procesarEdit(int $idUsuario) {
         $data = [];
         $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-        $data['seccion'] = '/usuarios/edit/' . $idUsuario;
+        $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
         $data['tituloDiv'] = 'Editar usuario';
 
         unset($_POST["enviar"]);
@@ -142,7 +142,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
                 if (!empty($_FILES["avatar"]["name"])) {
                     $modeloUsuario->updateAvatar($idUsuario);
                 }
-                header("location: /usuarios");
+                header("location: /admin/usuarios");
             }
         } else {
             $modeloRol = new \Com\Daw2\Models\RolModel();
@@ -160,7 +160,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function verUsuario(int $idUsuario): void {
         $data = [];
         $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
-        $data['seccion'] = '/usuarios/view/' . $idUsuario;
+        $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;
         $data['tituloDiv'] = 'Ver usuario';
 
         $modeloRol = new \Com\Daw2\Models\RolModel();
@@ -190,7 +190,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
 
         $data['titulo'] = 'Todos los usuarios';
-        $data['seccion'] = '/usuarios';
+        $data['seccion'] = '/admin/usuarios';
 
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 

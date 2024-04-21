@@ -24,7 +24,7 @@
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Iniciar sesión</p>
-                    <form action="/" method="post">
+                    <form action="/admin" method="post">
                         <div class="input-group mb-3">
                             <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo isset($email) ? $email : ''; ?>">
                             <div class="input-group-append">

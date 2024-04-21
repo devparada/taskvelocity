@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-6">
                     <div class="m-0 font-weight-bold justify-content-end">
-                        <a href="/proyectos/add/" class="btn btn-success ml-1 float-right"> Nuevo proyecto <i class="fas fa-plus-circle"></i></a>
+                        <a href="/admin/proyectos/add/" class="btn btn-success ml-1 float-right"> Nuevo proyecto <i class="fas fa-plus-circle"></i></a>
                     </div>
                 </div>
             </div>
@@ -57,9 +57,9 @@
                                         }
                                         ?></td>
                                     <td>
-                                        <a href="/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
-                                        <a href="/proyectos/delete/<?php echo $p['id_proyecto']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
+                                        <a href="/admin/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
+                                        <a href="/admin/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/proyectos/delete/<?php echo $p['id_proyecto']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
                                     </td>
                                 </tr>
                                 <?php

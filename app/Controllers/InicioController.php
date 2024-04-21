@@ -4,7 +4,7 @@ namespace Com\Daw2\Controllers;
 
 class InicioController extends \Com\Daw2\Core\BaseController {
 
-    public function index() {
+    public function indexAdmin(): void {
         $data = array(
             'titulo' => 'Página de inicio',
             'breadcrumb' => ['Inicio']
@@ -19,6 +19,12 @@ class InicioController extends \Com\Daw2\Core\BaseController {
         $data['numUsuarios'] = $modeloUsuario->contador();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/inicio.view.php', 'admin/templates/footer.view.php'), $data);
+    }
+
+    public function index(): void {
+        $data = [];
+
+        $this->view->show('public/inicio.view.php', $data);
     }
 
     /**

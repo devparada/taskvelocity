@@ -73,7 +73,7 @@
                         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                             <i class="fas fa-expand-arrows-alt"></i>
                         </a>
-                    </li>      
+                    </li>
                 </ul>
             </nav>
             <!-- /.navbar -->
@@ -94,7 +94,7 @@
                             <img src="assets/img/users/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle elevation-2" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
                         </div>
                         <div class="info">
-                            <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/profile/' . $_SESSION['usuario']['id_usuario'] : '/login'; ?>"
+                            <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"
                                class="d-block"> <?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?> </a>    
                         </div>
                     </div>

@@ -11,7 +11,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
     public function mostrarTareas(): void {
         $data = [];
         $data['titulo'] = 'Todas las tareas';
-        $data['seccion'] = '/tareas';
+        $data['seccion'] = '/admin/tareas';
 
         $modeloTarea = new \Com\Daw2\Models\TareaModel();
         $data['tareas'] = $modeloTarea->mostrarTareas();
@@ -22,7 +22,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir tareas';
-        $data['seccion'] = '/tareas/add';
+        $data['seccion'] = '/admin/tareas/add';
         $data['tituloDiv'] = 'Añadir tarea';
 
         $modeloColor = new \Com\Daw2\Models\ColorModel();
@@ -40,7 +40,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
     public function procesarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir tareas';
-        $data['seccion'] = '/tareas/add';
+        $data['seccion'] = '/admin/tareas/add';
         $data['tituloDiv'] = 'Añadir tarea';
 
         $modeloColor = new \Com\Daw2\Models\ColorModel();
@@ -68,7 +68,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
             $modeloTarea = new \Com\Daw2\Models\TareaModel();
 
             if ($modeloTarea->addTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"])) {
-                header("location: /tareas");
+                header("location: /admin/tareas");
             }
         } else {
             $modeloColor = new \Com\Daw2\Models\ColorModel();
@@ -99,7 +99,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         }
 
         $data['titulo'] = 'Todas las tareas';
-        $data['seccion'] = '/tareas';
+        $data['seccion'] = '/admin/tareas';
 
         $data['tareas'] = $modeloTarea->mostrarTareas();
 

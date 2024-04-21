@@ -79,9 +79,9 @@
                             if (!isset($modoVer)) {
                                 ?>
                                 <input type="submit" value="Enviar" name="enviar" class="btn btn-primary"/>
-                                <a href="/usuarios" class="btn btn-danger ml-3">Cancelar</a>
+                                <a href="/admin/usuarios" class="btn btn-danger ml-3">Cancelar</a>
                             <?php } else { ?>
-                                <a href="/usuarios" class="btn btn-danger ml-3">Volver</a>
+                                <a href="/admin/usuarios" class="btn btn-danger ml-3">Volver</a>
                             <?php } ?>
                         </div>
                     </div>
