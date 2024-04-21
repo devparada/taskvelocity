@@ -16,7 +16,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $modeloTarea = new \Com\Daw2\Models\TareaModel();
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
-        $this->view->showViews(array('templates/header.view.php', 'tarea.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function mostrarAdd() {
@@ -34,7 +34,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('templates/header.view.php', 'add.tarea.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarAdd() {
@@ -82,7 +82,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            $this->view->showViews(array('templates/header.view.php', 'add.tarea.view.php', 'templates/footer.view.php'), $data);
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
         }
     }
 
@@ -103,7 +103,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
 
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
-        $this->view->showViews(array('templates/header.view.php', 'tarea.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     private function comprobarAddTareas(array $data): array {

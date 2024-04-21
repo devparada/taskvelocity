@@ -16,13 +16,13 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function login() {
         $data = [];
 
-        $this->view->show('login.view.php', $data);
+        $this->view->show('admin/login.view.php', $data);
     }
 
     public function procesarLogin() {
@@ -36,7 +36,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             header("location: /");
         } else {
             $data["loginError"] = "Datos incorrectos";
-            $this->view->show('login.view.php', $data);
+            $this->view->show('admin/login.view.php', $data);
         }
     }
 
@@ -52,7 +52,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloColor = new \Com\Daw2\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
-        $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarAdd() {
@@ -88,7 +88,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
         }
     }
 
@@ -109,7 +109,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         $data["modoEdit"] = true;
 
-        $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarEdit(int $idUsuario) {
@@ -153,7 +153,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
         }
     }
 
@@ -173,7 +173,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
         $data["modoVer"] = true;
 
-        $this->view->showViews(array('templates/header.view.php', 'add.usuario.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarDelete(int $idUsuario): void {
@@ -194,7 +194,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('templates/header.view.php', 'usuario.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     private function comprobarComun(array $data): array {

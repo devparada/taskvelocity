@@ -100,7 +100,7 @@
                     </div>
 
                     <?php
-      include $_ENV['folder.views'].'/templates/left-menu.view.php';
+      include $_ENV['folder.views'].'/admin/templates/left-menu.view.php';
                     ?>
                 </div>
                 <!-- /.sidebar -->

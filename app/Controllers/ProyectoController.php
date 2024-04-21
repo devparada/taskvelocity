@@ -14,7 +14,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $this->view->showViews(array('templates/header.view.php', 'proyecto.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function mostrarAdd() {
@@ -26,7 +26,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('templates/header.view.php', 'add.proyecto.view.php', 'templates/footer.view.php'), $data);
+        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarAdd() {
@@ -58,7 +58,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            $this->view->showViews(array('templates/header.view.php', 'add.proyecto.view.php', 'templates/footer.view.php'), $data);
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         }
     }
 
