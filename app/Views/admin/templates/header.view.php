@@ -19,7 +19,7 @@
         <!-- JQVMap -->
         <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
         <!-- Theme style -->
-        <link rel="stylesheet" href="assets/css/adminlte.min.css">
+        <link rel="stylesheet" href="assets/css/admin/adminlte.min.css">
         <!-- overlayScrollbars -->
         <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
         <!-- Daterange picker -->
@@ -30,7 +30,7 @@
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <!-- CSS propios -->
-        <link rel="stylesheet" href="assets/css/admin.css">
+        <link rel="stylesheet" href="assets/css/admin/admin.css">
     </head>
     <body class="hold-transition sidebar-mini layout-fixed <?php echo isset($_COOKIE['dark']) ? 'dark-mode' : ''; ?>">
         <div class="wrapper"> 

@@ -43,8 +43,8 @@
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- Select2 -->
 <script src="plugins/select2/js/select2.full.min.js"></script>
-<script src="assets/js/adminlte.js"></script>
-<script src="assets/js/pages/main.js"></script>
+<script src="assets/js/admin/adminlte.js"></script>
+<script src="assets/js/admin/pages/main.js"></script>
 <!-- AdminLTE for demo purposes -->
 <!--<script src="dist/js/demo.js"></script>-->
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
