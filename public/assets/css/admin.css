@@ -1,0 +1,11 @@
+/* Personaliza todos los enlaces a */
+a {
+    color: black;
+    text-decoration: none;
+}
+
+/* Personaliza el icono y nombre del usuario del header */
+.user-panel-personalizado {
+    display: flex;
+    align-items: center;
+}

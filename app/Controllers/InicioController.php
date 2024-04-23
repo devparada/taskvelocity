@@ -7,8 +7,9 @@ class InicioController extends \Com\Daw2\Core\BaseController {
     public function indexAdmin(): void {
         $data = array(
             'titulo' => 'Página de inicio',
-            'breadcrumb' => ['Inicio']
+            'seccion' => '/admin',
         );
+
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
         $data['numProyectos'] = $modeloProyecto->contador();
 

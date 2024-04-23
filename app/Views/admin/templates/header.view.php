@@ -29,8 +29,10 @@
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+        <!-- CSS propios -->
+        <link rel="stylesheet" href="assets/css/admin.css">
     </head>
-<body class="hold-transition sidebar-mini layout-fixed <?php echo isset($_COOKIE['dark'])? 'dark-mode':'';?>">
+    <body class="hold-transition sidebar-mini layout-fixed <?php echo isset($_COOKIE['dark']) ? 'dark-mode' : ''; ?>">
         <div class="wrapper"> 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -43,18 +45,18 @@
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
-                    <!-- Navbar Search -->
-                    <li class="nav-item">
-          <?php echo isset($_COOKIE['dark'])? 
-                                '<a class="nav-link" href="/light" role="button">
-                <i class="text fas fa-sun"></i>
-        </a>      
-      </li>' :
-                                '   <a class="nav-link" href="/dark" role="button">
-          <i class="text fas fa-moon"></i>
-        </a>      
-      </li>' ;
-                        ?>
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel user-panel-personalizado">
+                        <div>
+                            <img src="assets/img/users/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
+                        </div>
+                        <div class="info">
+                            <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"
+                               class="d-block"> <?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?> </a>    
+                        </div>
+                        
+                    </div>
+
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/logout' : ''; ?>" role="button">
                             <?php if (isset($_SESSION['usuario']['id_usuario'])) { ?>
@@ -69,11 +71,20 @@
                             ?>
                         </a>        
                     </li>
+                    
+                    <!-- Navbar Search -->
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                            <i class="fas fa-expand-arrows-alt"></i>
-                        </a>
-                    </li>
+                        <?php
+                        echo isset($_COOKIE['dark']) ?
+                                '<a class="nav-link" href="/light" role="button">
+                <i class="text fas fa-sun"></i>
+        </a>      
+      </li>' :
+                                '   <a class="nav-link" href="/dark" role="button">
+          <i class="text fas fa-moon"></i>
+        </a>      
+      </li>';
+                        ?>
                 </ul>
             </nav>
             <!-- /.navbar -->
@@ -88,19 +99,9 @@
 
                 <!-- Sidebar -->
                 <div class="sidebar">
-                    <!-- Sidebar user panel (optional) -->
-                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div class="image">
-                            <img src="assets/img/users/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle elevation-2" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
-                        </div>
-                        <div class="info">
-                            <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"
-                               class="d-block"> <?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?> </a>    
-                        </div>
-                    </div>
 
                     <?php
-      include $_ENV['folder.views'].'/admin/templates/left-menu.view.php';
+                    include $_ENV['folder.views'] . '/admin/templates/left-menu.view.php';
                     ?>
                 </div>
                 <!-- /.sidebar -->
@@ -113,21 +114,19 @@
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-            <h1 class="m-0"><?php             
-            echo isset($titulo) ? $titulo : '' ?></h1>
+                                <h1 class="m-0"><?php echo isset($titulo) ? $titulo : '' ?></h1>
                             </div><!-- /.col -->
                             <?php
-          if(isset($breadcrumb) && is_array($breadcrumb)){
+                            if (isset($breadcrumb) && is_array($breadcrumb)) {
                                 ?>          
                                 <div class="col-sm-6">
                                     <ol class="breadcrumb float-sm-right">
                                         <?php
-                
-                foreach($breadcrumb as $b){
+                                        foreach ($breadcrumb as $b) {
                                             ?>
                                             <li class="breadcrumb-item"><?php echo $b; ?></li>             
-              <?php
-                }?>
+                                        <?php }
+                                        ?>
                                     </ol>
                                 </div><!-- /.col -->
                                 <?php
