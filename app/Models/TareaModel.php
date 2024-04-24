@@ -51,6 +51,18 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    /**
+     * Filtra las tareas asociadas a un proyecto por el id del proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array Retorna un array con las tareas del proyecto asociado
+     */
+    public function mostrarTareasPorProyecto(int $idProyecto): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
+                . "WHERE id_proyecto = ?");
+        $stmt->execute([$idProyecto]);
+        return $stmt->fetchAll();
+    }
+
     public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, array $id_usuarios_asociados, string $descripcionTarea): bool {
         $stmt = $this->pdo->prepare("INSERT INTO tareas "
                 . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite, id_usuario_tarea_prop, id_proyecto) "

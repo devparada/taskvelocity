@@ -127,6 +127,13 @@ class FrontController {
                         $controlador->procesarDelete($idProyecto);
                     }
                     , 'get');
+
+            Route::add('/proyectos',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->mostrarProyectosPublic();
+                    }
+                    , 'get');
         } else {
             Route::add('/admin',
                     function () {

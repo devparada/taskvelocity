@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
-        <title>TaskVelocity | Inicio</title>
         <meta charset="UTF-8">
+        <title>TaskVelocity | Inicio</title>
+        <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
     </head>
     <body>
         <p>Bienvenido a TaskVelocity</p>

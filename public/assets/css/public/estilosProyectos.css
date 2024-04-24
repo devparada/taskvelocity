@@ -1,0 +1,16 @@
+.proyectos {
+    border: 1px white solid;
+    border-radius: 20px;
+    margin-top: 16px;
+    padding: 16px;
+}
+
+#info {
+    padding: 6px;
+}
+
+.proyectos p, .proyectos a {
+    margin-left: 16px;
+    padding: 6px;
+    color: white;
+}

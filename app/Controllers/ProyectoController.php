@@ -17,6 +17,18 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
+    public function mostrarProyectosPublic(): void {
+        $data = [];
+
+        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $data['proyectos'] = $modeloProyecto->mostrarProyectos();
+
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($_SESSION["usuario"]["id_usuario"]);
+
+        $this->view->show('public/proyecto.view.php', $data);
+    }
+
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir proyectos';
