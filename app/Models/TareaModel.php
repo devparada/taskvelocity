@@ -52,13 +52,25 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
     }
 
     /**
-     * Filtra las tareas asociadas a un proyecto por el id del proyecto
+     * Muestra las tareas asociadas a un proyecto por el id del proyecto
      * @param int $idProyecto el id del proyecto
      * @return array Retorna un array con las tareas del proyecto asociado
      */
     public function mostrarTareasPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
-                . "WHERE id_proyecto = ?");
+                . "WHERE ta.id_proyecto = ?");
+        $stmt->execute([$idProyecto]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Muestra los usuarios asociados a un proyecto por el id del proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array Retorna un array con los usuarios del proyecto asociado
+     */
+    public function mostrarUsuariosPorProyecto(int $idProyecto): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
+                . "WHERE up.id_proyectoPAsoc  = ?");
         $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
     }

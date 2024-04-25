@@ -11,6 +11,7 @@
 
 .proyectos p, .proyectos a {
     margin-left: 16px;
+    margin-bottom: 6px;
     padding: 6px;
     color: white;
 }

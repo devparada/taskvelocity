@@ -5,10 +5,26 @@
 }
 
 body {
-    background-color: black;
+    margin:10px;
+    background-color: #121212;
 }
 
 a {
     color: white;
     text-decoration: none;
+}
+
+.botones {
+    margin-top: 16px;
+    border-radius: 20px;
+    padding: 6px;
+    background-color: #658FDB;
+}
+
+#perfil {
+    margin-top: 16px;
+}
+
+#perfil p {
+    margin-bottom: 16px;
 }

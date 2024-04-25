@@ -8,6 +8,7 @@ class FrontController {
 
     static function main() {
 
+        // Rutas que requieren login para acceder
         if (isset($_SESSION["usuario"])) {
             Route::add('/admin',
                     function () {
@@ -134,6 +135,14 @@ class FrontController {
                         $controlador->mostrarProyectosPublic();
                     }
                     , 'get');
+
+            Route::add('/proyectos/ver/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->verProyectoPublic($idProyecto);
+                    }
+                    , 'get');
+            // Rutas que los usuarios pueden acceder sin logearse
         } else {
             Route::add('/admin',
                     function () {
