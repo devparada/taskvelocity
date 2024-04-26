@@ -7,9 +7,16 @@ namespace Com\Daw2\Models;
 class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
     public function mostrarProyectos(): array {
-        $stmt = $this->pdo->query("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
-                . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                . " ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY id_proyectoPAsoc");
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $stmt = $this->pdo->query("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
+                    . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
+                    . " ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY id_proyectoPAsoc");
+        } else {
+            $stmt = $this->pdo->prepare("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
+                    . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
+                    . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_usuario_proyecto_prop = ? GROUP BY id_proyectoPAsoc");
+            $stmt->execute([$_SESSION["usuario"]["id_usuario"]]);
+        }
         $datos = $stmt->fetchAll();
 
         for ($i = 0; $i < count($datos); $i++) {

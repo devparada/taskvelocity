@@ -142,6 +142,20 @@ class FrontController {
                         $controlador->verProyectoPublic($idProyecto);
                     }
                     , 'get');
+
+            Route::add('/proyectos/crear',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->mostrarAdd();
+                    }
+                    , 'get');
+
+            Route::add('/proyectos/crear',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->procesarAdd();
+                    }
+                    , 'get');
             // Rutas que los usuarios pueden acceder sin logearse
         } else {
             Route::add('/admin',

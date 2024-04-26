@@ -51,7 +51,11 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->show('public/crear.proyecto.view.php', $data);
+        }
     }
 
     public function procesarAdd() {
@@ -74,7 +78,11 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
-                header("location: /admin/proyectos");
+                if ($_SESSION["id_rol"] == 1) {
+                    header("location: /admin/proyectos");
+                } else {
+                    header("location: /proyectos");
+                }
             }
         } else {
 

@@ -9,6 +9,7 @@
     <body>
         <h1>Tus proyectos</h1>
         <p id="info">(primera version mejorada)</p>
+        <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
         <?php foreach ($proyectos as $p) { ?>
             <div class="proyectos">
                 <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
@@ -18,8 +19,8 @@
             </div>
         <?php } ?>
         <div id="perfil">
-        <p>Sesión inciada como: <?php echo $_SESSION["usuario"]["username"]; ?></p>
-        <a href="/logout" class="botones">Cerrar sesión</a>
+            <p>Sesión inciada como: <?php echo $_SESSION["usuario"]["username"]; ?></p>
+            <a href="/logout" class="botones">Cerrar sesión</a>
         </div>
     </body>
 </html>
