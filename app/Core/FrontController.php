@@ -158,14 +158,14 @@ class FrontController {
                     , 'get');
             // Rutas que los usuarios pueden acceder sin logearse
         } else {
-            Route::add('/admin',
+            Route::add('/login',
                     function () {
                         $controlador = new \Com\Daw2\Controllers\UsuarioController();
                         $controlador->login();
                     }
                     , 'get');
 
-            Route::add('/admin',
+            Route::add('/login',
                     function () {
                         $controlador = new \Com\Daw2\Controllers\UsuarioController();
                         $controlador->procesarLogin();

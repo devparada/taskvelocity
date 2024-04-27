@@ -34,6 +34,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
             $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($datos["email"]);
+
             if ($usuarioEncontrado["id_rol"] == 1) {
                 header("location: /admin");
             } else {

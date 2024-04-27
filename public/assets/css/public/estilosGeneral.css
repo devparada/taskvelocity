@@ -22,17 +22,56 @@ input, select, option {
     color: black;
 }
 
+img {
+    width: 50px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: green;
+    padding: 16px;
+}
+
+#logo {
+    display: flex;
+    align-items: center;
+}
+
+#logo p {
+    margin-left: 6px;
+}
+
+main {
+    margin: 16px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: gray;
+}
+
+footer p {
+    text-align: center;
+}
+
 .botones {
-    margin-top: 16px;
     border-radius: 20px;
-    padding: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
     background-color: #658FDB;
 }
 
 #perfil {
-    margin-top: 16px;
+    display: flex;
+    align-items: center;
 }
 
 #perfil p {
-    margin-bottom: 16px;
+    margin-right: 6px;
 }

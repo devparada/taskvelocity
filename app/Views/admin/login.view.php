@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity Admin | Log in</title>
+        <title>TaskVelocity | Login</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -18,13 +18,13 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="#"><b>TaskVelocity</b></a>
+                <a href="/"><b>TaskVelocity</b></a>
             </div>
             <!-- /.login-logo -->  
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Iniciar sesión</p>
-                    <form action="/admin" method="post">
+                    <form action="/login" method="post">
                         <div class="input-group mb-3">
                             <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo isset($email) ? $email : ''; ?>">
                             <div class="input-group-append">

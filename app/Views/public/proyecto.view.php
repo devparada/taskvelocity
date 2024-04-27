@@ -7,8 +7,21 @@
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
     </head>
     <body>
+        <header>
+            <div id="logo">
+                <a href="/">
+                    <img src="assets/img/logo.png" alt="Logo">
+                </a>
+                <p>TaskVelocity</p>
+            </div>
+            <div id="perfil">
+                <p><?php echo $_SESSION["usuario"]["username"]; ?></p>
+                <a href="/logout" class="botones">Cerrar sesión</a>
+            </div>
+
+        </header>
         <h1>Tus proyectos</h1>
-        <p id="info">(primera version mejorada)</p>
+        <p id="info">(segunda version)</p>
         <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
         <?php foreach ($proyectos as $p) { ?>
             <div class="proyectos">
@@ -18,9 +31,5 @@
                 <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones">Entrar en el proyecto</a>
             </div>
         <?php } ?>
-        <div id="perfil">
-            <p>Sesión inciada como: <?php echo $_SESSION["usuario"]["username"]; ?></p>
-            <a href="/logout" class="botones">Cerrar sesión</a>
-        </div>
     </body>
 </html>
