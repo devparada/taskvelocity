@@ -43,7 +43,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
-    public function buscarProyectoPorId(int $idProyecto): ?array {
+    public function buscarProyectoPorId(string $idProyecto): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM proyectos pr LEFT JOIN usuarios us"
                 . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
                 . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ?");
@@ -59,6 +59,8 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function addProyecto(string $nombreProyecto, string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
+        $idProyecto = $this->pdo->query("SELECT UUID()")->fetchColumn();
+
         $stmt = $this->pdo->prepare("INSERT INTO proyectos "
                 . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop) "
                 . "VALUES(?, ?, ?, ?)");
@@ -70,7 +72,6 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, 1])) {
             // Se consigue el id del proyecto debido a que es la última tarea insertada
-            $idProyecto = $this->pdo->lastInsertId();
             $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
             // $this->crearImagen($idProyecto);
             return true;
@@ -93,7 +94,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteProyecto(int $idProyecto): bool {
+    public function deleteProyecto(string $idProyecto): bool {
         if (!is_null($this->buscarProyectoPorId($idProyecto))) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);

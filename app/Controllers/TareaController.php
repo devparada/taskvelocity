@@ -86,7 +86,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarDelete(int $idTarea) {
+    public function procesarDelete(string $idTarea) {
         $data = [];
 
         $modeloTarea = new \Com\Daw2\Models\TareaModel();

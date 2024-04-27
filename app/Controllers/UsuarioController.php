@@ -163,7 +163,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function verUsuario(int $idUsuario): void {
+    public function verUsuario(string $idUsuario): void {
         $data = [];
         $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
         $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;

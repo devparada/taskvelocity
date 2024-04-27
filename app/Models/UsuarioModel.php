@@ -11,7 +11,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
-    public function buscarUsuarioPorId(int $idUsuario): ?array {
+    public function buscarUsuarioPorId(string $idUsuario): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
 
@@ -69,8 +69,8 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function addUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor): bool {
-        $stmt = $this->pdo->prepare("INSERT INTO usuarios (id_usuario, username, password, email, id_rol, fecha_nacimiento, fecha_login, 
-            descripcion_usuario, id_color_favorito) VALUES (0, ?, ?, ?, ?, ?, NULL, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO usuarios (username, password, email, id_rol, fecha_nacimiento, fecha_login, 
+            descripcion_usuario, id_color_favorito) VALUES (?, ?, ?, ?, ?, NULL, ?, ?)");
 
         if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor])) {
             return true;
@@ -118,7 +118,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    public function updateAvatar(int $idUsuario): bool {
+    public function updateAvatar(string $idUsuario): bool {
         $directorio = "./assets/img/users/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
@@ -142,7 +142,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    public function eliminarAvatar(int $idUsuario): bool {
+    public function eliminarAvatar(string $idUsuario): bool {
         $directorio = "./assets/img/users/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
@@ -167,7 +167,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteUsuario(int $idUsuario): bool {
+    public function deleteUsuario(string $idUsuario): bool {
         if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
             $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
             $stmt->execute([$idUsuario]);

@@ -36,7 +36,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
-    public function buscarTareaPorId(int $idTarea): ?array {
+    public function buscarTareaPorId(string $idTarea): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
                 . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
                 . "WHERE id_tarea = ?");
@@ -53,10 +53,10 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
     /**
      * Muestra las tareas asociadas a un proyecto por el id del proyecto
-     * @param int $idProyecto el id del proyecto
+     * @param string $idProyecto el uuid del proyecto
      * @return array Retorna un array con las tareas del proyecto asociado
      */
-    public function mostrarTareasPorProyecto(int $idProyecto): array {
+    public function mostrarTareasPorProyecto(string $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
                 . "WHERE ta.id_proyecto = ?");
         $stmt->execute([$idProyecto]);
@@ -65,10 +65,10 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
     /**
      * Muestra los usuarios asociados a un proyecto por el id del proyecto
-     * @param int $idProyecto el id del proyecto
+     * @param string $idProyecto el id del proyecto
      * @return array Retorna un array con los usuarios del proyecto asociado
      */
-    public function mostrarUsuariosPorProyecto(int $idProyecto): array {
+    public function mostrarUsuariosPorProyecto(string $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
                 . "WHERE up.id_proyectoPAsoc  = ?");
         $stmt->execute([$idProyecto]);
@@ -160,7 +160,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteTarea(int $idTarea): bool {
+    public function deleteTarea(string $uuidTarea): bool {
         $valorDevuelto = false;
 
         if (!is_null($this->buscarTareaPorId($idTarea))) {

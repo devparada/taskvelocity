@@ -29,7 +29,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $this->view->show('public/proyecto.view.php', $data);
     }
 
-    public function verProyectoPublic(int $idProyecto): void {
+    public function verProyectoPublic(string $idProyecto): void {
         $data = [];
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
@@ -78,7 +78,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
-                if ($_SESSION["id_rol"] == 1) {
+                if ($_SESSION["usuario"]["id_rol"] == 1) {
                     header("location: /admin/proyectos");
                 } else {
                     header("location: /proyectos");
@@ -95,7 +95,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarDelete(int $idProyecto) {
+    public function procesarDelete(string $uuidProyecto) {
         $data = [];
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
