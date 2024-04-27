@@ -14,7 +14,11 @@ a {
     text-decoration: none;
 }
 
-input, select {
+input[type="file"] {
+    color: white;
+}
+
+input, select, option {
     color: black;
 }
 
