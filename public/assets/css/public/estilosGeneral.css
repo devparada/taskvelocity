@@ -45,6 +45,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 16px;
+    margin: 16px;
 }
 
 nav {
@@ -98,6 +99,8 @@ footer {
     justify-content: space-between;
     padding: 16px;
     background-color: var(--color-secundario-complementario);
+    border-radius: 20px;
+    margin: 16px;
 }
 
 footer p {

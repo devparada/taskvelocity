@@ -172,6 +172,13 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/tareas',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\TareaController();
+                        $controlador->mostrarTareas();
+                    }
+                    , 'get');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\Daw2\Controllers\InicioController();

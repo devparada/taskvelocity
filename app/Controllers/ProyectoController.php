@@ -23,9 +23,6 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
-        $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($_SESSION["usuario"]["id_usuario"]);
-
         $this->view->show('public/proyectos.view.php', $data);
     }
 

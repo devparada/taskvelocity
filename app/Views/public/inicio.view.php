@@ -42,7 +42,7 @@
                 <p>Tiene las siguientes caracteristicas:</p>
                 <div id="main-caracteristicas">
                     <div class="imagen-caracteristicas">
-                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Proyectos"></img>
+                        <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
                     </div>
                     <div id="caracteristica-proyectos" class="caracteristicas-texto">
                         <p>Un gestor de proyectos veloz donde ver todas las tareas asociadas a un proyecto, 
@@ -53,11 +53,11 @@
                             a más personas para trabjar juntos</p>
                     </div>
                     <div class="imagen-caracteristicas">
-                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Tareas"></img>
+                        <img src="assets/img/ejemplo-tareas.png" alt="Ejemplo Tareas"></img>
                     </div>
 
                     <div class="imagen-caracteristicas">
-                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Perfil"></img>
+                        <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Perfil"></img>
                     </div>
                     <div id="caracteristica-perfil" class="caracteristicas-texto">
                         <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción</p>
@@ -67,7 +67,10 @@
         </main>
         <footer>
             <div>
-                <p>TaskVelocity - 2024</p>
+                <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
+            </div>
+            <div>
+                <p>TaskVelocity</p>
             </div>
             <div id="iconos-footer">
                 <a href="#">Linkedin</a>

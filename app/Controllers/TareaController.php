@@ -16,7 +16,11 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $modeloTarea = new \Com\Daw2\Models\TareaModel();
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->show('public/tareas.view.php', $data);
+        }
     }
 
     public function mostrarAdd() {
