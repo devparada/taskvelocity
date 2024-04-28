@@ -7,6 +7,29 @@
         <link rel="stylesheet" href="../../assets/css/public/estilosProyectos.css">
     </head>
     <body>
+        <header>
+            <div id="logo">
+                <a href="/">
+                    <img src="../../../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                </a>
+                <h2>TaskVelocity</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
+                    <li><a href="/tareas" class="botones">Tareas</a></li>
+                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                </ul>
+            </nav>
+            <?php if (isset($_SESSION["usuario"])) { ?>
+                <div id="perfil">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                </div>
+            <?php } else { ?>
+                <a href="/login" class="botones">Iniciar sesión</a>
+            <?php } ?>
+        </header>
         <main>
             <div class="formlario">
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
@@ -33,5 +56,16 @@
                     <input type="submit" value="Enviar" name="enviar" class="botones">
                 </form>
         </main>
+        <footer>
+            <div>
+                <p>TaskVelocity - 2024</p>
+            </div>
+            <div id="iconos-footer">
+                <a href="#">Linkedin</a>
+                <a href="#">Youtube</a>
+                <a href="#">Twitter / X</a>
+                <a href="#">Instagram</a>
+            </div>
+        </footer>
     </body>
 </html>

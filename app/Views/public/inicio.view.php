@@ -10,7 +10,7 @@
         <header>
             <div id="logo">
                 <a href="/">
-                    <img src="../assets/img/logo.png" alt="Logo" class="imagenes-pequeñas">
+                    <img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
                 </a>
                 <h2>TaskVelocity</h2>
             </div>
@@ -23,7 +23,7 @@
             </nav>
             <?php if (isset($_SESSION["usuario"])) { ?>
                 <div id="perfil">
-                    <img src="/assets/img/users/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                     <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     <a href="/proyectos" class="botones">Ir a tus proyectos</a>
                 </div>
@@ -41,25 +41,25 @@
                 <h2 class="apartados">Características</h2>
                 <p>Tiene las siguientes caracteristicas:</p>
                 <div id="main-caracteristicas">
-                    <div class="imagen-proyectos">
-                        <img src="assets/img/caracteristicas-1.png"></img>
+                    <div class="imagen-caracteristicas">
+                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Proyectos"></img>
                     </div>
                     <div id="caracteristica-proyectos" class="caracteristicas-texto">
                         <p>Un gestor de proyectos veloz donde ver todas las tareas asociadas a un proyecto, 
                             añadir una fecha límite y una imagen y añadir más miembros para trabajar en compañia</p>
                     </div>
-                    <div id="caracteristica-proyectos" class="caracteristicas-texto">
+                    <div id="caracteristica-tareas" class="caracteristicas-texto">
                         <p>Un gestor de tareas que pueden tener distinto color según lo prefiera el usuario, una fecha límite y una imagen y añadir 
                             a más personas para trabjar juntos</p>
                     </div>
-                    <div class="imagen-proyectos">
-                        <img src="assets/img/caracteristicas-1.png"></img>
+                    <div class="imagen-caracteristicas">
+                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Tareas"></img>
                     </div>
 
-                    <div class="imagen-proyectos">
-                        <img src="assets/img/caracteristicas-1.png"></img>
+                    <div class="imagen-caracteristicas">
+                        <img src="assets/img/caracteristicas-1.png" alt="Ejemplo Perfil"></img>
                     </div>
-                    <div id="caracteristica-proyectos" class="caracteristicas-texto">
+                    <div id="caracteristica-perfil" class="caracteristicas-texto">
                         <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción</p>
                     </div>
                 </div>

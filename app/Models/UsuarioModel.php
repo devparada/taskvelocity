@@ -88,7 +88,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function crearAvatar(string $email): void {
-        $directorio = "./assets/img/users/";
+        $directorio = "./assets/img/usuarios/";
 
         // Si la carpeta no existe se crea
         if (!file_exists($directorio)) {
@@ -118,7 +118,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function updateAvatar(string $idUsuario): bool {
-        $directorio = "./assets/img/users/";
+        $directorio = "./assets/img/usuarios/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
 
@@ -142,7 +142,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function eliminarAvatar(string $idUsuario): bool {
-        $directorio = "./assets/img/users/";
+        $directorio = "./assets/img/usuarios/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
 

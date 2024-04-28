@@ -3,10 +3,15 @@
 }
 
 .proyectos {
+    display: flex;
     border: 1px white solid;
     border-radius: 20px;
     margin-top: 16px;
     padding: 16px;
+}
+
+.imagen-proyecto {
+    width: 20%;
 }
 
 #info {
