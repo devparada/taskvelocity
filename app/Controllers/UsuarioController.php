@@ -35,6 +35,8 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
             $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($datos["email"]);
 
+            $_SESSION["usuario"] = $usuarioEncontrado;
+            $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
             if ($usuarioEncontrado["id_rol"] == 1) {
                 header("location: /admin");
             } else {
@@ -308,5 +310,31 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
 
         return $errores;
+    }
+
+    private function verPermisos(int $idRol): array {
+        $permisos = array(
+            "inicio" => "",
+            "usuarios" => "",
+            "tareas" => "",
+            "proyectos" => "",
+        );
+
+        switch ($idRol) {
+            case 1:
+                $permisos["inicio"] = "rwd";
+                $permisos["usuarios"] = "rwd";
+                $permisos["tareas"] = "rwd";
+                $permisos["proyectos"] = "rwd";
+                break;
+            case 2:
+                $permisos["inicio"] = "";
+                $permisos["usuarios"] = "";
+                $permisos["tareas"] = "";
+                $permisos["proyectos"] = "";
+                break;
+        }
+
+        return $permisos;
     }
 }

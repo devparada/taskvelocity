@@ -61,7 +61,6 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
 
         if (!is_null($usuarioEncontrado)) {
             if ($email == $usuarioEncontrado["email"] && password_verify($password, $usuarioEncontrado["password"])) {
-                $_SESSION["usuario"] = $usuarioEncontrado;
                 return true;
             }
         }

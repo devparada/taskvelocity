@@ -26,7 +26,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
         $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($_SESSION["usuario"]["id_usuario"]);
 
-        $this->view->show('public/proyecto.view.php', $data);
+        $this->view->show('public/proyectos.view.php', $data);
     }
 
     public function verProyectoPublic(string $idProyecto): void {
@@ -95,7 +95,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarDelete(string $uuidProyecto) {
+    public function procesarDelete(string $idProyecto) {
         $data = [];
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();

@@ -1,17 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     color: white;
 }
 
+:root {
+    --color-primario: #1b1b1b;
+    --color-secundario-principal: #2B478E;
+    --color-secundario-complementario: #3456AC;
+}
+
+
 body {
     margin:10px;
-    background-color: #121212;
+    background-color: var(--color-primario);
 }
 
 a {
     color: white;
     text-decoration: none;
+}
+
+:not(h1, h2, h3, h4, h5, h6) {
+    font-family: roboto;
 }
 
 input[type="file"] {
@@ -22,7 +36,7 @@ input, select, option {
     color: black;
 }
 
-img {
+.imagenes-pequeñas {
     width: 50px;
 }
 
@@ -30,8 +44,30 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: green;
     padding: 16px;
+}
+
+nav {
+    margin-right: 32px;
+}
+
+nav ul {
+    display: flex;
+    border-radius: 20px;
+}
+
+nav ul li {
+    list-style-type: none;
+}
+
+nav ul li a {
+    border-radius: 20px;
+    background-color: var(--color-secundario-principal);
+}
+
+.botones:hover {
+    background-color: var(--color-secundario-complementario);
+
 }
 
 #logo {
@@ -39,7 +75,7 @@ header {
     align-items: center;
 }
 
-#logo p {
+#logo h2 {
     margin-left: 6px;
 }
 
@@ -47,11 +83,21 @@ main {
     margin: 16px;
 }
 
+.apartados {
+    margin: 16px;
+    text-align: center;
+    font-family: lato;
+}
+
+.titulos {
+    margin-bottom: 16px;
+}
+
 footer {
     display: flex;
     justify-content: space-between;
     padding: 16px;
-    background-color: gray;
+    background-color: var(--color-secundario-complementario);
 }
 
 footer p {
@@ -60,11 +106,11 @@ footer p {
 
 .botones {
     border-radius: 20px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: #658FDB;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--color-secundario-principal);
 }
 
 #perfil {
@@ -72,6 +118,13 @@ footer p {
     align-items: center;
 }
 
+#perfil img {
+    margin-left: 10px;
+    width: 50px;
+    border-radius: 50px;
+}
+
 #perfil p {
-    margin-right: 6px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
