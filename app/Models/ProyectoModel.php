@@ -23,7 +23,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioPAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
                         . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                        . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyectoPAsoc"]);
+                        . " WHERE id_proyectoPAsoc ='" . $datos[$i]["id_proyectoPAsoc"] . "'");
 
                 $usuariosProyectos = $stmt->fetchAll();
 
@@ -70,7 +70,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
             $fechaLimiteProyecto = null;
         }
 
-        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, 1])) {
+        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $_SESSION["usuario"]["id_usuario"]])) {
             // Se consigue el id del proyecto debido a que es la última tarea insertada
             $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
             // $this->crearImagen($idProyecto);
