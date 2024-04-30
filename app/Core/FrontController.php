@@ -170,7 +170,7 @@ class FrontController {
                         $controlador = new \Com\Daw2\Controllers\ProyectoController();
                         $controlador->procesarAdd();
                     }
-                    , 'get');
+                    , 'post');
 
             Route::add('/tareas',
                     function () {

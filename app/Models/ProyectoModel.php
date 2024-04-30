@@ -58,7 +58,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    public function addProyecto(string $nombreProyecto, string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
+    public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
         $stmt = $this->pdo->prepare("INSERT INTO proyectos "
                 . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop) "
                 . "VALUES(?, ?, ?, ?)");
@@ -78,7 +78,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    private function addProyectoUsuarios(array $idUsuarios, int $idProyecto): void {
+    private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                     . "(id_usuarioPAsoc, id_proyectoPAsoc) "

@@ -32,7 +32,7 @@ input[type="file"] {
     color: white;
 }
 
-input, select, option {
+input, select, option, textarea {
     color: black;
 }
 
