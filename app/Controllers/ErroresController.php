@@ -10,7 +10,12 @@ class ErroresController extends \Com\Daw2\Core\BaseController {
         http_response_code(404);
         $data = ['titulo' => 'Error 404'];
         $data['texto'] = 'Error 404. URL no encontrada.';
-        $this->view->show('admin/error.php', $data);
+
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/error.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->show('public/error.php', $data);
+        }
     }
 
     function error405(): void {
@@ -18,6 +23,10 @@ class ErroresController extends \Com\Daw2\Core\BaseController {
         $data = ['titulo' => 'Error 405'];
         $data['texto'] = 'Error 405. Método no disponible.';
 
-        $this->view->show('admin/error.php', $data);
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/error.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->show('public/error.php', $data);
+        }
     }
 }

@@ -1,0 +1,9 @@
+#mensaje-error {
+    background-color: #DC3545;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+#boton-volver {
+    margin-top: 16px;
+}
