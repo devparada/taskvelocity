@@ -11,7 +11,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
-    public function buscarUsuarioPorId(string $idUsuario): ?array {
+    public function buscarUsuarioPorId(int $idUsuario): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
 
@@ -87,7 +87,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    public function crearAvatar(string $email): void {
+    public function crearAvatar(string $username): void {
         $directorio = "./assets/img/usuarios/";
 
         // Si la carpeta no existe se crea
@@ -95,8 +95,8 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
             mkdir($directorio, 0755, true);
         }
 
-        $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios us WHERE us.email = ?");
-        $stmt->execute([$email]);
+        $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios us WHERE us.username = ?");
+        $stmt->execute([$username]);
 
         $usuarioId = $stmt->fetch()["id_usuario"];
 
@@ -117,7 +117,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    public function updateAvatar(string $idUsuario): bool {
+    public function updateAvatar(int $idUsuario): bool {
         $directorio = "./assets/img/usuarios/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
@@ -141,7 +141,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    public function eliminarAvatar(string $idUsuario): bool {
+    public function eliminarAvatar(int $idUsuario): bool {
         $directorio = "./assets/img/usuarios/";
 
         $imagen = $directorio . "avatar-" . $idUsuario . ".";
@@ -166,7 +166,7 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteUsuario(string $idUsuario): bool {
+    public function deleteUsuario(int $idUsuario): bool {
         if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
             $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
             $stmt->execute([$idUsuario]);

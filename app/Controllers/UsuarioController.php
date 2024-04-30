@@ -84,7 +84,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         if (empty($errores)) {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
             if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
-                $modeloUsuario->crearAvatar($datos["email"]);
+                $modeloUsuario->crearAvatar($datos["username"]);
                 header("location: /usuarios");
             }
         } else {
@@ -165,7 +165,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function verUsuario(string $idUsuario): void {
+    public function verUsuario(int $idUsuario): void {
         $data = [];
         $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
         $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;

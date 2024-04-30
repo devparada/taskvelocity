@@ -10,11 +10,11 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $stmt = $this->pdo->query("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
                     . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                    . " ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY id_proyectoPAsoc");
+                    . " ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY up.id_proyectoPAsoc");
         } else {
             $stmt = $this->pdo->prepare("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
                     . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                    . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_usuario_proyecto_prop = ? GROUP BY id_proyectoPAsoc");
+                    . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_usuario_proyecto_prop = ? GROUP BY up.id_proyectoPAsoc");
             $stmt->execute([$_SESSION["usuario"]["id_usuario"]]);
         }
         $datos = $stmt->fetchAll();
@@ -23,7 +23,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioPAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
                         . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                        . " WHERE id_proyectoPAsoc ='" . $datos[$i]["id_proyectoPAsoc"] . "'");
+                        . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyectoPAsoc"]);
 
                 $usuariosProyectos = $stmt->fetchAll();
 
@@ -43,7 +43,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
-    public function buscarProyectoPorId(string $idProyecto): ?array {
+    public function buscarProyectoPorId(int $idProyecto): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM proyectos pr LEFT JOIN usuarios us"
                 . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
                 . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ?");
@@ -59,8 +59,6 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
     }
 
     public function addProyecto(string $nombreProyecto, string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
-        $idProyecto = $this->pdo->query("SELECT UUID()")->fetchColumn();
-
         $stmt = $this->pdo->prepare("INSERT INTO proyectos "
                 . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop) "
                 . "VALUES(?, ?, ?, ?)");
@@ -72,6 +70,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $_SESSION["usuario"]["id_usuario"]])) {
             // Se consigue el id del proyecto debido a que es la última tarea insertada
+            $idProyecto = $this->pdo->lastInsertId();
             $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
             // $this->crearImagen($idProyecto);
             return true;
@@ -79,7 +78,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
+    private function addProyectoUsuarios(array $idUsuarios, int $idProyecto): void {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                     . "(id_usuarioPAsoc, id_proyectoPAsoc) "
@@ -94,7 +93,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteProyecto(string $idProyecto): bool {
+    public function deleteProyecto(int $idProyecto): bool {
         if (!is_null($this->buscarProyectoPorId($idProyecto))) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);

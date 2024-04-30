@@ -48,7 +48,7 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel user-panel-personalizado">
                         <div>
-                            <img src="assets/img/users/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/usuarios/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
+                            <img src="assets/img/usuarios/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/usuarios/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
                         </div>
                         <div class="info">
                             <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"

@@ -43,7 +43,7 @@
                             foreach ($usuarios as $u) {
                                 ?>
                                 <tr>
-                                    <td><img src="assets/img/users/avatar-<?php echo $u['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $u["id_usuario"] . ".png") ? "png" : "jpg" ?>" alt="Avatar usuario <?php echo $u['id_usuario'] ?>"></td>
+                                    <td><img src="assets/img/usuarios/avatar-<?php echo $u['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $u["id_usuario"] . ".png") ? "png" : "jpg" ?>" alt="Avatar usuario <?php echo $u['id_usuario'] ?>"></td>
                                     <td><?php echo $u['username']; ?></td>
                                     <td><a href="mailto: <?php echo $u['email']; ?>"><?php echo $u['email']; ?></a></td>
                                     <td><?php echo $u['nombre_rol']; ?></td>

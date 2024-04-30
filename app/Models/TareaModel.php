@@ -24,7 +24,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
                         . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
-                        . " WHERE id_tareaTAsoc ='" . $datos[$i]["id_tareaTAsoc"] . "'");
+                        . " WHERE id_tareaTAsoc =" . $datos[$i]["id_tareaTAsoc"]);
 
                 $usuariosTareas = $stmt->fetchAll();
 
@@ -44,7 +44,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
-    public function buscarTareaPorId(string $idTarea): ?array {
+    public function buscarTareaPorId(int $idTarea): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
                 . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
                 . "WHERE id_tarea = ?");
@@ -61,10 +61,10 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
     /**
      * Muestra las tareas asociadas a un proyecto por el id del proyecto
-     * @param string $idProyecto el uuid del proyecto
+     * @param int $idProyecto el id del proyecto
      * @return array Retorna un array con las tareas del proyecto asociado
      */
-    public function mostrarTareasPorProyecto(string $idProyecto): array {
+    public function mostrarTareasPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
                 . "WHERE ta.id_proyecto = ?");
         $stmt->execute([$idProyecto]);
@@ -73,10 +73,10 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
 
     /**
      * Muestra los usuarios asociados a un proyecto por el id del proyecto
-     * @param string $idProyecto el id del proyecto
+     * @param int $idProyecto el id del proyecto
      * @return array Retorna un array con los usuarios del proyecto asociado
      */
-    public function mostrarUsuariosPorProyecto(string $idProyecto): array {
+    public function mostrarUsuariosPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
                 . "WHERE up.id_proyectoPAsoc  = ?");
         $stmt->execute([$idProyecto]);
@@ -93,7 +93,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
             $fechaLimite = null;
         }
 
-        if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, 1, $idProyecto])) {
+        if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $_SESSION["usuario"]["id_usuario"], $idProyecto])) {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
             $this->addTareaUsuarios($id_usuarios_asociados, $idTarea);
@@ -103,7 +103,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    private function addTareaUsuarios(array $idUsuarios, string $idTarea): void {
+    private function addTareaUsuarios(array $idUsuarios, int $idTarea): void {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                     . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
@@ -112,7 +112,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    private function crearImagen(string $idTarea): void {
+    private function crearImagen(int $idTarea): void {
         $directorio = "./assets/img/tareas/";
 
         // Si la carpeta no existe se crea
@@ -168,7 +168,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function deleteTarea(string $uuidTarea): bool {
+    public function deleteTarea(int $idTarea): bool {
         $valorDevuelto = false;
 
         if (!is_null($this->buscarTareaPorId($idTarea))) {

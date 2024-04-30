@@ -26,7 +26,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $this->view->show('public/proyectos.view.php', $data);
     }
 
-    public function verProyectoPublic(string $idProyecto): void {
+    public function verProyectoPublic(int $idProyecto): void {
         $data = [];
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
@@ -92,7 +92,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarDelete(string $idProyecto) {
+    public function procesarDelete(int $idProyecto) {
         $data = [];
 
         $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
