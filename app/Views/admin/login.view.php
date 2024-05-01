@@ -39,9 +39,15 @@
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>
                                 </div>
-                            </div>          
+                            </div>
                         </div>
-                        <p class="login-box-msg text-danger"><?php echo isset($loginError) ? $loginError : ''; ?></p>      
+
+                        <?php if (isset($loginError)) { ?>
+                            <p class="login-box-msg text-danger"><?php echo $loginError ?></p> 
+                        <?php } ?>
+                        <div class="text-center">
+                            <p>¿No tienes una cuenta? <a href="/register">Crea una cuenta</a></p>
+                        </div>
                         <div class="row">
                             <div class="col-12">            
                                 <button type="submit" class="btn btn-primary btn-block float-right">Iniciar sesión</button>

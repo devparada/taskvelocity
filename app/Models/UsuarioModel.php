@@ -67,7 +67,18 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    public function addUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor): bool {
+    /**
+     * Añade el usuario a la base de datos con los datos pasados por $_POST (son strings)
+     * @param string $username el nombre de usuario
+     * @param string $contrasena la contraseña
+     * @param string $email el email
+     * @param $idRol el id del rol
+     * @param string $fechaNacimiento la fecha de nacimiento
+     * @param string $descripcionUsuario la descripción del usuario (opcional)
+     * @param string $idColor el id del color
+     * @return bool Devuelve true si se añade correctamente o false si no
+     */
+    public function addUsuario(string $username, string $contrasena, string $email, $idRol, string $fechaNacimiento, ?string $descripcionUsuario, string $idColor): bool {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios (username, password, email, id_rol, fecha_nacimiento, fecha_login, 
             descripcion_usuario, id_color_favorito) VALUES (?, ?, ?, ?, ?, NULL, ?, ?)");
 

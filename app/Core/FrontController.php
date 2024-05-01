@@ -32,14 +32,14 @@ class FrontController {
                 Route::add('/admin/usuarios/add',
                         function () {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->mostrarAdd();
+                            $controlador->mostrarAddUsuario();
                         }
                         , 'get');
 
                 Route::add('/admin/usuarios/add',
                         function () {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->procesarAdd();
+                            $controlador->procesarAddUsuario();
                         }
                         , 'post');
             }
@@ -191,7 +191,7 @@ class FrontController {
             Route::add('/login',
                     function () {
                         $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                        $controlador->login();
+                        $controlador->mostrarLogin();
                     }
                     , 'get');
 
@@ -201,7 +201,22 @@ class FrontController {
                         $controlador->procesarLogin();
                     }
                     , 'post');
+
+            Route::add('/register',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->mostrarRegister();
+                    }
+                    , 'get');
+
+            Route::add('/register',
+                    function () {
+                        $controlador = new \Com\Daw2\Controllers\UsuarioController();
+                        $controlador->procesarAddUsuario();
+                    }
+                    , 'post');
         }
+
         Route::add('/',
                 function () {
                     $controlador = new \Com\Daw2\Controllers\InicioController();

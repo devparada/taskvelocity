@@ -19,7 +19,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
-    public function login() {
+    public function mostrarLogin() {
         $data = [];
 
         $this->view->show('admin/login.view.php', $data);
@@ -33,22 +33,37 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
 
         if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
-            $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($datos["email"]);
-
-            $_SESSION["usuario"] = $usuarioEncontrado;
-            $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
-            if ($usuarioEncontrado["id_rol"] == 1) {
-                header("location: /admin");
-            } else {
-                header("location: /proyectos");
-            }
+            $this->crearLogin($datos["email"]);
         } else {
             $data["loginError"] = "Datos incorrectos";
             $this->view->show('admin/login.view.php', $data);
         }
     }
 
-    public function mostrarAdd() {
+    private function crearLogin(string $email): void {
+        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($email);
+
+        $_SESSION["usuario"] = $usuarioEncontrado;
+        $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
+
+        if ($usuarioEncontrado["id_rol"] == 1) {
+            header("location: /admin");
+        } else {
+            header("location: /proyectos");
+        }
+    }
+
+    public function mostrarRegister() {
+        $data = [];
+
+        $modeloColores = new \Com\Daw2\Models\ColorModel();
+        $data["colores"] = $modeloColores->mostrarColores();
+
+        $this->view->show('public/register.view.php', $data);
+    }
+
+    public function mostrarAddUsuario() {
         $data = [];
         $data['titulo'] = 'Añadir usuarios';
         $data['seccion'] = '/admin/usuarios/add';
@@ -63,11 +78,19 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
-    public function procesarAdd() {
+    /**
+     * Este método procesa añadir un usuario a partir de los datos recibidos de un formulario
+     * de añadir usuario (tiene en cuenta el id_rol) o register (no tiene en cuenta el id_rol) y
+     * Cuando el usuario se registra, inicia sesión automáticamente.
+     * @return void No devuelve nada
+     */
+    public function procesarAddUsuario(): void {
         $data = [];
-        $data['titulo'] = 'Añadir usuarios';
-        $data['seccion'] = '/admin/usuarios/add';
-        $data['tituloDiv'] = 'Añadir usuario';
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
+            $data['titulo'] = 'Añadir usuarios';
+            $data['seccion'] = '/admin/usuarios/add';
+            $data['tituloDiv'] = 'Añadir usuario';
+        }
 
         unset($_POST["enviar"]);
 
@@ -83,20 +106,33 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         if (empty($errores)) {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
-            if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
-                $modeloUsuario->crearAvatar($datos["username"]);
-                header("location: /usuarios");
+            if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
+                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
+                    $modeloUsuario->crearAvatar($datos["username"]);
+                    header("location: /usuarios");
+                }
+            } else {
+                // El 2 es el id de rol del usuario (cuando se registra el usuario se añade el id de rol 2 que es usuario)
+                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], 2, $datos["fecha_nacimiento"], "", $datos["id_color"])) {
+                    $modeloUsuario->crearAvatar($datos["username"]);
+                    $this->crearLogin($datos["email"]);
+                    header("location: /proyectos");
+                }
             }
         } else {
-            $modeloRol = new \Com\Daw2\Models\RolModel();
-            $data["roles"] = $modeloRol->mostrarRoles();
+            $data["errores"] = $errores;
 
             $modeloColor = new \Com\Daw2\Models\ColorModel();
             $data["colores"] = $modeloColor->mostrarColores();
 
-            $data["errores"] = $errores;
+            if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
+                $modeloRol = new \Com\Daw2\Models\RolModel();
+                $data["roles"] = $modeloRol->mostrarRoles();
 
-            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->show('public/register.view.php', $data);
+            }
         }
     }
 
@@ -223,16 +259,18 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             }
         }
 
-        if (empty($data["id_rol"])) {
-            $errores["id_rol"] = "Debes seleccionar un rol";
-        } else if (!filter_var($data["id_rol"], FILTER_VALIDATE_INT)) {
-            $errores["id_rol"] = "El rol debe ser un número";
-        } else if (!$modeloRol->comprobarRol($data["id_rol"])) {
-            $errores["id_rol"] = "Debes seleccionar un rol válido";
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == 1) {
+            if (empty($data["id_rol"])) {
+                $errores["id_rol"] = "Debes seleccionar un rol";
+            } else if (!filter_var($data["id_rol"], FILTER_VALIDATE_INT)) {
+                $errores["id_rol"] = "El rol debe ser un número";
+            } else if (!$modeloRol->comprobarRol($data["id_rol"])) {
+                $errores["id_rol"] = "Debes seleccionar un rol válido";
+            }
         }
 
         if (empty($data["fecha_nacimiento"])) {
-            $errores["fechaNac"] = "La fecha de nacimiento no debe estar vacía";
+            $errores["fecha_nacimiento"] = "La fecha de nacimiento no debe estar vacía";
         } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
             $errores["fecha_nacimiento"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
         }
