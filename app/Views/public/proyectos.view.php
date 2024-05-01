@@ -5,6 +5,7 @@
         <title>TaskVelocity | Tus proyectos</title>
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
+        <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <header>
@@ -25,7 +26,7 @@
                 <div id="perfil">
                     <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                     <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    <a href="/logout" class="botones">Cerrar sesión</a>
+                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
                 </div>
             <?php } else { ?>
                 <a href="/login" class="botones">Iniciar sesión</a>
