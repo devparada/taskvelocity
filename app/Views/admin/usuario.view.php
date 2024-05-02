@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-6">
                     <div class="m-0 font-weight-bold justify-content-end">
-                        <a href="/admin/usuarios/add/" class="btn btn-success ml-1 float-right"> Nuevo usuario <i class="fas fa-plus-circle"></i></a>
+                        <a href="/admin/usuarios/add/" class="btn btn-success ml-1 float-right"> Nuevo usuario <i class="fas fa-user-plus"></i></a>
                     </div>
                 </div>
             </div>
@@ -43,15 +43,15 @@
                             foreach ($usuarios as $u) {
                                 ?>
                                 <tr>
-                                    <td><img src="assets/img/usuarios/avatar-<?php echo $u['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $u["id_usuario"] . ".png") ? "png" : "jpg" ?>" alt="Avatar usuario <?php echo $u['id_usuario'] ?>"></td>
+                                    <td><img src="assets/img/usuarios/avatar-<?php echo $u['id_usuario'] . "."; ?><?php echo file_exists("assets/img/users/avatar-" . $u["id_usuario"] . ".png") ? "png" : "jpg" ?>" alt="Avatar usuario <?php echo $u['id_usuario'] ?>" class="img-circle imagenes-usuarios"></td>
                                     <td><?php echo $u['username']; ?></td>
                                     <td><a href="mailto: <?php echo $u['email']; ?>"><?php echo $u['email']; ?></a></td>
                                     <td><?php echo $u['nombre_rol']; ?></td>
                                     <td><?php echo (!empty($u['fecha_login'])) ? $u['fecha_login'] : "No se ha conectado aún" ?></td>
                                     <td>
-                                        <a href="/admin/usuarios/view/<?php echo $u['id_usuario']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/admin/usuarios/edit/<?php echo $u['id_usuario']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
-                                        <a href="/admin/usuarios/delete/<?php echo $u['id_usuario']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
+                                        <a href="/admin/usuarios/view/<?php echo $u['id_usuario']; ?>" class="btn btn-default ml-1"><i class="fas fa-user-alt"></i></a>
+                                        <a href="/admin/usuarios/edit/<?php echo $u['id_usuario']; ?>" class="btn btn-primary ml-1"><i class="fas fa-user-edit"></i></a>
+                                        <a href="/admin/usuarios/delete/<?php echo $u['id_usuario']; ?>" class="btn btn-danger ml-1"><i class="fas fa-user-minus"></i></a>
                                     </td>
                                 </tr>
                                 <?php

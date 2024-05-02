@@ -9,3 +9,7 @@ a {
     display: flex;
     align-items: center;
 }
+
+.imagenes-usuarios {
+    width: 80px;
+}
