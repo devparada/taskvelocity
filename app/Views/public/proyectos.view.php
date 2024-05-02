@@ -33,28 +33,37 @@
             <?php } ?>
         </header>
         <main>
-            <h1 class="titulos">Tus proyectos</h1>
-            <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
-            <?php foreach ($proyectos as $p) { ?>
-                <div class="proyectos">
-                    <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">
-                    <div class="informacion-proyecto">
-                        <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
-                        <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
-                        <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
-                        <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones">Entrar en el proyecto</a>
-                        <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones">Editar el proyecto</a>
-                        <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones">Borrar el proyecto</a>
+            <div id="introduccion">
+                <h1>Tus proyectos</h1>
+                <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
+            </div>
+            <div>
+                <?php foreach ($proyectos as $p) { ?>
+                    <div class="proyectos">
+                        <?php
+                        $idProyecto = $p["id_proyecto"];
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) {
+                            ?>
+                            <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
+                        <?php } ?>
+                        <div class="informacion-proyecto">
+                            <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
+                            <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
+                            <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
+                            <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones">Entrar en el proyecto</a>
+                            <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones">Editar el proyecto</a>
+                            <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones">Borrar el proyecto</a>
+                        </div>
                     </div>
-                </div>
-            <?php } ?>
+                <?php } ?>
+            </div>
         </main>
         <footer>
             <div>
                 <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
             </div>
             <div id="logo-footer">
-                <a href="#" class="logo-enlace"><img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                <a href="/" class="logo-enlace"><img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
                     <p>TaskVelocity</p></a>
             </div>
             <div id="iconos-footer">

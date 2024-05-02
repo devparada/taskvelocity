@@ -12,7 +12,7 @@
         <header>
             <div id="logo">
                 <a href="/">
-                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                    <img src="../../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
                 </a>
                 <h2>TaskVelocity</h2>
             </div>
@@ -68,7 +68,7 @@
                 <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
             </div>
             <div id="logo-footer">
-                <a href="#" class="logo-enlace"><img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                <a href="/" class="logo-enlace"><img src="../../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
                     <p>TaskVelocity</p></a>
             </div>
             <div id="iconos-footer">

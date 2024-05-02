@@ -89,6 +89,13 @@ main {
     margin: 16px;
 }
 
+#introduccion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 16px;
+}
+
 .apartados {
     margin: 16px;
     text-align: center;

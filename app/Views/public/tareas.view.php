@@ -45,7 +45,6 @@
                         if (file_exists("./assets/img/tareas/tarea-$idTarea.png")) {
                             ?>
                             <img src="/assets/img/tareas/tarea-<?php echo $t["id_tarea"] ?>" alt="Imagen Tarea <?php echo $t["nombre_tarea"] ?>" class="imagen-proyecto">        
-                        <?php } else { ?>
                         <?php } ?>
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>

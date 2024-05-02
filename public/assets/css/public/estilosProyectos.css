@@ -12,10 +12,7 @@
 
 .imagen-proyecto {
     width: 20%;
-}
-
-#info {
-    padding: 6px;
+    border-radius: 50px;
 }
 
 .proyectos p, .proyectos a {
