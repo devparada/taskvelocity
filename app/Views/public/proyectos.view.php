@@ -51,13 +51,17 @@
         </main>
         <footer>
             <div>
-                <p>TaskVelocity - 2024</p>
+                <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
+            </div>
+            <div id="logo-footer">
+                <a href="#" class="logo-enlace"><img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                    <p>TaskVelocity</p></a>
             </div>
             <div id="iconos-footer">
-                <a href="#">Linkedin</a>
-                <a href="#">Youtube</a>
-                <a href="#">Twitter / X</a>
-                <a href="#">Instagram</a>
+                <a href="https://es.linkedin.com"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://www.youtube.com"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://twitter.com"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </footer>
     </body>
