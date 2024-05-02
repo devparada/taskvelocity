@@ -14,11 +14,11 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <div class="col-6">
-                    <h6 class="m-0 installfont-weight-bold text-primary">Tareas</h6>
+                    <h6 class="m-0 installfont-weight-bold text-primary">Proyectos</h6>
                 </div>
                 <div class="col-6">
                     <div class="m-0 font-weight-bold justify-content-end">
-                        <a href="/admin/proyectos/add/" class="btn btn-success ml-1 float-right"> Nuevo proyecto <i class="fas fa-plus-circle"></i></a>
+                        <a href="/admin/proyectos/add/" class="btn btn-success ml-1 float-right"> Nuevo proyecto <i class="fas fa-folder-plus"></i></a>
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Descripcion</th>
+                                <th>Descripción</th>
                                 <th>Propietario</th>
                                 <th>Fecha límite</th>
                                 <th>Usuarios asociados</th>                    
@@ -44,7 +44,7 @@
                                 ?>
                                 <tr>
                                     <td><?php echo $p['nombre_proyecto']; ?></td>
-                                    <td><?php echo isset($p["descripcion_proyecto"]) ? $p["descripcion_proyecto"] : "No tiene descripcion" ?></td>
+                                    <td><?php echo (!empty($p["descripcion_proyecto"])) ? $p["descripcion_proyecto"] : "No tiene descripción" ?></td>
                                     <td><?php echo $p['username']; ?></td>  
                                     <td><?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></td>
                                     <td><?php
@@ -57,9 +57,9 @@
                                         }
                                         ?></td>
                                     <td>
-                                        <a href="/admin/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/admin/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
-                                        <a href="/admin/proyectos/delete/<?php echo $p['id_proyecto']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
+                                        <a href="/admin/proyectos/view/<?php echo $p['id_proyecto']; ?>" class="btn btn-info ml-1"><i class="fas fa-folder-open"></i></a>
+                                        <a href="/admin/proyectos/edit/<?php echo $p['id_proyecto']; ?>" class="btn btn-warning ml-1"><i class="fas fa-edit"></i></a>
+                                        <a href="/admin/proyectos/delete/<?php echo $p['id_proyecto']; ?>" class="btn btn-danger ml-1"><i class="fas fa-folder-minus"></i></a>
                                     </td>
                                 </tr>
                                 <?php

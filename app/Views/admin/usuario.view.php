@@ -49,8 +49,8 @@
                                     <td><?php echo $u['nombre_rol']; ?></td>
                                     <td><?php echo (!empty($u['fecha_login'])) ? $u['fecha_login'] : "No se ha conectado aún" ?></td>
                                     <td>
-                                        <a href="/admin/usuarios/view/<?php echo $u['id_usuario']; ?>" class="btn btn-default ml-1"><i class="fas fa-user-alt"></i></a>
-                                        <a href="/admin/usuarios/edit/<?php echo $u['id_usuario']; ?>" class="btn btn-primary ml-1"><i class="fas fa-user-edit"></i></a>
+                                        <a href="/admin/usuarios/view/<?php echo $u['id_usuario']; ?>" class="btn btn-info ml-1"><i class="fas fa-user-alt"></i></a>
+                                        <a href="/admin/usuarios/edit/<?php echo $u['id_usuario']; ?>" class="btn btn-warning ml-1"><i class="fas fa-user-edit"></i></a>
                                         <a href="/admin/usuarios/delete/<?php echo $u['id_usuario']; ?>" class="btn btn-danger ml-1"><i class="fas fa-user-minus"></i></a>
                                     </td>
                                 </tr>

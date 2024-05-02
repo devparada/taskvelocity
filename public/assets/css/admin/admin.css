@@ -10,6 +10,12 @@ a {
     align-items: center;
 }
 
+/* Centra el texto en forma vertical de las celdas de las tablas */
+.table td {
+    vertical-align: baseline;
+}
+
+/* Hace las imágenes con un tamaño predeterminado y más pequeñas */
 .imagenes-usuarios {
-    width: 80px;
+    width: 50px;
 }

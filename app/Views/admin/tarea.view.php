@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-6">
                     <div class="m-0 font-weight-bold justify-content-end">
-                        <a href="/admin/tareas/add/" class="btn btn-success ml-1 float-right"> Nueva tarea <i class="fas fa-plus-circle"></i></a>
+                        <a href="/admin/tareas/add/" class="btn btn-success ml-1 float-right">Nueva tarea <i class="fas fa-tasks"></i></a>
                     </div>
                 </div>
             </div>
@@ -57,9 +57,9 @@
                                         }
                                         ?></td>  
                                     <td>
-                                        <a href="/admin/tareas/view/<?php echo $t['id_tarea']; ?>" class="btn btn-default ml-1"><i class="fas fa-eye"></i></a>
-                                        <a href="/admin/tareas/edit/<?php echo $t['id_tarea']; ?>" class="btn btn-primary ml-1"><i class="fas fa-edit"></i></a>
-                                        <a href="/admin/tareas/delete/<?php echo $t['id_tarea']; ?>" class="btn btn-danger ml-1"><i class="fas fa-trash"></i></a>
+                                        <a href="/admin/tareas/view/<?php echo $t['id_tarea']; ?>" class="btn btn-info ml-1"><i class="fas fa-sticky-note"></i></a>
+                                        <a href="/admin/tareas/edit/<?php echo $t['id_tarea']; ?>" class="btn btn-warning ml-1"><i class="fas fa-pen"></i></a>
+                                        <a href="/admin/tareas/delete/<?php echo $t['id_tarea']; ?>" class="btn btn-danger ml-1"><i class="fas fa-box-tissue"></i></a>
                                     </td>
                                 </tr>
                                 <?php
