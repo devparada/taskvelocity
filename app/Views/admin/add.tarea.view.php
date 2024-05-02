@@ -51,10 +51,10 @@
 
                         <div class="mb-3 col-sm-3">
                             <label for="id_usuarios_asociados[]">Usuarios asociados *</label>
-                            <select class="form-control" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
                                 <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" <?php echo isset($datos["id_usuarios_asociados"]) && $usuario["id_usuario"] == $datos["id_usuarios_asociados"] ? "selected" : "" ?>><?php echo $usuario["username"]; ?></option>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>" <?php echo isset($datos["id_usuarios_asociados"]) && ($usuario["id_usuario"] == $datos["id_usuarios_asociados"]) || ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "selected" : "" ?>><?php echo $usuario["username"]; ?></option>
                                 <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>

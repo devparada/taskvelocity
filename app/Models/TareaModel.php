@@ -96,8 +96,8 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $_SESSION["usuario"]["id_usuario"], $idProyecto])) {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
-            $this->addTareaUsuarios($id_usuarios_asociados, $idTarea);
-            $this->crearImagen($idTarea);
+            $this->addTareaUsuarios($id_usuarios_asociados, (int) $idTarea);
+            $this->crearImagen((int) $idTarea);
             return true;
         }
         return false;
@@ -174,7 +174,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         if (!is_null($this->buscarTareaPorId($idTarea))) {
             $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
             $stmt->execute([$idTarea]);
-            if ($this->buscarAvatar($idTarea) || $this->eliminarAvatar($idTarea)) {
+            if (!$this->buscarAvatar($idTarea) || $this->eliminarAvatar($idTarea)) {
                 $valorDevuelto = true;
             } else {
                 $valorDevuelto = false;

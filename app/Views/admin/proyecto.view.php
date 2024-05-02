@@ -44,9 +44,9 @@
                                 ?>
                                 <tr>
                                     <td><?php echo $p['nombre_proyecto']; ?></td>
-                                    <td><?php echo $p['descripcion_proyecto']; ?></a></td>
+                                    <td><?php echo isset($p["descripcion_proyecto"]) ? $p["descripcion_proyecto"] : "No tiene descripcion" ?></td>
                                     <td><?php echo $p['username']; ?></td>  
-                                    <td><?php echo $p['fecha_limite_proyecto']; ?></td>
+                                    <td><?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></td>
                                     <td><?php
                                         for ($index = 0; $index < count($p["nombresUsuarios"]); $index++) {
                                             if ($index < 3) {
