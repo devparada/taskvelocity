@@ -61,10 +61,16 @@ class UsuarioModel extends \Com\Daw2\Core\BaseModel {
 
         if (!is_null($usuarioEncontrado)) {
             if ($email == $usuarioEncontrado["email"] && password_verify($password, $usuarioEncontrado["password"])) {
+                $this->actualizarFechaLogin($usuarioEncontrado["id_usuario"]);
                 return true;
             }
         }
         return false;
+    }
+
+    private function actualizarFechaLogin(int $idUsuario): void {
+        $stmt = $this->pdo->prepare("UPDATE usuarios SET fecha_login = current_timestamp() WHERE id_usuario = ?");
+        $stmt->execute([$idUsuario]);
     }
 
     /**
