@@ -46,34 +46,34 @@ class FrontController {
 
             if (strpos($_SESSION["permisos"]["usuarios"], "r") !== false) {
                 Route::add('/admin/usuarios/view/([0-9]+)',
-                        function ($uuidUsuario) {
+                        function ($idUsuario) {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->verUsuario($uuidUsuario);
+                            $controlador->verUsuario($idUsuario);
                         }
                         , 'get');
             }
 
             if (strpos($_SESSION["permisos"]["usuarios"], "w") !== false) {
                 Route::add('/admin/usuarios/edit/([0-9]+)',
-                        function ($uuidUsuario) {
+                        function ($idUsuario) {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->mostrarEdit($uuidUsuario);
+                            $controlador->mostrarEdit($idUsuario);
                         }
                         , 'get');
 
                 Route::add('/admin/usuarios/edit/([0-9]+)',
-                        function ($uuidUsuario) {
+                        function ($idUsuario) {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->procesarEdit($uuidUsuario);
+                            $controlador->procesarEdit($idUsuario);
                         }
                         , 'post');
             }
 
             if (strpos($_SESSION["permisos"]["usuarios"], "d") !== false) {
                 Route::add('/admin/usuarios/delete/([0-9]+)',
-                        function ($uuidUsuario) {
+                        function ($idUsuario) {
                             $controlador = new \Com\Daw2\Controllers\UsuarioController();
-                            $controlador->procesarDelete($uuidUsuario);
+                            $controlador->procesarDelete($idUsuario);
                         }
                         , 'get');
             }
@@ -104,9 +104,9 @@ class FrontController {
             }
             if (strpos($_SESSION["permisos"]["tareas"], "r") !== false) {
                 Route::add('/admin/tareas/delete/([0-9]+)',
-                        function ($uuidTarea) {
+                        function ($idTarea) {
                             $controlador = new \Com\Daw2\Controllers\TareaController();
-                            $controlador->procesarDelete($uuidTarea);
+                            $controlador->procesarDelete($idTarea);
                         }
                         , 'get');
             }
@@ -136,9 +136,9 @@ class FrontController {
 
             if (strpos($_SESSION["permisos"]["proyectos"], "r") !== false) {
                 Route::add('/admin/proyectos/delete/([0-9]+)',
-                        function ($uuidProyecto) {
+                        function ($idProyecto) {
                             $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                            $controlador->procesarDelete($uuidProyecto);
+                            $controlador->procesarDelete($idProyecto);
                         }
                         , 'get');
             }
@@ -152,9 +152,9 @@ class FrontController {
                     , 'get');
 
             Route::add('/proyectos/ver/([0-9]+)',
-                    function ($uuidProyecto) {
+                    function ($idProyecto) {
                         $controlador = new \Com\Daw2\Controllers\ProyectoController();
-                        $controlador->verProyectoPublic($uuidProyecto);
+                        $controlador->verProyectoPublic($idProyecto);
                     }
                     , 'get');
 
