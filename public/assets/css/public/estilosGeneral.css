@@ -31,16 +31,12 @@ h1, h2, h3, h4, h5, h6 {
     font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
 }
 
-input[type="file"] {
-    color: white;
-}
-
-input, select, option, textarea {
-    color: black;
-}
-
 .imagenes-pequeñas {
     width: 50px;
+}
+
+.campo-obligatorio {
+    color: #FF8080;
 }
 
 /* HEADER */
@@ -54,7 +50,7 @@ header {
 }
 
 nav {
-    margin-right: 32px;
+    margin-left: 48px;
 }
 
 nav ul {

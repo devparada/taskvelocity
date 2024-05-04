@@ -172,6 +172,20 @@ class FrontController {
                     }
                     , 'post');
 
+            Route::add('/proyectos/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->mostrarEdit($idProyecto);
+                    }
+                    , 'get');
+
+            Route::add('/proyectos/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\Daw2\Controllers\ProyectoController();
+                        $controlador->procesarEdit($idProyecto);
+                    }
+                    , 'post');
+
             Route::add('/tareas',
                     function () {
                         $controlador = new \Com\Daw2\Controllers\TareaController();

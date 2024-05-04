@@ -43,16 +43,31 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         return $usuarios;
     }
 
+    /**
+     * Busca el proyecto a partir de su id y devuelve los datos del proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array|null los datos del proyecto si lo encontra o null si no lo encuentra
+     */
     public function buscarProyectoPorId(int $idProyecto): ?array {
-        $stmt = $this->pdo->prepare("SELECT * FROM proyectos pr LEFT JOIN usuarios us"
+        $stmt = $this->pdo->prepare("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
                 . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ?");
+                . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ? GROUP BY up.id_proyectoPAsoc");
         $stmt->execute([$idProyecto]);
 
-        $usuarioEncontrado = $stmt->fetch();
+        $proyectoEncontrado = $stmt->fetch();
 
-        if ($usuarioEncontrado) {
-            return $usuarioEncontrado;
+        for ($j = 0; $j < $proyectoEncontrado["COUNT(id_usuarioPAsoc)"]; $j++) {
+            $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
+                    . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
+                    . " WHERE id_proyectoPAsoc =" . $proyectoEncontrado["id_proyectoPAsoc"]);
+
+            $usuariosProyectos = $stmt->fetchAll();
+
+            $proyectoEncontrado["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
+        }
+
+        if ($proyectoEncontrado) {
+            return $proyectoEncontrado;
         } else {
             return null;
         }
@@ -79,6 +94,42 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
     }
 
     private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
+        foreach ($idUsuarios as $idUsuario) {
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
+                    . "(id_usuarioPAsoc, id_proyectoPAsoc) "
+                    . "VALUES(?, ?)");
+
+            $stmt->execute([$idUsuario, $idProyecto]);
+        }
+    }
+
+    /**
+     * Edita el proyecto en la base de datos a partir de los datos pasados
+     * @param string $nombreProyecto el nombre del proyecto
+     * @param string $fechaLimiteProyecto la fecha limite del proyecto
+     * @param array $idUsuarios los ids de los usuarios
+     * @param string|null $descripcionProyecto la descripcion del proyecto
+     * @return bool Retorna true si se edito correctamente el proyecto o false si no
+     */
+    public function editProyecto(string $nombreProyecto, string $fechaLimiteProyecto, array $idUsuarios, ?string $descripcionProyecto, int $idUsuario): bool {
+        $stmt = $this->pdo->prepare("UPDATE proyectos "
+                . "SET nombre_proyecto=?, descripcion_proyecto=?, fecha_limite_proyecto=? "
+                . "WHERE id_proyecto=?");
+
+        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idUsuario])) {
+            $this->editarUsuariosProyectos($idUsuarios, $idUsuario);
+            return true;
+        }
+        return false;
+    }
+
+    private function editarUsuariosProyectos(array $idUsuarios, int $idProyecto) {
+        // Elimina todos los usuarios del proyecto
+        $stmt = $this->pdo->prepare("DELETE FROM usuarios_proyectos "
+                . "WHERE id_proyectoPAsoc=?");
+
+        $stmt->execute([$idProyecto]);
+
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                     . "(id_usuarioPAsoc, id_proyectoPAsoc) "

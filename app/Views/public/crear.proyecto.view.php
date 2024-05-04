@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <base href="/">
         <meta charset="UTF-8">
-        <title>TaskVelocity | Crear proyecto</title>
-        <link rel="stylesheet" href="../../assets/css/public/estilosGeneral.css">
-        <link rel="stylesheet" href="../../assets/css/public/estilosProyectos.css">
+        <title>TaskVelocity | <?php echo $titulo ?></title>
+        <!-- Select 2 -->
+        <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+        <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
+        <!-- Estilos propios -->
+        <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosCrear.css">
+
     </head>
     <body>
         <header>
             <div id="logo">
                 <a href="/" class="logo-enlace">
-                    <img src="../../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
                     <h2>TaskVelocity</h2>
                 </a>
             </div>
@@ -33,29 +41,51 @@
             <?php } ?>
         </header>
         <main>
-            <div class="formlario">
-                <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
-                    <label for="nombre_proyecto">Nombre del proyecto *</label>
-                    <input type="text" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>">
+            <h1 class="apartados"><?php echo $titulo ?></h1>
+            <div class="formulario">
+                <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
+                    <div class="campo-formulario">
+                        <label for="nombre_proyecto">Nombre del proyecto <span class="campo-obligatorio">*</span></label>
+                        <input type="text" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" size="26" value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>">
+                    </div>
 
-                    <label for="imagen_proyecto">Imagen</label>
-                    <input type="file" id="imagen_proyecto" accept=".jpg,.png">
+                    <div class="campo-formulario">
+                        <label for="imagen_proyecto">Imagen</label>
+                        <input type="file" id="imagen_proyecto" accept=".jpg,.png">
+                    </div>
 
-                    <label for="fecha_limite_proyecto">Fecha límite</label>
-                    <input type="date" id="fecha_limite_proyecto" name="fecha_limite_proyecto" value="<?php echo isset($datos["fecha_limite_proyecto"]) ? $datos["fecha_limite_proyecto"] : "" ?>">
+                    <div class="campo-formulario">
+                        <label for="fecha_limite_proyecto">Fecha límite</label>
+                        <input type="date" id="fecha_limite_proyecto" name="fecha_limite_proyecto" value="<?php echo isset($datos["fecha_limite_proyecto"]) ? $datos["fecha_limite_proyecto"] : "" ?>">
+                    </div>
 
-                    <label for="id_usuarios_asociados[]">Usuarios asociados *</label>
-                    <select id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple>
-                        <option value=""></option>
-                        <?php foreach ($usuarios as $usuario) { ?>
-                            <option value="<?php echo $usuario["id_usuario"] ?>" <?php echo isset($datos["id_usuarios_asociados"]) && $usuario["id_usuario"] == $datos["id_usuarios_asociados"] ? "selected" : "" ?>><?php echo $usuario["username"]; ?></option>
-                        <?php } ?>
-                    </select>
+                    <div class="campo-formulario">
+                        <label for="id_usuarios_asociados[]">Usuarios asociados <span class="campo-obligatorio">*</span></label>
+                        <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
+                            <option value=""></option>
+                            <?php foreach ($usuarios as $usuario) { ?>
+                                <option value="<?php echo $usuario["id_usuario"] ?>" 
+                                <?php
+                                if (isset($datos["nombresUsuarios"])) {
+                                    foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
+                                        if (trim($nombreUsuario) == $usuario["username"]) {
+                                            echo "selected";
+                                        }
+                                    }
+                                }
+                                ?>><?php echo $usuario["username"]; ?></option>
+                                    <?php } ?>
+                        </select>
+                    </div>
 
-                    <label for="descripcion_proyecto">Descripción del proyecto</label>
-                    <textarea id="descripcion_proyecto" name="descripcion_proyecto" placeholder="Introduzca una descripción del proyecto (opcional)" rows="3"><?php echo isset($datos["descripcion_proyecto"]) ? $datos["descripcion_proyecto"] : "" ?></textarea>
+                    <div class="campo-formulario">
+                        <label for="descripcion_proyecto">Descripción del proyecto</label>
+                        <textarea id="descripcion_proyecto" name="descripcion_proyecto" placeholder="Introduzca una descripción del proyecto (opcional)" rows="3"><?php echo isset($datos["descripcion_proyecto"]) ? $datos["descripcion_proyecto"] : "" ?></textarea>
+                    </div>
 
-                    <input type="submit" value="Enviar" name="enviar" class="botones">
+                    <div class="campo-formulario">
+                        <input type="submit" value="Enviar" name="enviar" class="botones">
+                    </div>
                 </form>
         </main>
         <footer>
@@ -64,7 +94,8 @@
             </div>
             <div id="logo-footer">
                 <a href="/" class="logo-enlace"><img src="../assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
-                    <p>TaskVelocity</p></a>
+                    <p>TaskVelocity</p>
+                </a>
             </div>
             <div id="iconos-footer">
                 <a href="https://es.linkedin.com"><i class="fa-brands fa-linkedin"></i></a>
@@ -73,5 +104,10 @@
                 <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </footer>
+        <!-- jQuery -->
+        <script src="plugins/jquery/jquery.min.js"></script>
+        <!-- Select2 -->
+        <script src="plugins/select2/js/select2.full.min.js"></script>
+        <script src="assets/js/admin/pages/main.js"></script>
     </body>
 </html>

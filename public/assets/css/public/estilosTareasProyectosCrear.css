@@ -1,0 +1,76 @@
+/* Hoja de estilos utilizada en crear y editar proyectos y tareas */
+input, select, option, textarea {
+    color: black;
+    outline: var(--color-secundario-principal);
+}
+
+input, label, textarea {
+    margin: 6px;
+}
+
+input[type="file"] {
+    color: white;
+}
+
+input[type="submit"] {
+    margin-top: 10px;
+    border: none;
+    color: white;
+}
+
+/* Formulario */
+
+.formulario {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+    padding: 16px;
+}
+
+.campo-formulario, .selection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.campo-formulario > :not(.select2), .campo-formulario > textarea {
+    padding: 8px;
+}
+
+.campo-formulario > :not(input [type="search"]) {
+    width: 100%;
+}
+
+.campo-formulario > input, .campo-formulario > select, .select2-container--bootstrap4 .select2-selection, .campo-formulario > textarea,
+.select2-container .select2-search--inline .select2-search__field {
+    border-radius: 25px;
+}
+
+/* Estilos para el select2 */
+
+.select2-container {
+    border-radius: 50px;
+}
+
+.select2-results__options > li {
+    color: black;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple {
+    min-height: 0 !important;
+}
+
+.select2-container--bootstrap4 .select2-container--open.select2-container--below .select2-selection {
+    border-bottom-right-radius: unset;
+    border-bottom-left-radius: unset;
+}

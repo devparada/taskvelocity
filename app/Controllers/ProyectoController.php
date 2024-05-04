@@ -41,9 +41,9 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $this->view->show('public/ver.proyecto.view.php', $data);
     }
 
-    public function mostrarAdd() {
+    public function mostrarAdd(): void {
         $data = [];
-        $data['titulo'] = 'Añadir proyectos';
+        $data['titulo'] = 'Añadir proyecto';
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $data['seccion'] = '/admin/proyectos/add';
             $data['tituloDiv'] = 'Añadir proyecto';
@@ -61,9 +61,31 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         }
     }
 
-    public function procesarAdd() {
+    public function mostrarEdit(int $idProyecto): void {
         $data = [];
-        $data['titulo'] = 'Añadir proyectos';
+        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
+
+        if ($_SESSION["usuario"]["id_usuario"] == 1) {
+            $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
+            $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
+            $data['tituloDiv'] = 'Editar proyecto';
+
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $data['seccion'] = '/proyectos/editar/' . $idProyecto;
+            $data['titulo'] = 'Editar proyecto';
+
+            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
+            $this->view->show('public/crear.proyecto.view.php', $data);
+        }
+    }
+
+    public function procesarAdd(): void {
+        $data = [];
+        $data['titulo'] = 'Añadir proyecto';
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $data['seccion'] = '/admin/proyectos/add';
             $data['tituloDiv'] = 'Añadir proyecto';
@@ -95,6 +117,50 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
+            $data["errores"] = $errores;
+
+            if ($_SESSION["usuario"]["id_rol"] == 1) {
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->show('public/crear.proyecto.view.php', $data);
+            }
+        }
+    }
+
+    public function procesarEdit(int $idProyecto): void {
+        $data = [];
+        $data['titulo'] = 'Añadir proyecto';
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data['seccion'] = '/admin/proyectos/add';
+            $data['tituloDiv'] = 'Añadir proyecto';
+        } else {
+            $data['seccion'] = '/proyectos/crear';
+        }
+
+        unset($_POST["enviar"]);
+
+        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+
+        $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        $data["datos"] = $datos;
+
+        $data["modoEdit"] = true;
+
+        $errores = [];
+
+        if (empty($errores)) {
+            if ($modeloProyecto->editProyecto($datos["nombre_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"], $datos["descripcion_proyecto"], $idProyecto)) {
+                /* if (!empty($_FILES["imagen_proyecto"]["name"])) {
+                  $modeloProyecto->updateImagen($idProyecto);
+                  } */
+                if ($_SESSION["usuario"]["id_rol"] == 1) {
+                    header("location: /admin/proyectos");
+                } else {
+                    header("location: /proyectos");
+                }
+            }
+        } else {
             $data["errores"] = $errores;
 
             if ($_SESSION["usuario"]["id_rol"] == 1) {
