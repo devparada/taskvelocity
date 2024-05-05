@@ -117,6 +117,23 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
+    /**
+     * Crea el proyecto personal cuando el usuario se registra creando un proyecto no editable
+     * @param int $idUsuario el id del usuario
+     * @param string $username el nombre de usuario
+     * @return int Retorna el id del proyecto personal creado
+     */
+    public function crearProyectoPersonal(int $idUsuario, string $username): int {
+        $stmt = $this->pdo->prepare("INSERT INTO proyectos "
+                . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop, editable) "
+                . "VALUES(?, ?, ?, ?, ?)");
+        $stmt->execute(["Personal $username", "Personal $username", null, $idUsuario, 0]);
+
+        $idProyectoPersonal = (int) $this->pdo->lastInsertId();
+        $this->añadirPropietario((int) $idUsuario, (int) $idProyectoPersonal);
+        return $idProyectoPersonal;
+    }
+
     private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "

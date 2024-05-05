@@ -65,11 +65,17 @@
                         }
                         ?></p>
                     <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $proyecto["id_usuario_proyecto_prop"] ?></p>
-                    <div class="botones-proyecto">
-                        <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                        <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                        <a href="/proyectos/editar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                    </div>
+                    <?php if ($proyecto["editable"] == 1) { ?>
+                        <div class="botones-proyecto">
+                            <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                            <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                            <a href="/proyectos/editar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                        </div>
+                    <?php } else { ?>
+                        <div class="botones-proyecto">
+                            <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </main>

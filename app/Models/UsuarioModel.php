@@ -88,7 +88,14 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios (username, password, email, id_rol, fecha_nacimiento, fecha_login, 
             descripcion_usuario, id_color_favorito) VALUES (?, ?, ?, ?, ?, NULL, ?, ?)");
 
-        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor])) {
+        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor],)) {
+            $idUsuario = $this->pdo->lastInsertId();
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+            $idProyectoPersonal = $modeloProyecto->crearProyectoPersonal((int) $idUsuario, $username);
+
+            $stmt = $this->pdo->prepare("UPDATE usuarios SET id_proyecto_personal = ? WHERE id_usuario = ?");
+            $stmt->execute([$idProyectoPersonal, $idUsuario]);
+
             return true;
         }
         return false;
