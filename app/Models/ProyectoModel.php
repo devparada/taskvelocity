@@ -8,14 +8,18 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function mostrarProyectos(): array {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $stmt = $this->pdo->query("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
-                    . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                    . " ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY up.id_proyectoPAsoc ORDER BY pr.id_proyecto desc");
+            $stmt = $this->pdo->query("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us "
+                    . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
+                    . "ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY up.id_proyectoPAsoc "
+                    . "ORDER BY pr.id_proyecto desc");
         } else {
-            $stmt = $this->pdo->prepare("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
-                    . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                    . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_usuario_proyecto_prop = ? GROUP BY up.id_proyectoPAsoc ORDER BY pr.id_proyecto desc");
-            $stmt->execute([$_SESSION["usuario"]["id_usuario"]]);
+            $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us "
+                    . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
+                    . "ON pr.id_proyecto = up.id_proyectoPAsoc "
+                    . "WHERE id_usuario_proyecto_prop = ? "
+                    . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
+                    . "ORDER BY pr.id_proyecto desc");
+            $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
         $datos = $stmt->fetchAll();
 

@@ -36,9 +36,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
-        $data["miembros"] = $modeloTarea->mostrarUsuariosPorProyecto($idProyecto);
-
-        var_dump($data);
+        $data["miembros"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
 
         if ($this->comprobarUsuarioMiembros($data["miembros"])) {
             $this->view->show('public/ver.proyecto.view.php', $data);
