@@ -1,3 +1,5 @@
+/* Hoja de estilos que es usada de forma general */
+/* Descarga la fuente Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 * {
@@ -12,6 +14,7 @@
     --color-secundario-complementario: #3456AC;
 }
 
+/* Elementos HTML */
 
 body {
     margin:10px;
@@ -29,14 +32,6 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
-}
-
-.imagenes-pequeñas {
-    width: 50px;
-}
-
-.campo-obligatorio, .texto-error {
-    color: #FF8080;
 }
 
 /* HEADER */
@@ -81,6 +76,23 @@ nav ul li a {
     margin-left: 6px;
 }
 
+
+#perfil {
+    display: flex;
+    align-items: center;
+}
+
+#perfil img {
+    margin-left: 10px;
+    width: 50px;
+    border-radius: 50px;
+}
+
+#perfil p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
 main {
     margin: 16px;
 }
@@ -99,6 +111,29 @@ main {
 
 .titulos {
     margin-bottom: 16px;
+}
+
+.botones {
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: var(--color-secundario-principal);
+    text-align: center;
+    transition: background-color 1s;
+}
+
+.botones :hover {
+    background-color: var(--color-secundario-complementario);
+}
+
+.imagenes-pequeñas {
+    width: 50px;
+}
+
+.campo-obligatorio, .texto-error {
+    color: #FF8080;
 }
 
 /* FOOTER */
@@ -132,34 +167,4 @@ footer p {
 
 .logo-enlace p {
     margin-left: 10px;
-}
-
-.botones {
-    border-radius: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    background-color: var(--color-secundario-principal);
-    transition: background-color 1s;
-}
-
-.botones :hover {
-    background-color: var(--color-secundario-complementario);
-}
-
-#perfil {
-    display: flex;
-    align-items: center;
-}
-
-#perfil img {
-    margin-left: 10px;
-    width: 50px;
-    border-radius: 50px;
-}
-
-#perfil p {
-    margin-left: 10px;
-    margin-right: 10px;
 }

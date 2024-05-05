@@ -1,23 +1,48 @@
+/*Hoja de estilos utilizada en proyectos */
 #boton-crear {
     margin-top: 16px;
 }
 
+.proyectos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
+    column-gap: 5px;
+}
+
 .proyectos {
     display: flex;
-    border: 1px white solid;
+    border: 1px var(--color-secundario-principal) solid;
     border-radius: 20px;
     margin-top: 16px;
     padding: 16px;
 }
 
-.imagen-proyecto {
-    width: 20%;
-    border-radius: 50px;
-}
-
 .proyectos p, .proyectos a {
     margin-left: 16px;
     margin-bottom: 6px;
-    padding: 6px;
     color: white;
+}
+
+.proyectos p {
+    padding: 6px;
+}
+.informacion-proyecto {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.imagen-proyecto {
+    width: 30%;
+    border-radius: 50px;
+}
+
+.botones-proyecto {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.botones-proyecto a {
+    padding: 8px;
 }

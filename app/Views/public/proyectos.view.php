@@ -37,7 +37,7 @@
                 <h1>Tus proyectos</h1>
                 <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
             </div>
-            <div>
+            <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
                     <div class="proyectos">
                         <?php
@@ -50,9 +50,11 @@
                             <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
                             <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
                             <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
-                            <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones">Entrar en el proyecto</a>
-                            <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones">Editar el proyecto</a>
-                            <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones">Borrar el proyecto</a>
+                            <div class="botones-proyecto">
+                                <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
+                                <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>

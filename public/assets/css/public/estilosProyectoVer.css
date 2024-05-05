@@ -1,8 +1,21 @@
+/* Hoja de estilos utilizada en ver proyectos */
 .proyectos {
-    border: 1px white solid;
+    border: none;
+    justify-content: center;
+    align-content: center;
     border-radius: 20px;
     margin-top: 16px;
     padding: 16px;
+}
+
+.imagen-perfil-pequena {
+    width: 20px;
+    border-radius: 25px;
+    margin-right: 6px;
+}
+
+.botones-proyecto {
+    text-align: center;
 }
 
 .imagen-proyecto {
