@@ -46,12 +46,14 @@
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
                     <div class="campo-formulario">
                         <label for="nombre_proyecto">Nombre del proyecto <span class="campo-obligatorio">*</span></label>
-                        <input type="text" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" size="26" value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>">
+                        <input type="text" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" size="26" value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>" required>
+                        <p class="texto-error"><?php echo isset($errores["nombre_proyecto"]) ? $errores["nombre_proyecto"] : "" ?></p>
                     </div>
 
                     <div class="campo-formulario">
                         <label for="imagen_proyecto">Imagen</label>
-                        <input type="file" id="imagen_proyecto" accept=".jpg,.png">
+                        <input type="file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png">
+                        <p class="texto-error"><?php echo isset($errores["imagen_proyecto"]) ? $errores["imagen_proyecto"] : "" ?></p>
                     </div>
 
                     <div class="campo-formulario">
@@ -60,7 +62,7 @@
                     </div>
 
                     <div class="campo-formulario">
-                        <label for="id_usuarios_asociados[]">Usuarios asociados <span class="campo-obligatorio">*</span></label>
+                        <label for="id_usuarios_asociados[]">Usuarios asociados</label>
                         <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
                             <option value=""></option>
                             <?php foreach ($usuarios as $usuario) { ?>

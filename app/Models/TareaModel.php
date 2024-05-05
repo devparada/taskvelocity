@@ -134,7 +134,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    private function buscarAvatar(int $idTarea): bool {
+    private function buscarImagen(int $idTarea): bool {
         $imagenRuta = "./assets/img/tareas/tarea-" . $idTarea . ".";
         if (file_exists($imagenRuta . "png") || file_exists($imagenRuta . "jpg")) {
             return true;
@@ -143,7 +143,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         return false;
     }
 
-    private function eliminarAvatar(int $idTarea): bool {
+    private function eliminarImagen(int $idTarea): bool {
         $directorio = "./assets/img/tareas/";
 
         $imagen = $directorio . "tarea-" . $idTarea . ".";
@@ -174,7 +174,7 @@ class TareaModel extends \Com\Daw2\Core\BaseModel {
         if (!is_null($this->buscarTareaPorId($idTarea))) {
             $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
             $stmt->execute([$idTarea]);
-            if (!$this->buscarAvatar($idTarea) || $this->eliminarAvatar($idTarea)) {
+            if (!$this->buscarImagen($idTarea) || $this->eliminarImagen($idTarea)) {
                 $valorDevuelto = true;
             } else {
                 $valorDevuelto = false;

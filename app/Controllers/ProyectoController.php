@@ -104,6 +104,14 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $errores = $this->comprobarAdd($datos);
 
         if (empty($errores)) {
+            if (empty($datos["id_usuarios_asociados"])) {
+                $datos["id_usuarios_asociados"] = null;
+            }
+
+            if (empty($datos["fecha_limite_proyecto"])) {
+                $datos["fecha_limite_proyecto"] = null;
+            }
+
             $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
@@ -147,13 +155,18 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
         $data["modoEdit"] = true;
 
-        $errores = [];
+        $errores = $this->comprobarEdit($datos);
 
         if (empty($errores)) {
+            if (empty($datos["id_usuarios_asociados"])) {
+                $datos["id_usuarios_asociados"] = null;
+            }
+
+            if (empty($datos["fecha_limite_proyecto"])) {
+                $datos["fecha_limite_proyecto"] = null;
+            }
+
             if ($modeloProyecto->editProyecto($datos["nombre_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"], $datos["descripcion_proyecto"], $idProyecto)) {
-                /* if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                  $modeloProyecto->updateImagen($idProyecto);
-                  } */
                 if ($_SESSION["usuario"]["id_rol"] == 1) {
                     header("location: /admin/proyectos");
                 } else {
@@ -191,7 +204,12 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
-    private function comprobarAdd(array $data): array {
+    private function comprobarEdit(array $data): array {
+        $errores = $this->comprobarComun($data);
+        return $errores;
+    }
+
+    private function comprobarComun(array $data): array {
         $errores = [];
 
         $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
@@ -200,12 +218,12 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $errores["nombre_proyecto"] = "El nombre del proyecto no debe estar vacío";
         }
 
-        if (!empty($_FILES["proyecto"]["name"])) {
-            if ($_FILES["proyecto"]["type"] != "image/jpeg" && $_FILES["proyecto"]["type"] != "image/png") {
+        if (!empty($_FILES["imagen_proyecto"]["name"])) {
+            if ($_FILES["imagen_proyecto"]["type"] != "image/jpeg" && $_FILES["imagen_proyecto"]["type"] != "image/png") {
                 $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["proyecto"]["tmp_name"])[1] > 1024) {
-                $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
-            } else if ($_FILES["proyecto"]["size"] > 10 * self::MB) {
+            } else if (getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[1] > 1024) {
+                $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1024";
+            } else if ($_FILES["imagen_proyecto"]["size"] > 10 * self::MB) {
                 $errores["imagen_proyecto"] = "Imagen demasiada pesada";
             }
         }
@@ -225,6 +243,11 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             }
         }
 
+        return $errores;
+    }
+
+    private function comprobarAdd(array $data): array {
+        $errores = $this->comprobarComun($data);
         return $errores;
     }
 }

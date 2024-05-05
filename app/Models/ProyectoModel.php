@@ -73,7 +73,7 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
-    public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, array $idUsuariosAsociados): bool {
+    public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, ?array $idUsuariosAsociados): bool {
         $stmt = $this->pdo->prepare("INSERT INTO proyectos "
                 . "(nombre_proyecto, descripcion_proyecto, fecha_limite_proyecto, id_usuario_proyecto_prop) "
                 . "VALUES(?, ?, ?, ?)");
@@ -86,8 +86,14 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $_SESSION["usuario"]["id_usuario"]])) {
             // Se consigue el id del proyecto debido a que es la última tarea insertada
             $idProyecto = $this->pdo->lastInsertId();
-            $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
-            // $this->crearImagen($idProyecto);
+            $this->añadirPropietario($_SESSION["usuario"]["id_usuario"], (int) $idProyecto);
+            if (!empty($idUsuariosAsociados)) {
+                $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
+            }
+
+            if (!empty($_FILES["imagen_proyecto"]["name"])) {
+                $this->crearImagen((int) $idProyecto);
+            }
             return true;
         }
         return false;
@@ -103,21 +109,37 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
         }
     }
 
+    private function añadirPropietario(int $idUsuario, int $idProyecto): void {
+        $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
+                . "(id_usuarioPAsoc, id_proyectoPAsoc) "
+                . "VALUES(?, ?)");
+
+        $stmt->execute([$idUsuario, $idProyecto]);
+    }
+
     /**
      * Edita el proyecto en la base de datos a partir de los datos pasados
      * @param string $nombreProyecto el nombre del proyecto
-     * @param string $fechaLimiteProyecto la fecha limite del proyecto
-     * @param array $idUsuarios los ids de los usuarios
+     * @param string|null $fechaLimiteProyecto la fecha limite del proyecto
+     * @param array|null $idUsuariosAsociados los ids de los usuarios
      * @param string|null $descripcionProyecto la descripcion del proyecto
+     * @param int $idProyecto es el id del proyecto
      * @return bool Retorna true si se edito correctamente el proyecto o false si no
      */
-    public function editProyecto(string $nombreProyecto, string $fechaLimiteProyecto, array $idUsuarios, ?string $descripcionProyecto, int $idUsuario): bool {
+    public function editProyecto(string $nombreProyecto, ?string $fechaLimiteProyecto, ?array $idUsuariosAsociados, ?string $descripcionProyecto, int $idProyecto): bool {
         $stmt = $this->pdo->prepare("UPDATE proyectos "
                 . "SET nombre_proyecto=?, descripcion_proyecto=?, fecha_limite_proyecto=? "
                 . "WHERE id_proyecto=?");
 
-        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idUsuario])) {
-            $this->editarUsuariosProyectos($idUsuarios, $idUsuario);
+        if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idProyecto])) {
+            // Se consigue el id del proyecto debido a que es la última tarea insertada
+            if (!empty($idUsuariosAsociados)) {
+                $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
+            }
+
+            if (!empty($_FILES["imagen_proyecto"]["name"])) {
+                $this->actualizarImagen($idProyecto);
+            }
             return true;
         }
         return false;
@@ -137,6 +159,50 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
             $stmt->execute([$idUsuario, $idProyecto]);
         }
+    }
+
+    private function crearImagen(int $idProyecto): void {
+        $directorio = "./assets/img/proyectos/";
+
+        // Si la carpeta no existe se crea
+        if (!file_exists($directorio)) {
+            mkdir($directorio, 0755, true);
+        }
+
+        if (!empty($_FILES["imagen_proyecto"]["name"])) {
+            // La imagen subida puede tener la extension jpg o png
+            $directorioArchivo = $directorio . "proyecto-" . $idProyecto . "." . pathinfo($_FILES["imagen_proyecto"]["name"])["extension"];
+
+            move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $directorioArchivo);
+        }
+    }
+
+    private function actualizarImagen(int $idProyecto): bool {
+        $directorio = "./assets/img/proyectos/";
+
+        $imagen = $directorio . "proyecto-" . $idProyecto . ".";
+
+        // Para obtener la extension de la imagen se comprueba si es png o jpg
+        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
+
+        $imagenRuta = $imagen . $extension;
+
+        if (file_exists($imagenRuta)) {
+            // Si se puede escribir o borrar la imagen
+            if (is_writable($directorio)) {
+                if (file_exists($imagenRuta)) {
+                    // Se borra la imagen
+                    unlink($imagenRuta);
+                }
+
+                move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $imagenRuta);
+            } else {
+                $this->crearImagen($idProyecto);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     public function contador(): int {
