@@ -44,6 +44,18 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
+     * Muestra los usuarios asociados a un proyecto por el id del proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array Retorna un array con los usuarios del proyecto asociado
+     */
+    public function mostrarUsuariosPorProyecto(int $idProyecto): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
+                . "WHERE up.id_proyectoPAsoc  = ?");
+        $stmt->execute([$idProyecto]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Busca el proyecto a partir de su id y devuelve los datos del proyecto
      * @param int $idProyecto el id del proyecto
      * @return array|null los datos del proyecto si lo encontra o null si no lo encuentra
@@ -56,14 +68,16 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $proyectoEncontrado = $stmt->fetch();
 
-        for ($j = 0; $j < $proyectoEncontrado["COUNT(id_usuarioPAsoc)"]; $j++) {
-            $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
-                    . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                    . " WHERE id_proyectoPAsoc =" . $proyectoEncontrado["id_proyectoPAsoc"]);
+        if (!empty($proyectoEncontrado)) {
+            for ($j = 0; $j < $proyectoEncontrado["COUNT(id_usuarioPAsoc)"]; $j++) {
+                $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
+                        . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
+                        . " WHERE id_proyectoPAsoc =" . $proyectoEncontrado["id_proyectoPAsoc"]);
 
-            $usuariosProyectos = $stmt->fetchAll();
+                $usuariosProyectos = $stmt->fetchAll();
 
-            $proyectoEncontrado["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
+                $proyectoEncontrado["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
+            }
         }
 
         if ($proyectoEncontrado) {

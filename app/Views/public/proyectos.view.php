@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <base href="/">
         <meta charset="UTF-8">
         <title>TaskVelocity | Tus proyectos</title>
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
@@ -37,6 +38,11 @@
                 <h1>Tus proyectos</h1>
                 <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
             </div>
+            <?php if (isset($informacion)) { ?>
+                <div class="alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
+                    <p><?php echo $informacion["texto"] ?></p>
+                </div>
+            <?php } ?>
             <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
                     <div class="proyectos">

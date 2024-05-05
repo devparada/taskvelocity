@@ -38,9 +38,33 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
         $data["miembros"] = $modeloTarea->mostrarUsuariosPorProyecto($idProyecto);
 
-        $this->view->show('public/ver.proyecto.view.php', $data);
+        var_dump($data);
+
+        if ($this->comprobarUsuarioMiembros($data["miembros"])) {
+            $this->view->show('public/ver.proyecto.view.php', $data);
+        } else {
+            header("location: /proyectos");
+        }
     }
 
+    /**
+     * Comprueba si el usuario logeado es miembro del proyecto
+     * @param array $miembros los miembros del proyecto
+     * @return bool Retorna true si es miembro y false si no
+     */
+    private function comprobarUsuarioMiembros(array $miembros): bool {
+        foreach ($miembros as $persona) {
+            if ($persona["id_usuario"] == $_SESSION["usuario"]["id_usuario"]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Muestra el formulario de añadir proyecto
+     * @return void Retorna nada
+     */
     public function mostrarAdd(): void {
         $data = [];
         $data['titulo'] = 'Añadir proyecto';
@@ -188,20 +212,32 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        if ($modeloProyecto->deleteProyecto($idProyecto)) {
-            $data["informacion"]["estado"] = "success";
-            $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " ha sido eliminado correctamente";
+
+        $miembrosProyecto = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
+
+        if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
+            if ($modeloProyecto->deleteProyecto($idProyecto)) {
+                $data["informacion"]["estado"] = "success";
+                $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " ha sido eliminado correctamente";
+            } else {
+                $data["informacion"]["estado"] = "danger";
+                $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " no ha sido eliminado correctamente";
+            }
+
+
+            $data['titulo'] = 'Todos los proyectos';
+            $data['seccion'] = '/admin/proyectos';
+
+            $data['proyectos'] = $modeloProyecto->mostrarProyectos();
+
+            if ($_SESSION["usuario"]["id_rol"] == 1) {
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->show('public/proyectos.view.php', $data);
+            }
         } else {
-            $data["informacion"]["estado"] = "danger";
-            $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " no ha sido eliminado correctamente";
+            header("location: /proyectos");
         }
-
-        $data['titulo'] = 'Todos los proyectos';
-        $data['seccion'] = '/admin/proyectos';
-
-        $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     private function comprobarEdit(array $data): array {

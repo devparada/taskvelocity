@@ -44,6 +44,8 @@ header {
     margin: 16px;
 }
 
+/* NAV */
+
 nav {
     margin-left: 48px;
 }
@@ -93,6 +95,8 @@ nav ul li a {
     margin-right: 10px;
 }
 
+/* MAIN */
+
 main {
     margin: 16px;
 }
@@ -134,6 +138,21 @@ main {
 
 .campo-obligatorio, .texto-error {
     color: #FF8080;
+}
+
+/* Div cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */
+
+.alerta-success, .alerta-danger {
+    padding: 16px;
+    border-radius: 25px;
+}
+
+.alerta-success {
+    background-color: #229954;
+}
+
+.alerta-danger {
+    background-color: #CB4335;
 }
 
 /* FOOTER */

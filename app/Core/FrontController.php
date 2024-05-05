@@ -186,6 +186,13 @@ class FrontController {
                     }
                     , 'post');
 
+            Route::add('/proyectos/borrar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                        $controlador->procesarDelete($idProyecto);
+                    }
+                    , 'get');
+
             Route::add('/tareas',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
