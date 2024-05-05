@@ -42,7 +42,8 @@
                     <div class="proyectos">
                         <?php
                         $idProyecto = $p["id_proyecto"];
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) {
+                        (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
                             ?>
                             <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
                         <?php } ?>
