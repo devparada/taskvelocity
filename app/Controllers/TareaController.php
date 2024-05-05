@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Controllers;
+namespace Com\TaskVelocity\Controllers;
 
-class TareaController extends \Com\Daw2\Core\BaseController {
+class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
     private const MB = 1048576;
 
@@ -13,7 +13,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $data['titulo'] = 'Todas las tareas';
         $data['seccion'] = '/admin/tareas';
 
-        $modeloTarea = new \Com\Daw2\Models\TareaModel();
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data['tareas'] = $modeloTarea->mostrarTareas();
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
@@ -29,13 +29,13 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $data['seccion'] = '/admin/tareas/add';
         $data['tituloDiv'] = 'Añadir tarea';
 
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
@@ -47,13 +47,13 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $data['seccion'] = '/admin/tareas/add';
         $data['tituloDiv'] = 'Añadir tarea';
 
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
         unset($_POST["enviar"]);
@@ -69,19 +69,19 @@ class TareaController extends \Com\Daw2\Core\BaseController {
         $errores = $this->comprobarAddTareas($datos);
 
         if (empty($errores)) {
-            $modeloTarea = new \Com\Daw2\Models\TareaModel();
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
             if ($modeloTarea->addTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"])) {
                 header("location: /admin/tareas");
             }
         } else {
-            $modeloColor = new \Com\Daw2\Models\ColorModel();
+            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
             $data["colores"] = $modeloColor->mostrarColores();
 
-            $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
             $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
-            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $data["errores"] = $errores;
@@ -93,7 +93,7 @@ class TareaController extends \Com\Daw2\Core\BaseController {
     public function procesarDelete(int $idTarea) {
         $data = [];
 
-        $modeloTarea = new \Com\Daw2\Models\TareaModel();
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         if ($modeloTarea->deleteTarea($idTarea)) {
             $data["informacion"]["estado"] = "success";
             $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " ha sido eliminado correctamente";
@@ -113,9 +113,9 @@ class TareaController extends \Com\Daw2\Core\BaseController {
     private function comprobarAddTareas(array $data): array {
         $errores = [];
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
         if (empty($data["nombre_tarea"])) {
             $errores["nombre_tarea"] = "El nombre de la tarea no debe estar vacío";

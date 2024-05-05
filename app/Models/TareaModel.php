@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Models;
+namespace Com\TaskVelocity\Models;
 
-class TareaModel extends \Com\Daw2\Core\BaseModel {
+class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function mostrarTareas(): array {
         if ($_SESSION["usuario"]["id_rol"] == 1) {

@@ -5,7 +5,7 @@ session_start();
 try{
     $dotenv = Dotenv\Dotenv::createImmutable('../');
     $dotenv->load();
-    Com\Daw2\Core\FrontController::main();    
+    Com\TaskVelocity\Core\FrontController::main();
 } catch (Exception $e) {
     if($_ENV['app.debug']){
         throw $e;

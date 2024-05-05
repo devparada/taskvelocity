@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Controllers;
+namespace Com\TaskVelocity\Controllers;
 
-class ProyectoController extends \Com\Daw2\Core\BaseController {
+class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
     private const MB = 1048576;
 
@@ -13,7 +13,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         $data['titulo'] = 'Todos los proyectos';
         $data['seccion'] = '/admin/proyectos';
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -22,7 +22,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function mostrarProyectosPublic(): void {
         $data = [];
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
         $this->view->show('public/proyectos.view.php', $data);
@@ -31,10 +31,10 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function verProyectoPublic(int $idProyecto): void {
         $data = [];
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["proyecto"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
-        $modeloTarea = new \Com\Daw2\Models\TareaModel();
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
         $data["miembros"] = $modeloTarea->mostrarUsuariosPorProyecto($idProyecto);
 
@@ -51,7 +51,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $data['seccion'] = '/proyectos/crear';
         }
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
@@ -63,7 +63,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
     public function mostrarEdit(int $idProyecto): void {
         $data = [];
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
         if ($_SESSION["usuario"]["id_usuario"] == 1) {
@@ -76,7 +76,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $data['seccion'] = '/proyectos/editar/' . $idProyecto;
             $data['titulo'] = 'Editar proyecto';
 
-            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $this->view->show('public/crear.proyecto.view.php', $data);
@@ -93,7 +93,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
             $data['seccion'] = '/proyectos/crear';
         }
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
         unset($_POST["enviar"]);
@@ -112,7 +112,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
                 $datos["fecha_limite_proyecto"] = null;
             }
 
-            $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
                 if ($_SESSION["usuario"]["id_rol"] == 1) {
@@ -122,7 +122,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
                 }
             }
         } else {
-            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $data["errores"] = $errores;
@@ -147,7 +147,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
 
         unset($_POST["enviar"]);
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -187,7 +187,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     public function procesarDelete(int $idProyecto) {
         $data = [];
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         if ($modeloProyecto->deleteProyecto($idProyecto)) {
             $data["informacion"]["estado"] = "success";
             $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " ha sido eliminado correctamente";
@@ -212,7 +212,7 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
     private function comprobarComun(array $data): array {
         $errores = [];
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         if (empty($data["nombre_proyecto"])) {
             $errores["nombre_proyecto"] = "El nombre del proyecto no debe estar vacío";

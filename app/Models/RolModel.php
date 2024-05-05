@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Models;
+namespace Com\TaskVelocity\Models;
 
-class RolModel extends \Com\Daw2\Core\BaseModel {
+class RolModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function mostrarRoles(): array {
         $stmt = $this->pdo->query("SELECT * FROM roles");

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Controllers;
+namespace Com\TaskVelocity\Controllers;
 
-class UsuarioController extends \Com\Daw2\Core\BaseController {
+class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     private const MB = 1048576;
 
@@ -13,7 +13,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data['titulo'] = 'Todos los usuarios';
         $data['seccion'] = '/admin/usuarios';
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -30,7 +30,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
             $this->crearLogin($datos["email"]);
@@ -41,7 +41,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     }
 
     private function crearLogin(string $email): void {
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($email);
 
         $_SESSION["usuario"] = $usuarioEncontrado;
@@ -57,7 +57,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function mostrarRegister() {
         $data = [];
 
-        $modeloColores = new \Com\Daw2\Models\ColorModel();
+        $modeloColores = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColores->mostrarColores();
 
         $this->view->show('public/register.view.php', $data);
@@ -69,10 +69,10 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data['seccion'] = '/admin/usuarios/add';
         $data['tituloDiv'] = 'Añadir usuario';
 
-        $modeloRol = new \Com\Daw2\Models\RolModel();
+        $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
 
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -105,7 +105,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $errores = $this->comprobarAdd($datos);
 
         if (empty($errores)) {
-            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
                     $modeloUsuario->crearAvatar($datos["username"]);
@@ -122,11 +122,11 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         } else {
             $data["errores"] = $errores;
 
-            $modeloColor = new \Com\Daw2\Models\ColorModel();
+            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
             $data["colores"] = $modeloColor->mostrarColores();
 
             if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
-                $modeloRol = new \Com\Daw2\Models\RolModel();
+                $modeloRol = new \Com\TaskVelocity\Models\RolModel();
                 $data["roles"] = $modeloRol->mostrarRoles();
 
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -142,13 +142,13 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
         $data['tituloDiv'] = 'Editar usuario';
 
-        $modeloRol = new \Com\Daw2\Models\RolModel();
+        $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
 
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
         $data["modoEdit"] = true;
@@ -169,7 +169,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
             $_POST["id_color"] = "1";
         }
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -180,7 +180,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $errores = $this->comprobarEdit($datos);
 
         if (empty($errores)) {
-            $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
             if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
                 if (!empty($_FILES["avatar"]["name"])) {
@@ -189,10 +189,10 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
                 header("location: /admin/usuarios");
             }
         } else {
-            $modeloRol = new \Com\Daw2\Models\RolModel();
+            $modeloRol = new \Com\TaskVelocity\Models\RolModel();
             $data["roles"] = $modeloRol->mostrarRoles();
 
-            $modeloColor = new \Com\Daw2\Models\ColorModel();
+            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
             $data["colores"] = $modeloColor->mostrarColores();
 
             $data["errores"] = $errores;
@@ -207,13 +207,13 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
         $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;
         $data['tituloDiv'] = 'Ver usuario';
 
-        $modeloRol = new \Com\Daw2\Models\RolModel();
+        $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
 
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColor->mostrarColores();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
         $data["modoVer"] = true;
 
@@ -223,7 +223,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     public function procesarDelete(int $idUsuario): void {
         $data = [];
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         if ($modeloUsuario->deleteUsuario($idUsuario)) {
             $data["informacion"]["estado"] = "success";
@@ -244,8 +244,8 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     private function comprobarComun(array $data): array {
         $errores = [];
 
-        $modeloRol = new \Com\Daw2\Models\RolModel();
-        $modeloColor = new \Com\Daw2\Models\ColorModel();
+        $modeloRol = new \Com\TaskVelocity\Models\RolModel();
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
 
         $dimensionesAvatar = 256;
 
@@ -287,7 +287,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     private function comprobarEdit(array $data): array {
         $errores = $this->comprobarComun($data);
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         if (!is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"])) && $data["email"] != $modeloUsuario->buscarUsuarioPorEmail($data["email"])["email"]) {
             $errores["email"] = "El email ya existe";
@@ -313,7 +313,7 @@ class UsuarioController extends \Com\Daw2\Core\BaseController {
     private function comprobarAdd(array $data): array {
         $errores = $this->comprobarComun($data);
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         if (empty($data["username"])) {
             $errores["username"] = "El nombre de usuario no debe estar vacío";

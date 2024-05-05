@@ -1,8 +1,8 @@
 <?php
 
-namespace Com\Daw2\Controllers;
+namespace Com\TaskVelocity\Controllers;
 
-class InicioController extends \Com\Daw2\Core\BaseController {
+class InicioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function indexAdmin(): void {
         $data = array(
@@ -10,13 +10,13 @@ class InicioController extends \Com\Daw2\Core\BaseController {
             'seccion' => '/admin',
         );
 
-        $modeloProyecto = new \Com\Daw2\Models\ProyectoModel();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['numProyectos'] = $modeloProyecto->contador();
 
-        $modeloTareas = new \Com\Daw2\Models\TareaModel();
+        $modeloTareas = new \Com\TaskVelocity\Models\TareaModel();
         $data['numTareas'] = $modeloTareas->contador();
 
-        $modeloUsuario = new \Com\Daw2\Models\UsuarioModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['numUsuarios'] = $modeloUsuario->contador();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/inicio.view.php', 'admin/templates/footer.view.php'), $data);

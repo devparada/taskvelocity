@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Models;
+namespace Com\TaskVelocity\Models;
 
-class ColorModel extends \Com\Daw2\Core\BaseModel {
+class ColorModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function mostrarColores(): array {
         $stmt = $this->pdo->query("SELECT * FROM colores");

@@ -1,11 +1,11 @@
 {
-    "name": "com/daw2",
+    "name": "com/taskvelocity",
     "description": "Gestor de tareas y proyectos",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Com\\Daw2\\": "app/"
+            "Com\\TaskVelocity\\": "app/"
         }
     },
     "require": {

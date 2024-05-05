@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Com\Daw2\Controllers;
+namespace Com\TaskVelocity\Controllers;
 
-class ErroresController extends \Com\Daw2\Core\BaseController {
+class ErroresController extends \Com\TaskVelocity\Core\BaseController {
 
     function error404(): void {
         http_response_code(404);
