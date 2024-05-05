@@ -179,7 +179,6 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
     private function actualizarImagen(int $idProyecto): bool {
         $directorio = "./assets/img/proyectos/";
-
         $imagen = $directorio . "proyecto-" . $idProyecto . ".";
 
         // Para obtener la extension de la imagen se comprueba si es png o jpg
@@ -187,21 +186,18 @@ class ProyectoModel extends \Com\Daw2\Core\BaseModel {
 
         $imagenRuta = $imagen . $extension;
 
-        if (file_exists($imagenRuta)) {
-            // Si se puede escribir o borrar la imagen
-            if (is_writable($directorio)) {
-                if (file_exists($imagenRuta)) {
-                    // Se borra la imagen
-                    unlink($imagenRuta);
-                }
-
-                move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $imagenRuta);
-            } else {
-                $this->crearImagen($idProyecto);
+        // Si se puede escribir o borrar la imagen
+        if (is_writable($directorio)) {
+            if (file_exists($imagenRuta)) {
+                // Se borra la imagen
+                unlink($imagenRuta);
             }
+
+            move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $imagenRuta);
+        } else {
+            $this->crearImagen($idProyecto);
             return true;
         }
-
         return false;
     }
 

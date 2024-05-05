@@ -221,8 +221,8 @@ class ProyectoController extends \Com\Daw2\Core\BaseController {
         if (!empty($_FILES["imagen_proyecto"]["name"])) {
             if ($_FILES["imagen_proyecto"]["type"] != "image/jpeg" && $_FILES["imagen_proyecto"]["type"] != "image/png") {
                 $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[1] > 1024) {
-                $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1024";
+            } else if (getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[1] > 1624) {
+                $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1624";
             } else if ($_FILES["imagen_proyecto"]["size"] > 10 * self::MB) {
                 $errores["imagen_proyecto"] = "Imagen demasiada pesada";
             }
