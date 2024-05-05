@@ -19,3 +19,21 @@ a {
 .imagenes-usuarios {
     width: 50px;
 }
+
+/* Pone el fondo oscuro en el login y register */
+.login-page, .register-page {
+    background-color: #1B1B1B;
+}
+
+/* El logo y el titulo en las ventanas login y register */
+.login-logo > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+}
+
+.imagen-login {
+    width: 70px;
+}

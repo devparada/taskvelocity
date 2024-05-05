@@ -13,20 +13,25 @@
         <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="assets/css/admin/adminlte.min.css">
+        <!-- Estilos propios -->
+        <link rel="stylesheet" href="assets/css/admin/admin.css">
         <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/"><b>TaskVelocity</b></a>
+                <a href="/">
+                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagen-login">
+                    <b>TaskVelocity</b>
+                </a>
             </div>
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Crear una cuenta</p>
                     <form action="/register" method="post">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" name="username" id="username" placeholder="Nombre" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>">
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>

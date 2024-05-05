@@ -14,11 +14,16 @@
         <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="assets/css/admin/adminlte.min.css">
+        <!-- Estilos propios -->
+        <link rel="stylesheet" href="assets/css/admin/admin.css">
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/"><b>TaskVelocity</b></a>
+                <a href="/">
+                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagen-login">
+                    <b>TaskVelocity</b>
+                </a>
             </div>
             <!-- /.login-logo -->  
             <div class="card">
