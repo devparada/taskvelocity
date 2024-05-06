@@ -46,6 +46,7 @@ input[type="submit"] {
 
 .campo-formulario > input, .campo-formulario > select, .select2-container--bootstrap4 .select2-selection, .campo-formulario > textarea,
 .select2-container .select2-search--inline .select2-search__field {
+    text-align: center;
     border-radius: 25px;
 }
 
@@ -73,4 +74,10 @@ input[type="submit"] {
 .select2-container--bootstrap4 .select2-container--open.select2-container--below .select2-selection {
     border-bottom-right-radius: unset;
     border-bottom-left-radius: unset;
+}
+
+.select2-search--dropdown .select2-search__field {
+    margin: -4px;
+    margin-top: 1px;
+    margin-bottom: 1px;
 }

@@ -42,9 +42,10 @@
                     <div class="tareas" style="background-color:<?php echo $t["valor_color"] ?>">
                         <?php
                         $idTarea = $t["id_tarea"];
-                        if (file_exists("./assets/img/tareas/tarea-$idTarea.png")) {
+                        (file_exists("./assets/img/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
+                        if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
                             ?>
-                            <img src="/assets/img/tareas/tarea-<?php echo $t["id_tarea"] ?>" alt="Imagen Tarea <?php echo $t["nombre_tarea"] ?>" class="imagen-proyecto">        
+                            <img src="/assets/img/tareas/tarea-<?php echo $t["id_tarea"] ?>.jpg" alt="Imagen Tarea <?php echo $t["nombre_tarea"] ?>" class="imagen-proyecto">        
                         <?php } ?>
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>

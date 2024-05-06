@@ -84,11 +84,19 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $_SESSION["usuario"]["id_usuario"], $idProyecto])) {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
+            $this->añadirPropietario((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
             $this->addTareaUsuarios($id_usuarios_asociados, (int) $idTarea);
             $this->crearImagen((int) $idTarea);
             return true;
         }
         return false;
+    }
+
+    private function añadirPropietario(int $idUsuario, int $idTarea): void {
+        $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+                . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+
+        $stmt->execute([$idUsuario, $idTarea]);
     }
 
     private function addTareaUsuarios(array $idUsuarios, int $idTarea): void {
@@ -100,6 +108,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
+    /**
+     * Guarda la imagen en la ruta específicada
+     * @param int $idTarea el id de la tarea
+     * @return void
+     */
     private function crearImagen(int $idTarea): void {
         $directorio = "./assets/img/tareas/";
 
@@ -109,7 +122,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
 
         if (!empty($_FILES["imagen_tarea"]["name"])) {
-            // Si la imagen es subida la extension puede ser jpg o png
+            // La extension de la imagen puede ser jpg o png
             $directorioArchivo = $directorio . "tarea-" . $idTarea . "." . pathinfo($_FILES["imagen_tarea"]["name"])["extension"];
         } else {
             // Si la imagen es por defecto la extension es jpg

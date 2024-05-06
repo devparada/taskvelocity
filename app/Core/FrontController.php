@@ -200,6 +200,20 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/tareas/crear',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->mostrarAdd();
+                    }
+                    , 'get');
+
+            Route::add('/tareas/crear',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->procesarAdd();
+                    }
+                    , 'post');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();
