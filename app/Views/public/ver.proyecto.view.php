@@ -60,7 +60,7 @@
                         <p>No hay tareas asociadas a este proyecto </p>
                     <?php } ?>
                     <p>Miembros: <?php
-                        foreach ($miembros as $u) {
+                        foreach ($usuarios as $u) {
                             echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";
                         }
                         ?></p>

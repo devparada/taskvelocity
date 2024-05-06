@@ -37,20 +37,33 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      * @param int $idProyecto el id del proyecto
      * @return void
      */
-    public function verProyectoPublic(int $idProyecto): void {
+    public function verProyecto(int $idProyecto): void {
         $data = [];
 
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data["titulo"] = "Ver proyecto $idProyecto";
+            $data["tituloDiv"] = "Ver proyecto $idProyecto";
+            $data["seccion"] = "/admin/proyectos/view/$idProyecto";
+        }
+
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["proyecto"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
+        $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
+        $data["proyecto"] = $data["datos"];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
-        $data["miembros"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
+        $data["usuarios"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
 
-        if ($this->comprobarUsuarioMiembros($data["miembros"])) {
-            $this->view->show('public/ver.proyecto.view.php', $data);
+        $data["modoVer"] = true;
+
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
-            header("location: /proyectos");
+            if ($this->comprobarUsuarioMiembros($data["usuarios"])) {
+                $this->view->show('public/ver.proyecto.view.php', $data);
+            } else {
+                header("location: /proyectos");
+            }
         }
     }
 

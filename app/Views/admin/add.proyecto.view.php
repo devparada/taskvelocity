@@ -18,7 +18,7 @@
 
                         <div class="mb-3 col-sm-4">
                             <label for="imagen_proyecto">Imagen</label>
-                            <input type="file" class="form-control-file" id="imagen_proyecto" accept=".jpg,.png">
+                            <input type="file" class="form-control-file" id="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['imagen_proyecto']) ? $errores['imagen_proyecto'] : ''; ?></p>
                         </div>
 
@@ -33,8 +33,17 @@
                             <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
                                 <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" <?php echo isset($datos["id_usuarios_asociados"]) && $usuario["id_usuario"] == $datos["id_usuarios_asociados"] ? "selected" : "" ?>><?php echo $usuario["username"]; ?></option>
-                                <?php } ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
+                                    <?php
+                                    if (isset($datos["nombresUsuarios"])) {
+                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
+                                            if (trim($nombreUsuario) == $usuario["username"]) {
+                                                echo "selected";
+                                            }
+                                        }
+                                    }
+                                    ?>><?php echo $usuario["username"]; ?></option>                               
+                                        <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>
                         </div>
