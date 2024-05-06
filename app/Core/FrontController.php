@@ -214,6 +214,27 @@ class FrontController {
                     }
                     , 'post');
 
+            Route::add('/tareas/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->mostrarEdit($idProyecto);
+                    }
+                    , 'get');
+
+            Route::add('/tareas/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->procesarEdit($idProyecto);
+                    }
+                    , 'post');
+
+            Route::add('/tareas/borrar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->procesarDelete($idProyecto);
+                    }
+                    , 'get');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();

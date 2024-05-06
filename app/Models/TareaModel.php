@@ -71,7 +71,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
-    public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, array $id_usuarios_asociados, string $descripcionTarea): bool {
+    public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, ?array $idUsuariosAsociados, string $descripcionTarea): bool {
         $stmt = $this->pdo->prepare("INSERT INTO tareas "
                 . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite, id_usuario_tarea_prop, id_proyecto) "
                 . "VALUES (?, ?, ?, ?, ?, ?)");
@@ -85,7 +85,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
             $this->añadirPropietario((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
-            $this->addTareaUsuarios($id_usuarios_asociados, (int) $idTarea);
+            if (empty($idUsuariosAsociados)) {
+                $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
+            }
             $this->crearImagen((int) $idTarea);
             return true;
         }
@@ -103,6 +105,52 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                     . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+
+            $stmt->execute([$idUsuario, $idTarea]);
+        }
+    }
+
+    /**
+     * Edita la tarea en la base de datos a partir de los datos pasados
+     * @param string $nombreTarea el nombre de la tarea
+     * @param string|null $fechaLimite la fecha límite de la tarea
+     * @param string $idColorTarea el color de la tarea
+     * @param string $idProyecto el id del proyecto
+     * @param array|null $idUsuariosAsociados los ids de los usuarios
+     * @param string $descripcionTarea la descripcion de la tarea
+     * @param int $idTarea el id de la tarea a editar
+     * @return bool Retorna true si se edito correctamente la tarea o false si no
+     */
+    public function editTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, ?array $idUsuariosAsociados, string $descripcionTarea, int $idTarea): bool {
+        $stmt = $this->pdo->prepare("UPDATE tareas"
+                . " SET nombre_tarea=?, id_color_tarea=?, descripcion_tarea=?, fecha_limite=?, id_proyecto=?"
+                . " WHERE id_tarea=?");
+
+        if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $idProyecto, $idTarea])) {
+            // Se consigue el id del proyecto debido a que es la última tarea insertada
+            if (!empty($idUsuariosAsociados)) {
+                $this->editarUsuariosTareas($idUsuariosAsociados, $idTarea);
+            }
+
+            if (!empty($_FILES["imagen_tarea"]["name"])) {
+                $this->actualizarImagen($idTarea);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private function editarUsuariosTareas(array $idUsuarios, int $idTarea) {
+        // Elimina todos los usuarios del proyecto
+        $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas "
+                . "WHERE id_tareaTAsoc=?");
+
+        $stmt->execute([$idTarea]);
+
+        foreach ($idUsuarios as $idUsuario) {
+            $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+                    . "(id_usuarioTAsoc, id_tareaTAsoc) "
+                    . "VALUES(?, ?)");
 
             $stmt->execute([$idUsuario, $idTarea]);
         }
@@ -133,6 +181,30 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             // La imagen subida se mueve al directorio y se llama con el id de la tarea
             move_uploaded_file($_FILES["imagen_tarea"]["tmp_name"], $directorioArchivo);
         }
+    }
+
+    private function actualizarImagen(int $idTarea): bool {
+        $directorio = "./assets/img/tareas/";
+        $imagen = $directorio . "tarea-" . $idTarea . ".";
+
+        // Para obtener la extension de la imagen se comprueba si es png o jpg
+        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
+
+        $imagenRuta = $imagen . $extension;
+
+        // Si se puede escribir o borrar la imagen
+        if (is_writable($directorio)) {
+            if (file_exists($imagenRuta)) {
+                // Se borra la imagen
+                unlink($imagenRuta);
+            }
+
+            move_uploaded_file($_FILES["imagen_tarea"]["tmp_name"], $imagenRuta);
+        } else {
+            $this->crearImagen($idProyecto);
+            return true;
+        }
+        return false;
     }
 
     private function buscarImagen(int $idTarea): bool {

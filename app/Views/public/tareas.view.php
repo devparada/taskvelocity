@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
     <head>
+        <base href="/">
         <meta charset="UTF-8">
         <title>TaskVelocity | Tus tareas</title>
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
@@ -37,6 +38,11 @@
                 <h1>Tus tareas</h1>
                 <a href="/tareas/crear" class="botones">Crear una tarea</a>
             </div>
+            <?php if (isset($informacion)) { ?>
+                <div class="alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
+                    <p><?php echo $informacion["texto"] ?></p>
+                </div>
+            <?php } ?>
             <div id="tareas-grid">
                 <?php foreach ($tareas as $t) { ?>
                     <div class="tareas" style="background-color:<?php echo $t["valor_color"] ?>">
