@@ -147,7 +147,7 @@ class FrontController {
             Route::add('/proyectos',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
-                        $controlador->mostrarProyectosPublic();
+                        $controlador->mostrarProyectos();
                     }
                     , 'get');
 

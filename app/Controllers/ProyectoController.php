@@ -6,28 +6,37 @@ namespace Com\TaskVelocity\Controllers;
 
 class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
+    /**
+     * El valor de 1MB en bytes
+     */
     private const MB = 1048576;
 
+    /**
+     * Muestra la información de los proyectos
+     * @return void
+     */
     public function mostrarProyectos(): void {
         $data = [];
-        $data['titulo'] = 'Todos los proyectos';
-        $data['seccion'] = '/admin/proyectos';
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data['titulo'] = 'Todos los proyectos';
+            $data['seccion'] = '/admin/proyectos';
+        }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->show('public/proyectos.view.php', $data);
+        }
     }
 
-    public function mostrarProyectosPublic(): void {
-        $data = [];
-
-        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-
-        $this->view->show('public/proyectos.view.php', $data);
-    }
-
+    /**
+     * Muestra la información de un proyecto pasado como parámetro
+     * @param int $idProyecto el id del proyecto
+     * @return void
+     */
     public function verProyectoPublic(int $idProyecto): void {
         $data = [];
 
@@ -61,7 +70,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
     /**
      * Muestra el formulario de añadir proyecto
-     * @return void Retorna nada
+     * @return void
      */
     public function mostrarAdd(): void {
         $data = [];
@@ -83,28 +92,10 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    public function mostrarEdit(int $idProyecto): void {
-        $data = [];
-        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
-
-        if ($_SESSION["usuario"]["id_usuario"] == 1) {
-            $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
-            $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
-            $data['tituloDiv'] = 'Editar proyecto';
-
-            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
-        } else {
-            $data['seccion'] = '/proyectos/editar/' . $idProyecto;
-            $data['titulo'] = 'Editar proyecto';
-
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
-
-            $this->view->show('public/crear.proyecto.view.php', $data);
-        }
-    }
-
+    /**
+     * Procesa cuando se añade un proyecto a la base de datos
+     * @return void
+     */
     public function procesarAdd(): void {
         $data = [];
         $data['titulo'] = 'Añadir proyecto';
@@ -157,6 +148,38 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
+    /**
+     * Muestra el formualrio de editar proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return void
+     */
+    public function mostrarEdit(int $idProyecto): void {
+        $data = [];
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
+
+        if ($_SESSION["usuario"]["id_usuario"] == 1) {
+            $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
+            $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
+            $data['tituloDiv'] = 'Editar proyecto';
+
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $data['seccion'] = '/proyectos/editar/' . $idProyecto;
+            $data['titulo'] = 'Editar proyecto';
+
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
+            $this->view->show('public/crear.proyecto.view.php', $data);
+        }
+    }
+
+    /**
+     * Procesa cuando se edita un proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return void
+     */
     public function procesarEdit(int $idProyecto): void {
         $data = [];
         $data['titulo'] = 'Añadir proyecto';
@@ -206,7 +229,12 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    public function procesarDelete(int $idProyecto) {
+    /**
+     * Procesa al eliminar un proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return void
+     */
+    public function procesarDelete(int $idProyecto): void {
         $data = [];
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
@@ -238,11 +266,31 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
+    /**
+     * Comprueba si los datos están bien introducidos al añadir un proyecto
+     * @param array $data los datos a comprobar
+     * @return array el array de los errores si hay errores
+     */
+    private function comprobarAdd(array $data): array {
+        $errores = $this->comprobarComun($data);
+        return $errores;
+    }
+
+    /**
+     * Comprueba si los datos están bien introducidos al editar el proyecto
+     * @param array $data los datos a comprobar
+     * @return array el array de los errores si hay errores
+     */
     private function comprobarEdit(array $data): array {
         $errores = $this->comprobarComun($data);
         return $errores;
     }
 
+    /**
+     * Comprueba si los datos están bien introducidos al añadir y editar el proyecto
+     * @param array $data los datos a comprobar
+     * @return array el array de los errores si hay errores
+     */
     private function comprobarComun(array $data): array {
         $errores = [];
 
@@ -277,11 +325,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             }
         }
 
-        return $errores;
-    }
-
-    private function comprobarAdd(array $data): array {
-        $errores = $this->comprobarComun($data);
         return $errores;
     }
 }
