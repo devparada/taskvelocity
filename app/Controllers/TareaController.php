@@ -148,7 +148,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if ($_SESSION["usuario"]["id_usuario"] == 1) {
             $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
             $data['seccion'] = '/admin/tareas/edit/' . $idTarea;
-            $data['tituloDiv'] = 'Editar proyecto';
+            $data['tituloDiv'] = 'Editar tarea';
 
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
@@ -169,12 +169,12 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarEdit(int $idTarea): void {
         $data = [];
-        $data['titulo'] = 'Añadir proyecto';
+        $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $data['seccion'] = '/admin/proyectos/add';
-            $data['tituloDiv'] = 'Añadir proyecto';
+            $data['seccion'] = '/admin/tareas/edit';
+            $data['tituloDiv'] = 'Editar tarea';
         } else {
-            $data['seccion'] = '/proyectos/crear';
+            $data['seccion'] = '/tareas/editar';
         }
 
         unset($_POST["enviar"]);
@@ -219,7 +219,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $idTarea)) {
                 if ($_SESSION["usuario"]["id_rol"] == 1) {
-                    header("location: /admin/proyectos");
+                    header("location: /admin/tareas");
                 } else {
                     header("location: /tareas");
                 }

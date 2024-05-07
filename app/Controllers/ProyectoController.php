@@ -75,7 +75,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      */
     private function comprobarUsuarioMiembros(array $miembros): bool {
         foreach ($miembros as $persona) {
-            if ($persona["id_usuario"] == $_SESSION["usuario"]["id_usuario"]) {
+            if ($persona["id_usuario"] == $_SESSION["usuario"]["id_usuario"] || $_SESSION["usuario"]["id_rol"] == 1) {
                 return true;
             }
         }
@@ -172,6 +172,9 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
         if ($_SESSION["usuario"]["id_usuario"] == 1) {
             $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
             $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
@@ -181,9 +184,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $data['seccion'] = '/proyectos/editar/' . $idProyecto;
             $data['titulo'] = 'Editar proyecto';
-
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $this->view->show('public/crear.proyecto.view.php', $data);
         }
@@ -196,12 +196,12 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarEdit(int $idProyecto): void {
         $data = [];
-        $data['titulo'] = 'Añadir proyecto';
+        $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $data['seccion'] = '/admin/proyectos/add';
-            $data['tituloDiv'] = 'Añadir proyecto';
+            $data['seccion'] = '/admin/proyectos/edit';
+            $data['tituloDiv'] = 'Editar proyecto';
         } else {
-            $data['seccion'] = '/proyectos/crear';
+            $data['seccion'] = '/proyectos/editar';
         }
 
         unset($_POST["enviar"]);

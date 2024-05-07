@@ -104,6 +104,20 @@ class FrontController {
                             $controlador->procesarAdd();
                         }
                         , 'post');
+
+                Route::add('/admin/tareas/edit/([0-9]+)',
+                        function ($idTarea) {
+                            $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                            $controlador->mostrarEdit($idTarea);
+                        }
+                        , 'get');
+
+                Route::add('/admin/tareas/edit/([0-9]+)',
+                        function ($idTarea) {
+                            $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                            $controlador->procesarEdit($idTarea);
+                        }
+                        , 'post');
             }
 
 
@@ -144,6 +158,20 @@ class FrontController {
                         function () {
                             $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
                             $controlador->procesarAdd();
+                        }
+                        , 'post');
+
+                Route::add('/admin/proyectos/edit/([0-9]+)',
+                        function ($idProyecto) {
+                            $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                            $controlador->mostrarEdit($idProyecto);
+                        }
+                        , 'get');
+
+                Route::add('/admin/proyectos/edit/([0-9]+)',
+                        function ($idProyecto) {
+                            $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                            $controlador->procesarEdit($idProyecto);
                         }
                         , 'post');
             }

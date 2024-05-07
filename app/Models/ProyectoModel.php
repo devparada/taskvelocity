@@ -237,8 +237,13 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
+    /**
+     * Borra el proyecto de la base de datos si no es nulo y es editable
+     * @param int $idProyecto el id del proyecto a borrar
+     * @return bool Retorna true si consiga borrar el poryecto si no false
+     */
     public function deleteProyecto(int $idProyecto): bool {
-        if (!is_null($this->buscarProyectoPorId($idProyecto))) {
+        if (!is_null($this->buscarProyectoPorId($idProyecto)) && $this->buscarProyectoPorId($idProyecto)["editable"] == 1) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);
             return true;
