@@ -55,7 +55,7 @@
                         <?php } ?>
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
-                            <p>Fecha límite: <?php echo isset($t["fecha_limite"]) ? $p["fecha_limite"] : "No tiene fecha límite" ?></p>
+                            <p>Fecha límite: <?php echo isset($t["fecha_limite"]) ? $t["fecha_limite"] : "No tiene fecha límite" ?></p>
                             <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $t["username"] ?></p>
                             <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones">Ver</a>
                             <a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones">Editar</a>

@@ -105,19 +105,43 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
-    public function editUsuario(string $username, string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
-        $stmt = $this->pdo->prepare("UPDATE usuarios SET username=?, password=?, email=?, id_rol=?, fecha_nacimiento=?, "
-                . "fecha_login=current_timestamp(), descripcion_usuario=?, id_color_favorito=? WHERE id_usuario=?");
-
-        if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
-            if (isset($_FILES["avatar"])) {
-                var_dump($_FILES);
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
-                $modeloFiles->actualizarImagen("usuarios", "avatar", (int) $idUsuario);
+    /**
+     * Edita el usuario en la base de datos
+     * @param string $username el nombre de usuario
+     * @param string|null $contrasena la contraseña
+     * @param string $email el email
+     * @param string $idRol el id del rol
+     * @param string $fechaNacimiento la fecha de nacimiento
+     * @param string $descripcionUsuario la descripcion del usuario
+     * @param string $idColor el id del color del usuario
+     * @param int $idUsuario el id del usuario a modificar
+     * @return bool Retorna true si el usuario se edita correctamente
+     */
+    public function editUsuario(string $username, ?string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
+        // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
+        if (is_null($contrasena)) {
+            $stmt = $this->pdo->prepare("UPDATE usuarios "
+                    . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?,"
+                    . "descripcion_usuario=?, id_color_favorito=? "
+                    . "WHERE id_usuario=?");
+            if (!$stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
+                return false;
             }
+        } else {
+            $stmt = $this->pdo->prepare("UPDATE usuarios "
+                    . "SET username=?, password=?, email=?, id_rol=?, fecha_nacimiento=?, descripcion_usuario=?, id_color_favorito=? "
+                    . "WHERE id_usuario=?");
+            if (!$stmt->execute([$username, $contrasena, $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
+                return false;
+            }
+        }
+
+        if (isset($_FILES["avatar"])) {
+            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            return $modeloFiles->actualizarImagen("usuarios", "avatar", (int) $idUsuario) ? true : false;
+        } else {
             return true;
         }
-        return false;
     }
 
     public function contador(): int {

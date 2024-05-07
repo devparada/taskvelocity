@@ -154,7 +154,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
-    public function procesarEdit(int $idUsuario) {
+    /**
+     * Edita el usuario según los cambios que pase el usuario
+     * @param int $idUsuario el id del usuario a editar
+     * @return void
+     */
+    public function procesarEdit(int $idUsuario): void {
         $data = [];
         $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
         $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
@@ -172,7 +177,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $data["datos"] = $datos;
-
         $data["modoEdit"] = true;
 
         $errores = $this->comprobarEdit($datos);
@@ -180,7 +184,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         if (empty($errores)) {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-            if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
+            // Si está vacío se actualiza el usuario sin cambiar la contraseña
+            if (empty($datos["contrasena"])) {
+                if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
+                    header("location: /admin/usuarios");
+                }
+            } else if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
                 header("location: /admin/usuarios");
             }
         } else {
