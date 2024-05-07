@@ -55,6 +55,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data["usuarios"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
 
         $data["modoVer"] = true;
+        $data["idProyecto"] = $idProyecto;
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);

@@ -37,3 +37,12 @@ a {
 .imagen-login {
     width: 70px;
 }
+
+.campo-obligatorio {
+    color: #FF8080;
+}
+
+.imagen-mostrar {
+    display: block;
+    width: 70px;
+}

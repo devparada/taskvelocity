@@ -11,14 +11,25 @@
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
                     <div class="row">
                         <div class="mb-3 col-sm-3">
-                            <label for="nombre_tarea">Nombre de la tarea *</label>
-                            <input type="text" class="form-control" id="nombre_tarea" name="nombre_tarea" placeholder="Introduzca el nombre de la tarea" value="<?php echo isset($datos["nombre_tarea"]) ? $datos["nombre_tarea"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
+                            <label for="nombre_tarea">Nombre de la tarea <span class="campo-obligatorio">*</span></label>
+                            <input type="text" class="form-control" id="nombre_tarea" name="nombre_tarea" placeholder="Introduzca el nombre de la tarea" required value="<?php echo isset($datos["nombre_tarea"]) ? $datos["nombre_tarea"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['nombre_tarea']) ? $errores['nombre_tarea'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">
                             <label for="imagen_tarea">Imagen</label>
-                            <input type="file" class="form-control-file" id="imagen_tarea">
+                            <?php if (!isset($modoVer)) { ?>
+                                <input type="file" class="form-control-file" id="imagen_tarea" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <?php } else { ?>
+                                <?php
+                                (file_exists("assets/img/tareas/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
+                                if (file_exists("assets/img/tareas/tarea-$idTarea.$extension")) {
+                                    ?>
+                                    <img src="assets/img/tareas/tarea-<?php echo $idTarea . "." . $extension ?>" class="imagen-mostrar" id="imagen_tarea">
+                                <?php } else { ?>
+                                    <p>Esta tarea no tiene imagen</p>
+                                <?php } ?>
+                            <?php } ?>
                             <p class="text-danger"><?php echo isset($errores['imagen_tarea']) ? $errores['imagen_tarea'] : ''; ?></p>
                         </div>
 
@@ -29,7 +40,7 @@
                         </div>
 
                         <div class="mb-3 col-sm-3">
-                            <label for="id_color_tarea">Color de la tarea *</label>
+                            <label for="id_color_tarea">Color de la tarea <span class="campo-obligatorio">*</span></label>
                             <select class="form-control" id="id_color_tarea" name="id_color_tarea" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color_tarea"]) && $color["id_color"] == $datos["id_color_tarea"] ? "selected" : "" ?>><?php echo $color["nombre_color"]; ?></option>
@@ -39,23 +50,32 @@
                         </div>
 
                         <div class="mb-3 col-sm-3">
-                            <label for="id_proyecto_asociado">Proyecto asociado *</label>
-                            <select class="form-control" id="id_proyecto_asociado" name="id_proyecto_asociado" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
+                            <select class="form-control" id="id_proyecto_asociado" required name="id_proyecto_asociado" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value="">Selecciona un proyecto</option>
                                 <?php foreach ($proyectos as $proyecto) { ?>
-                                    <option value="<?php echo $proyecto["id_proyecto"] ?>" <?php echo isset($datos["id_proyecto_asociado"]) && $proyecto["id_proyecto"] == $datos["id_proyecto_asociado"] ? "selected" : "" ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
+                                    <option value="<?php echo $proyecto["id_proyecto"] ?>" <?php echo isset($datos["id_proyecto"]) && ($proyecto["id_proyecto"] == $datos["id_proyecto"]) ? "selected" : "" ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
                                 <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_proyecto_asociado']) ? $errores['id_proyecto_asociado'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">
-                            <label for="id_usuarios_asociados[]">Usuarios asociados *</label>
-                            <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
+                            <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
                                 <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" <?php echo isset($datos["id_usuarios_asociados"]) && ($usuario["id_usuario"] == $datos["id_usuarios_asociados"]) || ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "selected" : "" ?>><?php echo $usuario["username"]; ?></option>
-                                <?php } ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
+                                    <?php
+                                    if (isset($datos["nombresUsuarios"])) {
+                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
+                                            if (trim($nombreUsuario) == $usuario["username"]) {
+                                                echo "selected";
+                                            }
+                                        }
+                                    }
+                                    ?>><?php echo $usuario["username"]; ?></option>                               
+                                        <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>
                         </div>

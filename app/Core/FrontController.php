@@ -101,6 +101,13 @@ class FrontController {
                             $controlador->procesarAdd();
                         }
                         , 'post');
+
+                Route::add('/admin/tareas/view/([0-9]+)',
+                        function ($idTarea) {
+                            $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                            $controlador->verTarea($idTarea);
+                        }
+                        , 'get');
             }
 
             if (strpos($_SESSION["permisos"]["tareas"], "r") !== false) {

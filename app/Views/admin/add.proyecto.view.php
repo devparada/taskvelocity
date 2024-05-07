@@ -11,14 +11,25 @@
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
                     <div class="row">
                         <div class="mb-3 col-sm-5">
-                            <label for="nombre_proyecto">Nombre del proyecto *</label>
-                            <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
+                            <label for="nombre_proyecto">Nombre del proyecto <span class="campo-obligatorio">*</span></label>
+                            <input type="text" class="form-control" id="nombre_proyecto" name="nombre_proyecto" placeholder="Introduzca el nombre del proyecto" required value="<?php echo isset($datos["nombre_proyecto"]) ? $datos["nombre_proyecto"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['nombre_proyecto']) ? $errores['nombre_proyecto'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-4">
                             <label for="imagen_proyecto">Imagen</label>
-                            <input type="file" class="form-control-file" id="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <?php if (!isset($modoVer)) { ?>
+                                <input type="file" class="form-control-file" id="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <?php } else { ?>
+                                <?php
+                                (file_exists("assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
+                                if (file_exists("assets/img/proyectos/proyecto-$idProyecto.$extension")) {
+                                    ?>
+                                    <img src="assets/img/proyectos/proyecto-<?php echo $idProyecto . "." . $extension ?>" class="imagen-mostrar" id="imagen_proyecto">
+                                <?php } else { ?>
+                                    <p>Este proyecto no tiene imagen</p>
+                                <?php } ?>
+                            <?php } ?>
                             <p class="text-danger"><?php echo isset($errores['imagen_proyecto']) ? $errores['imagen_proyecto'] : ''; ?></p>
                         </div>
 
@@ -29,7 +40,7 @@
                         </div>
 
                         <div class="mb-3 col-sm-5">
-                            <label for="id_usuarios_asociados[]">Usuarios asociados *</label>
+                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
                             <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
                                 <?php foreach ($usuarios as $usuario) { ?>
@@ -47,7 +58,6 @@
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>
                         </div>
-
 
                         <div class="mb-3 col-sm-7">
                             <label for="descripcion_proyecto">Descripción del proyecto</label>

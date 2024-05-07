@@ -259,6 +259,45 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
+    /**
+     * Mustra la información de una tarea específicada a partir del id específicado
+     * @param int $idTarea el id de la tarea
+     * @return void
+     * */
+    public function verTarea(int $idTarea): void {
+        $data = [];
+
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data["titulo"] = "Ver tarea $idTarea";
+            $data["tituloDiv"] = "Ver tarea $idTarea";
+            $data["seccion"] = "/admin/tareas/view/$idTarea";
+        }
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
+        $data["tarea"] = $data["datos"];
+        $data["usuarios"] = $modeloTarea->mostrarUsuariosPorTarea($idTarea);
+
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+        $data["colores"] = $modeloColor->mostrarColores();
+
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $data["proyectos"] = $modeloProyecto->mostrarProyectos();
+
+        $data["modoVer"] = true;
+        $data["idTarea"] = $idTarea;
+
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            if ($this->comprobarUsuarioMiembros($data["usuarios"])) {
+                $this->view->show('public/ver.tarea.view.php', $data);
+            } else {
+                header("location: /tareas");
+            }
+        }
+    }
+
     private function comprobarAddTareas(array $data): array {
         $errores = [];
 

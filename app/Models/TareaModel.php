@@ -44,19 +44,46 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $usuarios;
     }
 
+    /**
+     * Busca la información de una tarea específica por el id pasado como parámetro
+     * @param int $idTarea el id de la tarea
+     * @return array|null Devuelve la información de la tarea si la encuentra o null
+     */
     public function buscarTareaPorId(int $idTarea): ?array {
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
-                . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
-                . "WHERE id_tarea = ?");
+        $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta LEFT JOIN proyectos p "
+                . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios_tareas ut "
+                . "ON ta.id_usuario_tarea_prop=ut.id_usuarioTAsoc LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
+                . "WHERE id_tarea = ? GROUP BY ut.id_tareaTAsoc");
         $stmt->execute([$idTarea]);
 
-        $usuarioEncontrado = $stmt->fetch();
+        $tareaEncontrada = $stmt->fetch();
 
-        if ($usuarioEncontrado) {
-            return $usuarioEncontrado;
-        } else {
-            return null;
+        if (!empty($tareaEncontrada)) {
+            for ($j = 0; $j < $tareaEncontrada["COUNT(id_usuarioTAsoc)"]; $j++) {
+                $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
+                        . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
+                        . " WHERE id_tareaTAsoc =" . $tareaEncontrada["id_tareaTAsoc"]);
+
+                $usuariosProyectos = $stmt->fetchAll();
+
+                $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
+            }
         }
+
+        return ($tareaEncontrada) ? $tareaEncontrada : null;
+    }
+
+    /**
+     * Muestra los usuarios asociados a una tarea por el id de la tarea
+     * @param int $idTarea el id de la tarea
+     * @return array Retorna un array con los usuarios de la tarea asociada
+     */
+    public function mostrarUsuariosPorTarea(int $idTarea): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_tareas ut "
+                . "ON u.id_usuario = ut.id_usuarioTAsoc "
+                . "WHERE ut.id_tareaTAsoc  = ?");
+        $stmt->execute([$idTarea]);
+        return $stmt->fetchAll();
     }
 
     /**

@@ -65,7 +65,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null los datos del proyecto si lo encontra o null si no lo encuentra
      */
     public function buscarProyectoPorId(int $idProyecto): ?array {
-        $stmt = $this->pdo->prepare("SELECT *,  COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
+        $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
                 . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
                 . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ? GROUP BY up.id_proyectoPAsoc");
         $stmt->execute([$idProyecto]);
@@ -84,11 +84,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             }
         }
 
-        if ($proyectoEncontrado) {
-            return $proyectoEncontrado;
-        } else {
-            return null;
-        }
+        return ($proyectoEncontrado) ? $proyectoEncontrado : null;
     }
 
     public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, ?array $idUsuariosAsociados): bool {
