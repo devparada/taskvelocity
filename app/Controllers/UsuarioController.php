@@ -65,7 +65,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarAddUsuario() {
         $data = [];
-        $data['titulo'] = 'Añadir usuarios';
+        $data['titulo'] = 'Añadir usuario';
         $data['seccion'] = '/admin/usuarios/add';
         $data['tituloDiv'] = 'Añadir usuario';
 
@@ -87,7 +87,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     public function procesarAddUsuario(): void {
         $data = [];
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
-            $data['titulo'] = 'Añadir usuarios';
+            $data['titulo'] = 'Añadir usuario';
             $data['seccion'] = '/admin/usuarios/add';
             $data['tituloDiv'] = 'Añadir usuario';
         }
@@ -108,13 +108,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
-                    $modeloUsuario->crearAvatar($datos["username"]);
-                    header("location: /usuarios");
+                    header("location: /admin/usuarios");
                 }
             } else {
                 // El 2 es el id de rol del usuario (cuando se registra el usuario se añade el id de rol 2 que es usuario)
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], 2, $datos["fecha_nacimiento"], "", $datos["id_color"])) {
-                    $modeloUsuario->crearAvatar($datos["username"]);
                     $this->crearLogin($datos["email"]);
                     header("location: /proyectos");
                 }
@@ -183,9 +181,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
             if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                if (!empty($_FILES["avatar"]["name"])) {
-                    $modeloUsuario->updateAvatar($idUsuario);
-                }
                 header("location: /admin/usuarios");
             }
         } else {
@@ -249,13 +244,13 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $dimensionesAvatar = 256;
 
-        if (!empty($_FILES["avatar"]["name"])) {
-            if ($_FILES["avatar"]["type"] != "image/jpeg" && $_FILES["avatar"]["type"] != "image/png") {
-                $errores["avatar"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["avatar"]["tmp_name"])[0] > $dimensionesAvatar || getimagesize($_FILES["avatar"]["tmp_name"])[1] > $dimensionesAvatar) {
-                $errores["avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
-            } else if ($_FILES["avatar"]["size"] > 10 * self::MB) {
-                $errores["avatar"] = "Imagen demasiada pesada";
+        if (!empty($_FILES["imagen_avatar"]["name"])) {
+            if ($_FILES["imagen_avatar"]["type"] != "image/jpeg" && $_FILES["imagen_avatar"]["type"] != "image/png") {
+                $errores["imagen_avatar"] = "Tipo de imagen no aceptado";
+            } else if (getimagesize($_FILES["imagen_avatar"]["tmp_name"])[0] > $dimensionesAvatar || getimagesize($_FILES["imagen_avatar"]["tmp_name"])[1] > $dimensionesAvatar) {
+                $errores["imagen_avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
+            } else if ($_FILES["imagen_avatar"]["size"] > 10 * self::MB) {
+                $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
         }
 

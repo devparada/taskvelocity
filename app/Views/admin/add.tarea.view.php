@@ -19,13 +19,13 @@
                         <div class="mb-3 col-sm-3">
                             <label for="imagen_tarea">Imagen</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_tarea" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
                             <?php } else { ?>
                                 <?php
                                 (file_exists("assets/img/tareas/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
                                 if (file_exists("assets/img/tareas/tarea-$idTarea.$extension")) {
                                     ?>
-                                    <img src="assets/img/tareas/tarea-<?php echo $idTarea . "." . $extension ?>" class="imagen-mostrar" id="imagen_tarea">
+                                    <img src="assets/img/tareas/tarea-<?php echo $idTarea . "." . $extension ?>" class="imagen-mostrar">
                                 <?php } else { ?>
                                     <p>Esta tarea no tiene imagen</p>
                                 <?php } ?>

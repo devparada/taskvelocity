@@ -115,7 +115,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             if (empty($idUsuariosAsociados)) {
                 $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
             }
-            $this->crearImagen((int) $idTarea);
+
+            if (isset($_FILES["imagen_tarea"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
+            }
             return true;
         }
         return false;
@@ -159,8 +163,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->editarUsuariosTareas($idUsuariosAsociados, $idTarea);
             }
 
-            if (!empty($_FILES["imagen_tarea"]["name"])) {
-                $this->actualizarImagen($idTarea);
+            if (isset($_FILES["imagen_tarea"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->actualizarImagen("tareas", "tarea", $idTarea);
             }
             return true;
         }
@@ -183,86 +188,6 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
-    /**
-     * Guarda la imagen en la ruta específicada
-     * @param int $idTarea el id de la tarea
-     * @return void
-     */
-    private function crearImagen(int $idTarea): void {
-        $directorio = "./assets/img/tareas/";
-
-        // Si la carpeta no existe se crea
-        if (!file_exists($directorio)) {
-            mkdir($directorio, 0755, true);
-        }
-
-        if (!empty($_FILES["imagen_tarea"]["name"])) {
-            // La extension de la imagen puede ser jpg o png
-            $directorioArchivo = $directorio . "tarea-" . $idTarea . "." . pathinfo($_FILES["imagen_tarea"]["name"])["extension"];
-        } else {
-            // Si la imagen es por defecto la extension es jpg
-            $directorioArchivo = $directorio . "tarea-" . $idTarea . ".jpg";
-        }
-
-        if (!empty($_FILES["imagen_tarea"]["name"])) {
-            // La imagen subida se mueve al directorio y se llama con el id de la tarea
-            move_uploaded_file($_FILES["imagen_tarea"]["tmp_name"], $directorioArchivo);
-        }
-    }
-
-    private function actualizarImagen(int $idTarea): bool {
-        $directorio = "./assets/img/tareas/";
-        $imagen = $directorio . "tarea-" . $idTarea . ".";
-
-        // Para obtener la extension de la imagen se comprueba si es png o jpg
-        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
-
-        $imagenRuta = $imagen . $extension;
-
-        // Si se puede escribir o borrar la imagen
-        if (is_writable($directorio)) {
-            if (file_exists($imagenRuta)) {
-                // Se borra la imagen
-                unlink($imagenRuta);
-            }
-
-            move_uploaded_file($_FILES["imagen_tarea"]["tmp_name"], $imagenRuta);
-        } else {
-            $this->crearImagen($idProyecto);
-            return true;
-        }
-        return false;
-    }
-
-    private function buscarImagen(int $idTarea): bool {
-        $imagenRuta = "./assets/img/tareas/tarea-" . $idTarea . ".";
-        if (file_exists($imagenRuta . "png") || file_exists($imagenRuta . "jpg")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function eliminarImagen(int $idTarea): bool {
-        $directorio = "./assets/img/tareas/";
-
-        $imagen = $directorio . "tarea-" . $idTarea . ".";
-
-        // Para obtener la extension de la imagen se comprueba si es png o jpg
-        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
-
-        $imagenRuta = $imagen . $extension;
-
-        // Si se puede escribir o borrar la imagen
-        if (is_writable($imagenRuta)) {
-            // Se borra la imagen
-            unlink($imagenRuta);
-            return true;
-        }
-
-        return false;
-    }
-
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM tareas");
         return $stmt->fetchColumn();
@@ -274,7 +199,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!is_null($this->buscarTareaPorId($idTarea))) {
             $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
             $stmt->execute([$idTarea]);
-            if (!$this->buscarImagen($idTarea) || $this->eliminarImagen($idTarea)) {
+            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            if (!$modeloFiles->buscarImagen("tareas", "tarea", $idTarea) || $modeloFiles->eliminarImagen("tareas", "tarea", $idTarea)) {
                 $valorDevuelto = true;
             } else {
                 $valorDevuelto = false;

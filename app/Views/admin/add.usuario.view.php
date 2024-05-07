@@ -17,9 +17,9 @@
                         </div>
 
                         <div class="mb-3 col-sm-5">
-                            <label for="avatar">Avatar</label>
-                            <input type="file" class="form-control-file" id="avatar" name="avatar" <?php echo isset($modoVer) ? "disabled" : "" ?>>
-                            <p class="text-danger"><?php echo isset($errores['avatar']) ? $errores['avatar'] : ''; ?></p>
+                            <label for="imagen_avatar">Avatar</label>
+                            <input type="file" class="form-control-file" id="imagen_avatar" name="imagen_avatar" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">

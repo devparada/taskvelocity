@@ -96,6 +96,10 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt = $this->pdo->prepare("UPDATE usuarios SET id_proyecto_personal = ? WHERE id_usuario = ?");
             $stmt->execute([$idProyectoPersonal, $idUsuario]);
 
+            if (isset($_FILES["avatar"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->guardarImagen("usuarios", "avatar", (int) $idUsuario);
+            }
             return true;
         }
         return false;
@@ -106,100 +110,19 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "fecha_login=current_timestamp(), descripcion_usuario=?, id_color_favorito=? WHERE id_usuario=?");
 
         if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
-            return true;
-        }
-        return false;
-    }
-
-    public function crearAvatar(string $username): void {
-        $directorio = "./assets/img/usuarios/";
-
-        // Si la carpeta no existe se crea
-        if (!file_exists($directorio)) {
-            mkdir($directorio, 0755, true);
-        }
-
-        $stmt = $this->pdo->prepare("SELECT id_usuario FROM usuarios us WHERE us.username = ?");
-        $stmt->execute([$username]);
-
-        $usuarioId = $stmt->fetch()["id_usuario"];
-
-        if (!empty($_FILES["avatar"]["name"])) {
-            // Si la imagen es subida la extension puede ser jpg o png
-            $directorioArchivo = $directorio . "avatar-" . $usuarioId . "." . pathinfo($_FILES["avatar"]["name"])["extension"];
-        } else {
-            // Si la imagen es por defecto la extension es jpg
-            $directorioArchivo = $directorio . "avatar-" . $usuarioId . ".jpg";
-        }
-
-        if (!empty($_FILES["avatar"]["name"])) {
-            // La imagen subida se mueve al directorio y se llama con el id del usuario
-            move_uploaded_file($_FILES["avatar"]["tmp_name"], $directorioArchivo);
-        } else {
-            // La imagen por defecto se copia con el id del usuario
-            copy($directorio . "avatar-default.jpg", $directorioArchivo);
-        }
-    }
-
-    public function updateAvatar(int $idUsuario): bool {
-        $directorio = "./assets/img/usuarios/";
-
-        $imagen = $directorio . "avatar-" . $idUsuario . ".";
-
-        // Para obtener la extension de la imagen se comprueba si es png o jpg
-        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
-
-        $imagenRuta = $imagen . $extension;
-
-        // Si se puede escribir o borrar la imagen
-        if (is_writable($directorio)) {
-            if (file_exists($imagenRuta)) {
-                // Se borra la imagen
-                unlink($imagenRuta);
+            if (isset($_FILES["avatar"])) {
+                var_dump($_FILES);
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->actualizarImagen("usuarios", "avatar", (int) $idUsuario);
             }
-
-            move_uploaded_file($_FILES["avatar"]["tmp_name"], $imagenRuta);
             return true;
         }
-
-        return false;
-    }
-
-    public function eliminarAvatar(int $idUsuario): bool {
-        $directorio = "./assets/img/usuarios/";
-
-        $imagen = $directorio . "avatar-" . $idUsuario . ".";
-
-        // Para obtener la extension de la imagen se comprueba si es png o jpg
-        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
-
-        $imagenRuta = $imagen . $extension;
-
-        // Si se puede escribir o borrar la imagen
-        if (is_writable($imagenRuta)) {
-            // Se borra la imagen
-            unlink($imagenRuta);
-            return true;
-        }
-
         return false;
     }
 
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
         return $stmt->fetchColumn();
-    }
-
-    public function deleteUsuario(int $idUsuario): bool {
-        if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
-            $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
-            $stmt->execute([$idUsuario]);
-            if ($this->eliminarAvatar($idUsuario)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public function comprobarUsuariosNumero(array $idUsuarios): bool {

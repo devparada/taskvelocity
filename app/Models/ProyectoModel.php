@@ -105,8 +105,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
             }
 
-            if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                $this->crearImagen((int) $idProyecto);
+            if (isset($_FILES["imagen_proyecto"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
             return true;
         }
@@ -168,8 +169,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
             }
 
-            if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                $this->actualizarImagen($idProyecto);
+            if (isset($_FILES["imagen_proyecto"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles->actualizarImagen("proyectos", "proyecto",(int) $idProyecto);
             }
             return true;
         }
@@ -192,46 +194,6 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
-    private function crearImagen(int $idProyecto): void {
-        $directorio = "./assets/img/proyectos/";
-
-        // Si la carpeta no existe se crea
-        if (!file_exists($directorio)) {
-            mkdir($directorio, 0755, true);
-        }
-
-        if (!empty($_FILES["imagen_proyecto"]["name"])) {
-            // La imagen subida puede tener la extension jpg o png
-            $directorioArchivo = $directorio . "proyecto-" . $idProyecto . "." . pathinfo($_FILES["imagen_proyecto"]["name"])["extension"];
-
-            move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $directorioArchivo);
-        }
-    }
-
-    private function actualizarImagen(int $idProyecto): bool {
-        $directorio = "./assets/img/proyectos/";
-        $imagen = $directorio . "proyecto-" . $idProyecto . ".";
-
-        // Para obtener la extension de la imagen se comprueba si es png o jpg
-        file_exists($imagen . "png") ? $extension = "png" : $extension = "jpg";
-
-        $imagenRuta = $imagen . $extension;
-
-        // Si se puede escribir o borrar la imagen
-        if (is_writable($directorio)) {
-            if (file_exists($imagenRuta)) {
-                // Se borra la imagen
-                unlink($imagenRuta);
-            }
-
-            move_uploaded_file($_FILES["imagen_proyecto"]["tmp_name"], $imagenRuta);
-        } else {
-            $this->crearImagen($idProyecto);
-            return true;
-        }
-        return false;
-    }
-
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM proyectos");
         return $stmt->fetchColumn();
@@ -243,12 +205,19 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si consiga borrar el poryecto si no false
      */
     public function deleteProyecto(int $idProyecto): bool {
+        $valorDevuelto = false;
+
         if (!is_null($this->buscarProyectoPorId($idProyecto)) && $this->buscarProyectoPorId($idProyecto)["editable"] == 1) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);
-            return true;
+            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            if (!$modeloFiles->buscarImagen("proyectos", "proyecto", $idProyecto) || $modeloFiles->eliminarImagen("proyectos", "proyecto", $idProyecto)) {
+                $valorDevuelto = true;
+            } else {
+                $valorDevuelto = false;
+            }
         }
 
-        return false;
+        return $valorDevuelto;
     }
 }

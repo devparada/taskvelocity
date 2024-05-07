@@ -19,7 +19,7 @@
                         <div class="mb-3 col-sm-4">
                             <label for="imagen_proyecto">Imagen</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <input type="file" class="form-control-file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                             <?php } else { ?>
                                 <?php
                                 (file_exists("assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
@@ -69,7 +69,7 @@
                             <?php
                             if (!isset($modoVer)) {
                                 ?>
-                                <input type="submit" value="Enviar" name="enviar" class="btn btn-primary"/>
+                                <input type="submit" value="Añadir proyecto" name="enviar" class="btn btn-primary"/>
                                 <a href="/admin/proyectos" class="btn btn-danger ml-3">Cancelar</a>
                             <?php } else { ?>
                                 <a href="/admin/proyectos" class="btn btn-danger ml-3">Volver</a>
