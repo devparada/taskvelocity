@@ -26,6 +26,13 @@ class FrontController {
                             $controlador->mostrarUsuarios();
                         }
                         , 'get');
+
+                Route::add('/admin/usuarios/view/([0-9]+)',
+                        function ($idUsuario) {
+                            $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                            $controlador->verUsuario($idUsuario);
+                        }
+                        , 'get');
             }
 
             if (strpos($_SESSION["permisos"]["usuarios"], "w") !== false) {
@@ -42,18 +49,7 @@ class FrontController {
                             $controlador->procesarAddUsuario();
                         }
                         , 'post');
-            }
 
-            if (strpos($_SESSION["permisos"]["usuarios"], "r") !== false) {
-                Route::add('/admin/usuarios/view/([0-9]+)',
-                        function ($idUsuario) {
-                            $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                            $controlador->verUsuario($idUsuario);
-                        }
-                        , 'get');
-            }
-
-            if (strpos($_SESSION["permisos"]["usuarios"], "w") !== false) {
                 Route::add('/admin/usuarios/edit/([0-9]+)',
                         function ($idUsuario) {
                             $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
@@ -85,9 +81,16 @@ class FrontController {
                             $controlador->mostrarTareas();
                         }
                         , 'get');
+
+                Route::add('/admin/tareas/view/([0-9]+)',
+                        function ($idTarea) {
+                            $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                            $controlador->verTarea($idTarea);
+                        }
+                        , 'get');
             }
 
-            if (strpos($_SESSION["permisos"]["tareas"], "r") !== false) {
+            if (strpos($_SESSION["permisos"]["tareas"], "w") !== false) {
                 Route::add('/admin/tareas/add',
                         function () {
                             $controlador = new \Com\TaskVelocity\Controllers\TareaController();
@@ -101,16 +104,10 @@ class FrontController {
                             $controlador->procesarAdd();
                         }
                         , 'post');
-
-                Route::add('/admin/tareas/view/([0-9]+)',
-                        function ($idTarea) {
-                            $controlador = new \Com\TaskVelocity\Controllers\TareaController();
-                            $controlador->verTarea($idTarea);
-                        }
-                        , 'get');
             }
 
-            if (strpos($_SESSION["permisos"]["tareas"], "r") !== false) {
+
+            if (strpos($_SESSION["permisos"]["tareas"], "d") !== false) {
                 Route::add('/admin/tareas/delete/([0-9]+)',
                         function ($idTarea) {
                             $controlador = new \Com\TaskVelocity\Controllers\TareaController();
@@ -126,9 +123,16 @@ class FrontController {
                             $controlador->mostrarProyectos();
                         }
                         , 'get');
+
+                Route::add('/admin/proyectos/view/([0-9]+)',
+                        function ($idProyecto) {
+                            $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                            $controlador->verProyecto($idProyecto);
+                        }
+                        , 'get');
             }
 
-            if (strpos($_SESSION["permisos"]["proyectos"], "r") !== false) {
+            if (strpos($_SESSION["permisos"]["proyectos"], "w") !== false) {
                 Route::add('/admin/proyectos/add',
                         function () {
                             $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
@@ -142,16 +146,9 @@ class FrontController {
                             $controlador->procesarAdd();
                         }
                         , 'post');
-
-                Route::add('/admin/proyectos/view/([0-9]+)',
-                        function ($idProyecto) {
-                            $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
-                            $controlador->verProyecto($idProyecto);
-                        }
-                        , 'get');
             }
 
-            if (strpos($_SESSION["permisos"]["proyectos"], "r") !== false) {
+            if (strpos($_SESSION["permisos"]["proyectos"], "d") !== false) {
                 Route::add('/admin/proyectos/delete/([0-9]+)',
                         function ($idProyecto) {
                             $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
