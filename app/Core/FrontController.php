@@ -185,6 +185,15 @@ class FrontController {
                         , 'get');
             }
 
+            if (strpos($_SESSION["permisos"]["logs"], "r") !== false) {
+                Route::add('/admin/logs',
+                        function () {
+                            $controlador = new \Com\TaskVelocity\Controllers\LogController();
+                            $controlador->mostrarLogs();
+                        }
+                        , 'get');
+            }
+
             // Rutas de usuarios
             Route::add('/proyectos',
                     function () {

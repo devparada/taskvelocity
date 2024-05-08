@@ -100,6 +100,9 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("usuarios", "avatar", (int) $idUsuario);
             }
+
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Creado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
             return true;
         }
         return false;
@@ -136,6 +139,9 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             }
         }
 
+        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+        $modeloLog->crearLog("Editado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
+
         if (isset($_FILES["avatar"])) {
             $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
             return $modeloFiles->actualizarImagen("usuarios", "avatar", (int) $idUsuario) ? true : false;
@@ -147,6 +153,25 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuarios");
         return $stmt->fetchColumn();
+    }
+
+    /**
+     * Borra el usuario y el avatar de la base de datos
+     * @param int $idUsuario el id del usuario
+     * @return bool Retorna true si borra el usuario y el avatar y si no false
+     */
+    public function deleteUsuario(int $idUsuario): bool {
+        if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
+            $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+            $stmt->execute([$idUsuario]);
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
+            if ($this->eliminarAvatar($idUsuario)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function comprobarUsuariosNumero(array $idUsuarios): bool {

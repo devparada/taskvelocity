@@ -360,6 +360,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             "usuarios" => "",
             "tareas" => "",
             "proyectos" => "",
+            "logs" => "",
         );
 
         switch ($idRol) {
@@ -368,12 +369,14 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                 $permisos["usuarios"] = "rwd";
                 $permisos["tareas"] = "rwd";
                 $permisos["proyectos"] = "rwd";
+                $permisos["logs"] = "rwd";
                 break;
             case 2:
                 $permisos["inicio"] = "";
                 $permisos["usuarios"] = "";
                 $permisos["tareas"] = "";
                 $permisos["proyectos"] = "";
+                $permisos["logs"] = "";
                 break;
         }
 

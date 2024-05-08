@@ -38,6 +38,13 @@
                         <p>Proyectos</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="/admin/logs" class="nav-link <?php echo isset($seccion) && $seccion === '/admin/logs' ? 'active' : ''; ?>">
+                        <i class="fas fa-cogs nav-icon"></i>
+                        <p>Logs</p>
+                    </a>
+                </li>
                 <?php
                 ?>
 

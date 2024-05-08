@@ -120,6 +120,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
             }
+
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Creada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);
             return true;
         }
         return false;
@@ -167,6 +170,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->actualizarImagen("tareas", "tarea", $idTarea);
             }
+
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Editada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);
             return true;
         }
         return false;
@@ -201,6 +207,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt->execute([$idTarea]);
             $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
             if (!$modeloFiles->buscarImagen("tareas", "tarea", $idTarea) || $modeloFiles->eliminarImagen("tareas", "tarea", $idTarea)) {
+                $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+                $modeloLog->crearLog("Eliminada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);
                 $valorDevuelto = true;
             } else {
                 $valorDevuelto = false;

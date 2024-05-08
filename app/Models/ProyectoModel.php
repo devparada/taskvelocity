@@ -109,6 +109,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
+
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Creado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);
             return true;
         }
         return false;
@@ -126,8 +129,11 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "VALUES(?, ?, ?, ?, ?)");
         $stmt->execute(["Personal $username", "Personal $username", null, $idUsuario, 0]);
 
-        $idProyectoPersonal = (int) $this->pdo->lastInsertId();
+        $idProyectoPersonal = $this->pdo->lastInsertId();
         $this->añadirPropietario((int) $idUsuario, (int) $idProyectoPersonal);
+
+        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+        $modeloLog->crearLog("Creado el proyecto personal con el id $idProyectoPersonal", (int) $idUsuario);
         return $idProyectoPersonal;
     }
 
@@ -171,8 +177,11 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
             if (isset($_FILES["imagen_proyecto"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
-                $modeloFiles->actualizarImagen("proyectos", "proyecto",(int) $idProyecto);
+                $modeloFiles->actualizarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
+
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+            $modeloLog->crearLog("Editado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);
             return true;
         }
         return false;
@@ -212,6 +221,8 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt->execute([$idProyecto]);
             $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
             if (!$modeloFiles->buscarImagen("proyectos", "proyecto", $idProyecto) || $modeloFiles->eliminarImagen("proyectos", "proyecto", $idProyecto)) {
+                $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+                $modeloLog->crearLog("Eliminado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);
                 $valorDevuelto = true;
             } else {
                 $valorDevuelto = false;
