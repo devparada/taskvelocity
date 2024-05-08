@@ -4,7 +4,7 @@
     <!-- /.content -->
 </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer text-center">
+  <footer class="main-footer text-center footer-personalizado">
     <strong>Administración de TaskVelocity</strong>    
   </footer>
 

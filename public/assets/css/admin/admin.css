@@ -1,6 +1,5 @@
 /* Personaliza todos los enlaces a */
 a {
-    color: black;
     text-decoration: none;
 }
 
@@ -27,11 +26,11 @@ a {
 
 /* El logo y el titulo en las ventanas login y register */
 .login-logo > a {
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    color: white;
 }
 
 .imagen-login {
@@ -45,4 +44,8 @@ a {
 .imagen-mostrar {
     display: block;
     width: 70px;
+}
+
+.footer-personalizado {
+    color: white;
 }
