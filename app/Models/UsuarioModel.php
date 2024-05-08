@@ -96,7 +96,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt = $this->pdo->prepare("UPDATE usuarios SET id_proyecto_personal = ? WHERE id_usuario = ?");
             $stmt->execute([$idProyectoPersonal, $idUsuario]);
 
-            if (isset($_FILES["avatar"])) {
+            if (isset($_FILES["imagen_avatar"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("usuarios", "avatar", (int) $idUsuario);
             }
@@ -166,7 +166,8 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt->execute([$idUsuario]);
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
-            if ($this->eliminarAvatar($idUsuario)) {
+            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            if ($modeloFiles->eliminarImagen("usuarios", "avatar", $idUsuario)) {
                 return true;
             }
         }
