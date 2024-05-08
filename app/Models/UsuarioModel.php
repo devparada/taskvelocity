@@ -127,14 +127,14 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
                     . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?,"
                     . "descripcion_usuario=?, id_color_favorito=? "
                     . "WHERE id_usuario=?");
-            if (!$stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
+            if (!$stmt->execute([$username, $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
                 return false;
             }
         } else {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
                     . "SET username=?, password=?, email=?, id_rol=?, fecha_nacimiento=?, descripcion_usuario=?, id_color_favorito=? "
                     . "WHERE id_usuario=?");
-            if (!$stmt->execute([$username, $contrasena, $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
+            if (!$stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
                 return false;
             }
         }
