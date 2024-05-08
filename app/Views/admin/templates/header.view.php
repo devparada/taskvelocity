@@ -54,7 +54,7 @@
                             <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"
                                class="d-block"> <?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?> </a>    
                         </div>
-                        
+
                     </div>
 
                     <li class="nav-item">
@@ -71,20 +71,21 @@
                             ?>
                         </a>        
                     </li>
-                    
+
                     <!-- Navbar Search -->
                     <li class="nav-item">
-                        <?php
-                        echo isset($_COOKIE['dark']) ?
-                                '<a class="nav-link" href="/light" role="button">
-                <i class="text fas fa-sun"></i>
-        </a>      
-      </li>' :
-                                '   <a class="nav-link" href="/dark" role="button">
-          <i class="text fas fa-moon"></i>
-        </a>      
-      </li>';
-                        ?>
+                        <?php /*
+                         * echo isset($_COOKIE['dark']) ?
+                          '<a class="nav-link" href="/light" role="button">
+                          <i class="text fas fa-sun"></i>
+                          </a>
+                          </li>' :
+                          '   <a class="nav-link" href="/dark" role="button">
+                          <i class="text fas fa-moon"></i>
+                          </a>
+                          </li>';
+                         */ ?>
+                    </li>
                 </ul>
             </nav>
             <!-- /.navbar -->

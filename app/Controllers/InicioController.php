@@ -18,6 +18,9 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['numUsuarios'] = $modeloUsuario->contador();
+        
+        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+        $data["logs"] = $modeloLog->mostrarLogsInicio();
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/inicio.view.php', 'admin/templates/footer.view.php'), $data);
     }

@@ -14,9 +14,9 @@
                     <table id="tabladatos" class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Asunto</th>
                                 <th>Usuario</th>
                                 <th>Fecha</th>
+                                <th>Motivo</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -24,9 +24,9 @@
                             foreach ($logs as $l) {
                                 ?>
                                 <tr>
-                                    <td><?php echo $l["asunto"]; ?></td>
                                     <td><?php echo $l['username']; ?></td>  
                                     <td><?php echo $l["fecha_log"] ?></td>
+                                    <td><?php echo $l["asunto"]; ?></td>
                                 </tr>
                                 <?php
                             }

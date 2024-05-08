@@ -17,6 +17,17 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
+     * Muestra los 6 últimos registros de la base de datos
+     * @return array Retorna el array de los registros
+     */
+    public function mostrarLogsInicio(): array {
+        $stmt = $this->pdo->query("SELECT * FROM logs l"
+                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
+                . " ORDER BY fecha_log DESC LIMIT 6");
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Crea el log y lo guarda en la base de datos
      * @param string $asunto el asunto del log
      * @param int $idUsuario el id del usuario
