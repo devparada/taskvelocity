@@ -134,7 +134,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
         $modeloLog->crearLog("Creado el proyecto personal con el id $idProyectoPersonal", (int) $idUsuario);
-        return $idProyectoPersonal;
+        return (int) $idProyectoPersonal;
     }
 
     private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
