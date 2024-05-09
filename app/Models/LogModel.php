@@ -7,12 +7,13 @@ namespace Com\TaskVelocity\Models;
 class LogModel extends \Com\TaskVelocity\Core\BaseModel {
 
     /**
-     * Muestra los registros de la base de datos 
+     * Muestra los registros de la base de datos
      * @return array Retorna el array de los registros
      */
     public function mostrarLogs(): array {
-        $stmt = $this->pdo->query("SELECT * FROM logs l "
-                . "JOIN usuarios u ON l.id_usuario_prop = u.id_usuario");
+        $stmt = $this->pdo->query("SELECT * FROM logs l"
+                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
+                . " ORDER BY fecha_log DESC");
         return $stmt->fetchAll();
     }
 

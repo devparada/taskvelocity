@@ -7,6 +7,7 @@
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasVer.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosVer.css">
         <!-- Iconos -->  
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
@@ -37,48 +38,32 @@
             <?php } ?>
         </header>
         <main>
-            <h1 class="apartados">Proyecto <?php echo $proyecto["nombre_proyecto"] ?></h1>
+            <h1 class="apartados">Tarea <?php echo $tarea["nombre_tarea"] ?></h1>
             <div class="proyectos">
                 <?php
-                $idProyecto = $proyecto["id_proyecto"];
-                (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
-                if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
+                $idTarea = $tarea["id_tarea"];
+                (file_exists("./assets/img/tareas/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
+                if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
                     ?>
-                    <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
+                    <img src="/assets/img/tareas/tarea-<?php echo $tarea["id_tarea"] ?>" class="imagen-proyecto" alt="Imagen Proyecto <?php echo $tarea["nombre_tarea"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto">
-                    <p>Nombre del proyecto: <?php echo $proyecto["nombre_proyecto"] ?></p>
-                    <p>Descripción del proyecto: <?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : "" ?></p>
-                    <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
-                    <p>Tareas:</p>
-                    <?php if (!empty($tareas)) { ?>
-                        <ul>
-                            <?php foreach ($tareas as $t) { ?>
-                                <div>
-                                    <li><?php echo $t["nombre_tarea"] ?></li>
-                                </div>
-                            <?php } ?>
-                        </ul>
-                    <?php } else { ?>
-                        <p>No hay tareas asociadas a este proyecto </p>
-                    <?php } ?>
+                    <p>Nombre de la tarea: <?php echo $tarea["nombre_tarea"] ?></p>
+                    <p>Descripción de la tarea: <?php echo ($tarea["descripcion_tarea"] == "") ? "No tiene descripción" : "" ?></p>
+                    <p>Fecha límite: <?php echo isset($tarea["fecha_limite_tarea"]) ? $tarea["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <p>Proyecto: <a href="/proyectos/ver/<?php echo $tarea["id_proyecto"] ?>" id="boton-ir-proyecto"><?php echo isset($tarea["id_proyecto"]) ? $tarea["nombre_proyecto"] : "" ?> <i class="fas fa-external-link-alt"></i></a></p>
+                    <p>Color: <?php echo $tarea["nombre_color"] ?></p>
                     <p>Miembros: <?php
                         foreach ($usuarios as $u) {
                             echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";
                         }
                         ?></p>
-                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $proyecto["id_usuario_proyecto_prop"] ?></p>
-                    <?php if ($proyecto["editable"] == 1) { ?>
-                        <div class="botones-proyecto">
-                            <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                            <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                            <a href="/proyectos/editar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                        </div>
-                    <?php } else { ?>
-                        <div class="botones-proyecto">
-                            <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                        </div>
-                    <?php } ?>
+                    <p>Propietario: <?php echo isset($tarea["id_usuario_tarea_prop"]) && ($tarea["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["id_usuario_proyecto_prop"] ?></p>
+                    <div class="botones-proyecto">
+                        <a href="/tareas" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                        <a href="/tareas/borrar/<?php echo $tarea["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                        <a href="/tareas/editar/<?php echo $tarea["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                    </div>
                 </div>
             </div>
         </main>

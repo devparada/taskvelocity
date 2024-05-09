@@ -325,11 +325,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             if ($_SESSION["usuario"]["id_rol"] == 1) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
-                if ($this->comprobarUsuarioMiembros($data["usuarios"])) {
-                    $this->view->show('public/ver.tarea.view.php', $data);
-                } else {
-                    header("location: /tareas");
-                }
+                $this->view->show('public/ver.tarea.view.php', $data);
             }
         } else {
             header("location: /tareas");

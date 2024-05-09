@@ -38,7 +38,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $usuarios = [];
 
         for ($index = 0; $index < count($usuariosTareas); $index++) {
-            $usuarios[$index] = $usuariosTareas[$index]["username"] . " ";
+            $usuarios[$index] = $usuariosTareas[$index]["username"];
         }
 
         return $usuarios;

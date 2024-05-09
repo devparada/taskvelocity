@@ -50,7 +50,7 @@
                                     <td><?php
                                         for ($index = 0; $index < count($t["nombresUsuarios"]); $index++) {
                                             if ($index < 3) {
-                                                echo $t["nombresUsuarios"][$index];
+                                                echo $t["nombresUsuarios"][$index] . " ";
                                             } else if ($index == 3) {
                                                 echo "...";
                                             }

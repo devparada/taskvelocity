@@ -61,7 +61,6 @@
                         <input type="date" id="fecha_limite_tarea" name="fecha_limite_tarea" value="<?php echo isset($datos["fecha_limite_tarea"]) ? $datos["fecha_limite_tarea"] : "" ?>">
                         <p class="texto-error"><?php echo isset($errores["fecha_limite_tarea"]) ? $errores["fecha_limite_tarea"] : "" ?></p>
                     </div>
-
                     <div class="campo-formulario">
                         <label for="id_usuarios_asociados[]">Usuarios asociados</label>
                         <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
@@ -73,11 +72,6 @@
                                     foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
                                         if (trim($nombreUsuario) == $usuario["username"]) {
                                             echo "selected";
-                                        }
-                                        foreach ($datos["id_usuarios_asociados"] as $usuariosAsociados) {
-                                            if ($usuariosAsociados == $nombreUsuario) {
-                                                echo "selected";
-                                            }
                                         }
                                     }
                                 }

@@ -64,11 +64,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             if ($_SESSION["usuario"]["id_rol"] == 1) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
-                if ($this->comprobarUsuarioMiembros($data["usuarios"])) {
-                    $this->view->show('public/ver.proyecto.view.php', $data);
-                } else {
-                    header("location: /proyectos");
-                }
+                $this->view->show('public/ver.proyecto.view.php', $data);
             }
         } else {
             header("location: /proyectos");
@@ -273,8 +269,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $miembrosProyecto = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto)["nombresUsuarios"];
-
+        $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
             if ($modeloProyecto->deleteProyecto($idProyecto)) {
                 $data["informacion"]["estado"] = "success";

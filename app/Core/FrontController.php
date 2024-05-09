@@ -251,6 +251,13 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/tareas/ver/([0-9]+)',
+                    function ($idTarea) {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->verTarea($idTarea);
+                    }
+                    , 'get');
+
             Route::add('/tareas/crear',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();

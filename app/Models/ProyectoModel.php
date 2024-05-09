@@ -41,7 +41,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $usuarios = [];
 
         for ($index = 0; $index < count($usuariosProyectos); $index++) {
-            $usuarios[$index] = $usuariosProyectos[$index]["username"] . " ";
+            $usuarios[$index] = $usuariosProyectos[$index]["username"];
         }
 
         return $usuarios;

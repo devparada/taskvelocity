@@ -1,0 +1,8 @@
+/* Hoja de estilos utilizada en ver tareas */
+#boton-ir-proyecto {
+    margin-left: 2px;
+}
+
+#boton-ir-proyecto:hover {
+    color: var(--color-secundario-complementario);
+}
