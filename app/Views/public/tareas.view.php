@@ -45,6 +45,11 @@
                     <p><?php echo $informacion["texto"] ?></p>
                 </div>
             <?php } ?>
+                            <?php if (empty($tareas)) { ?>
+                <div id="informacion">
+                    <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
+                </div>
+                <?php } ?>
             <div id="tareas-grid">
                 <?php foreach ($tareas as $t) { ?>
                     <div class="tareas" style="background-color:<?php echo $t["valor_color"] ?>">
@@ -58,10 +63,12 @@
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
                             <p>Fecha límite: <?php echo isset($t["fecha_limite"]) ? $t["fecha_limite"] : "No tiene fecha límite" ?></p>
-                            <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $t["username"] ?></p>
-                            <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones">Ver</a>
-                            <a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones">Editar</a>
-                            <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones">Borrar</a>
+                            <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
+                            <div class="botones-tareas">    
+                                <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Ver</a>
+                                <a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>
