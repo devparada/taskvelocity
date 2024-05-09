@@ -18,7 +18,7 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['numUsuarios'] = $modeloUsuario->contador();
-        
+
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
         $data["logs"] = $modeloLog->mostrarLogsInicio();
 
@@ -38,5 +38,13 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
     public function logout(): void {
         session_destroy();
         header("location: /");
+    }
+
+    /**
+     * Redirige a /login en los apartados restringidos
+     * @return void
+     */
+    public function restingidoRedireccion(): void {
+        header("location: /login");
     }
 }

@@ -322,6 +322,49 @@ class FrontController {
                         $controlador->procesarAddUsuario();
                     }
                     , 'post');
+
+            // Redirecciones cuando un usuario logeado intenta acceder a alguna sección
+            Route::add('/proyectos',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
+
+            Route::add('/proyectos/crear',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
+
+            Route::add('/proyectos/editar/([0-9]+)',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
+
+            Route::add('/tareas',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
+
+            Route::add('/tareas/crear',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
+
+            Route::add('/tareas/editar/([0-9]+)',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccion();
+                    }
+                    , 'get');
         }
 
         Route::add('/',
