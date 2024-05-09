@@ -53,7 +53,6 @@
 }
 
 #informacion {
-    margin: 16px;
     padding: 16px;
     background: var(--color-secundario-principal);
     border-radius: 20px;

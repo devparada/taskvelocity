@@ -21,7 +21,7 @@ class FilesModel extends \Com\TaskVelocity\Core\BaseModel {
         }
 
         if ($nombreDirectorio == "usuarios") {
-            if (!isset($_FILES["imagen_avatar"])) {
+            if (!empty($_FILES["imagen_avatar"]["name"])) {
                 // La imagen subida se mueve al directorio y se llama con el id del usuario
                 move_uploaded_file($_FILES["imagen_avatar"]["tmp_name"], $directorioArchivo);
             } else {

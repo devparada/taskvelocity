@@ -112,11 +112,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
             $this->añadirPropietario((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
-            if (empty($idUsuariosAsociados)) {
+            if (!empty($idUsuariosAsociados)) {
                 $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
             }
-
-            if (isset($_FILES["imagen_tarea"])) {
+                        
+            if (!empty($_FILES["imagen_tarea"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
             }
@@ -166,7 +166,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->editarUsuariosTareas($idUsuariosAsociados, $idTarea);
             }
 
-            if (isset($_FILES["imagen_tarea"])) {
+            if (!empty($_FILES["imagen_tarea"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->actualizarImagen("tareas", "tarea", $idTarea);
             }

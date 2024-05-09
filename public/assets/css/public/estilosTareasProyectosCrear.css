@@ -25,8 +25,12 @@ input[type="submit"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 16px;
     padding: 16px;
+}
+
+.formulario form {
+    width: 100%;
+    max-width: 500px;
 }
 
 .campo-formulario, .selection {
@@ -34,20 +38,27 @@ input[type="submit"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
-.campo-formulario > :not(.select2), .campo-formulario > textarea {
+.campo-formulario > :not(.select2), .campo-formulario > textarea, select2-selection select2-selection--multiple {
     padding: 8px;
 }
 
 .campo-formulario > :not(input [type="search"]) {
-    width: 100%;
+    width: 100% !important;
 }
 
 .campo-formulario > input, .campo-formulario > select, .select2-container--bootstrap4 .select2-selection, .campo-formulario > textarea,
 .select2-container .select2-search--inline .select2-search__field {
     text-align: center;
     border-radius: 25px;
+}
+
+.campo-formulario-grupo {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 /* Estilos para el select2 */

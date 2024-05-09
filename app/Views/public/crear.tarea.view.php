@@ -55,60 +55,65 @@
                         <input type="file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
                         <p class="texto-error"><?php echo isset($errores["imagen_tarea"]) ? $errores["imagen_tarea"] : "" ?></p>
                     </div>
+                    <div class="campo-formulario-grupo">
 
-                    <div class="campo-formulario">
-                        <label for="fecha_limite_tarea">Fecha límite</label>
-                        <input type="date" id="fecha_limite_tarea" name="fecha_limite_tarea" value="<?php echo isset($datos["fecha_limite_tarea"]) ? $datos["fecha_limite_tarea"] : "" ?>">
-                        <p class="texto-error"><?php echo isset($errores["fecha_limite_tarea"]) ? $errores["fecha_limite_tarea"] : "" ?></p>
-                    </div>
-                    <div class="campo-formulario">
-                        <label for="id_usuarios_asociados[]">Usuarios asociados</label>
-                        <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
-                            <option value=""></option>
-                            <?php foreach ($usuarios as $usuario) { ?>
-                                <option value="<?php echo $usuario["id_usuario"] ?>" 
-                                <?php
-                                if (isset($datos["nombresUsuarios"])) {
-                                    foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
-                                        if (trim($nombreUsuario) == $usuario["username"]) {
-                                            echo "selected";
+                        <div class="campo-formulario">
+                            <label for="fecha_limite_tarea">Fecha límite</label>
+                            <input type="date" id="fecha_limite_tarea" name="fecha_limite_tarea" value="<?php echo isset($datos["fecha_limite_tarea"]) ? $datos["fecha_limite_tarea"] : "" ?>">
+                            <p class="texto-error"><?php echo isset($errores["fecha_limite_tarea"]) ? $errores["fecha_limite_tarea"] : "" ?></p>
+                        </div>
+
+                        <div class="campo-formulario">
+                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
+                            <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Escoja un usuario" size="26" multiple>
+                                <option value=""></option>
+                                <?php foreach ($usuarios as $usuario) { ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
+                                    <?php
+                                    if (isset($datos["nombresUsuarios"])) {
+                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
+                                            if (trim($nombreUsuario) == $usuario["username"]) {
+                                                echo "selected";
+                                            }
                                         }
                                     }
-                                }
-                                ?>><?php echo $usuario["username"]; ?></option>
-                                    <?php } ?>
-                        </select>
-                        <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
-                    </div>
+                                    ?>><?php echo $usuario["username"]; ?></option>
+                                        <?php } ?>
+                            </select>
+                            <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
+                        </div>                                            </div>
 
-                    <div class="campo-formulario">
-                        <label for="id_color_tarea">Color favorito <span class="campo-obligatorio">*</span></label>
-                        <select id="id_color_tarea" class="select2" name="id_color_tarea" data-placeholder="Selecciona un color" size="26" required>
-                            <option value=""></option>
-                            <?php foreach ($colores as $color) { ?>
-                                <option value="<?php echo $color["id_color"] ?>" 
-                                        <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == 1) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?> ><?php echo $color["nombre_color"]; ?></option>
-                                    <?php } ?>
-                        </select>
-                        <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>
-                    </div>
 
-                    <div class="campo-formulario">
-                        <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
-                        <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26" required>
-                            <option value=""></option>
-                            <?php foreach ($proyectos as $proyecto) { ?>
-                                <option value="<?php echo $proyecto["id_proyecto"] ?>" 
-                                <?php
-                                if (!isset($datos["id_proyecto_asociado"]) && $proyecto["editable"] == 0) {
-                                    echo "selected";
-                                } else if (isset($datos["id_proyecto_asociado"]) && $datos["id_proyecto_asociado"] == $proyecto["id_proyecto"]) {
-                                    echo "selected";
-                                }
-                                ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
-                                    <?php } ?>
-                        </select>
-                        <p class="texto-error"><?php echo isset($errores["id_proyecto_asociado"]) ? $errores["id_proyecto_asociado"] : "" ?></p>
+                    <div class="campo-formulario-grupo">
+                        <div class="campo-formulario">
+                            <label for="id_color_tarea">Color favorito <span class="campo-obligatorio">*</span></label>
+                            <select id="id_color_tarea" class="select2" name="id_color_tarea" data-placeholder="Selecciona un color" size="26" required>
+                                <option value=""></option>
+                                <?php foreach ($colores as $color) { ?>
+                                    <option value="<?php echo $color["id_color"] ?>" 
+                                            <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == 1) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?> ><?php echo $color["nombre_color"]; ?></option>
+                                        <?php } ?>
+                            </select>
+                            <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>
+                        </div>
+
+                        <div class="campo-formulario">
+                            <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
+                            <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26" required>
+                                <option value=""></option>
+                                <?php foreach ($proyectos as $proyecto) { ?>
+                                    <option value="<?php echo $proyecto["id_proyecto"] ?>" 
+                                    <?php
+                                    if (!isset($datos["id_proyecto_asociado"]) && $proyecto["editable"] == 0) {
+                                        echo "selected";
+                                    } else if (isset($datos["id_proyecto_asociado"]) && $datos["id_proyecto_asociado"] == $proyecto["id_proyecto"]) {
+                                        echo "selected";
+                                    }
+                                    ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
+                                        <?php } ?>
+                            </select>
+                            <p class="texto-error"><?php echo isset($errores["id_proyecto_asociado"]) ? $errores["id_proyecto_asociado"] : "" ?></p>
+                        </div>
                     </div>
 
                     <div class="campo-formulario">

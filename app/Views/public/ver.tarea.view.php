@@ -61,8 +61,8 @@
                     <p>Propietario: <?php echo isset($tarea["id_usuario_tarea_prop"]) && ($tarea["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["id_usuario_proyecto_prop"] ?></p>
                     <div class="botones-proyecto">
                         <a href="/tareas" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                        <a href="/tareas/borrar/<?php echo $tarea["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                        <a href="/tareas/editar/<?php echo $tarea["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                        <a href="/tareas/borrar/<?php echo $tarea["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                        <a href="/tareas/editar/<?php echo $tarea["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                     </div>
                 </div>
             </div>

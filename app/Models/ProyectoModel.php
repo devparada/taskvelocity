@@ -105,7 +105,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
             }
 
-            if (isset($_FILES["imagen_proyecto"])) {
+            if (!empty($_FILES["imagen_proyecto"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
@@ -175,7 +175,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
             }
 
-            if (isset($_FILES["imagen_proyecto"])) {
+            if (!empty($_FILES["imagen_proyecto"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
                 $modeloFiles->actualizarImagen("proyectos", "proyecto", (int) $idProyecto);
             }

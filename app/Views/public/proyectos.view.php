@@ -57,16 +57,18 @@
                         <?php } ?>
                         <div class="informacion-proyecto">
                             <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
-                            <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
-                            <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
-                            <div class="botones-proyecto">
-                                <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
-                                <?php if ($p["editable"] == 1) { ?>
+                            <?php if ($p["editable"] == 1) { ?>
+                                <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
+                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
+                                <div class="botones-proyecto">
                                     <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                     <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
                                 </div>
                             <?php } else { ?>
-                                <p id="texto-personal">Este es tu proyecto personal no se puede borrar</p>
+                                <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                                <div class="botones-proyecto">
+                                    <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
+                                </div>
                             <?php } ?>
                         </div>
                     </div>
