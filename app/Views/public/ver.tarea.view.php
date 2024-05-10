@@ -3,7 +3,7 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
-        <title>TaskVelocity | Proyecto <?php echo $proyecto["nombre_proyecto"]; ?></title>
+        <title>TaskVelocity | Tarea <?php echo $tarea["nombre_tarea"]; ?></title>
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
@@ -15,10 +15,10 @@
     <body>
         <header>
             <div id="logo">
-                <a href="/">
+                <a href="/" class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
+                    <h2>TaskVelocity</h2>
                 </a>
-                <h2>TaskVelocity</h2>
             </div>
             <nav>
                 <ul>
@@ -45,12 +45,12 @@
                 (file_exists("./assets/img/tareas/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
                 if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
                     ?>
-                    <img src="/assets/img/tareas/tarea-<?php echo $tarea["id_tarea"] ?>" class="imagen-proyecto" alt="Imagen Proyecto <?php echo $tarea["nombre_tarea"] ?>">
+                    <img src="/assets/img/tareas/tarea-<?php echo $tarea["id_tarea"] ?>" class="imagen-proyecto-tarea" alt="Imagen Tarea <?php echo $tarea["nombre_tarea"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto">
                     <p>Nombre de la tarea: <?php echo $tarea["nombre_tarea"] ?></p>
                     <p>Descripción de la tarea: <?php echo ($tarea["descripcion_tarea"] == "") ? "No tiene descripción" : "" ?></p>
-                    <p>Fecha límite: <?php echo isset($tarea["fecha_limite_tarea"]) ? $tarea["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <p>Fecha límite: <?php echo isset($tarea["fecha_limite_tarea"]) ? $tarea["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
                     <p>Proyecto: <a href="/proyectos/ver/<?php echo $tarea["id_proyecto"] ?>" id="boton-ir-proyecto"><?php echo isset($tarea["id_proyecto"]) ? $tarea["nombre_proyecto"] : "" ?> <i class="fas fa-external-link-alt"></i></a></p>
                     <p>Color: <?php echo $tarea["nombre_color"] ?></p>
                     <p>Miembros: <?php
@@ -58,7 +58,7 @@
                             echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";
                         }
                         ?></p>
-                    <p>Propietario: <?php echo isset($tarea["id_usuario_tarea_prop"]) && ($tarea["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["id_usuario_proyecto_prop"] ?></p>
+                    <p>Propietario: <?php echo isset($tarea["id_usuario_tarea_prop"]) && ($tarea["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $tarea["username"] ?></p>
                     <div class="botones-proyecto">
                         <a href="/tareas" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                         <a href="/tareas/borrar/<?php echo $tarea["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>

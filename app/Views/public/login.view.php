@@ -20,7 +20,7 @@
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/">
+                <a href="/" class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagen-login">
                     <b>TaskVelocity</b>
                 </a>

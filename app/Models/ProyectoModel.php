@@ -144,6 +144,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                     . "VALUES(?, ?)");
 
             $stmt->execute([$idUsuario, $idProyecto]);
+
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $tareasProyecto = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
         }
     }
 

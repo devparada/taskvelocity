@@ -14,10 +14,10 @@
     <body>
         <header>
             <div id="logo">
-                <a href="/">
+                <a href="/"  class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
+                    <h2>TaskVelocity</h2>
                 </a>
-                <h2>TaskVelocity</h2>
             </div>
             <nav>
                 <ul>
@@ -44,7 +44,7 @@
                 (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
                 if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
                     ?>
-                    <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
+                    <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto">
                     <p>Nombre del proyecto: <?php echo $proyecto["nombre_proyecto"] ?></p>
@@ -52,7 +52,7 @@
                     <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
                     <p>Tareas:</p>
                     <?php if (!empty($tareas)) { ?>
-                    <ul class="lista-tareas">
+                        <ul class="lista-tareas">
                             <?php foreach ($tareas as $t) { ?>
                                 <div>
                                     <li><?php echo $t["nombre_tarea"] ?></li>

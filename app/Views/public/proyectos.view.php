@@ -13,10 +13,10 @@
     <body>
         <header>
             <div id="logo">
-                <a href="/">
+                <a href="/"  class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
+                    <h2>TaskVelocity</h2>
                 </a>
-                <h2>TaskVelocity</h2>
             </div>
             <nav>
                 <ul>
@@ -58,8 +58,8 @@
                         <div class="informacion-proyecto">
                             <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
                             <?php if ($p["editable"] == 1) { ?>
-                                <p>Fecha límite: <?php echo $p["fecha_limite_proyecto"] ?></p>
-                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $p["id_usuario_proyecto_prop"] ?></p>
+                                <p>Fecha límite: <?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["id_usuario_proyecto_prop"] ?></p>
                                 <div class="botones-proyecto">
                                     <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                     <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>

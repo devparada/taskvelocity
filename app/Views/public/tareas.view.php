@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <title>TaskVelocity | Tus tareas</title>
-        <!-- Estilos propios -->  
+        <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareas.css">
         <!-- Iconos -->
@@ -13,10 +13,10 @@
     <body>
         <header>
             <div id="logo">
-                <a href="/">
+                <a href="/" class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
+                    <h2>TaskVelocity</h2>
                 </a>
-                <h2>TaskVelocity</h2>
             </div>
             <nav>
                 <ul>
@@ -45,11 +45,11 @@
                     <p><?php echo $informacion["texto"] ?></p>
                 </div>
             <?php } ?>
-                            <?php if (empty($tareas)) { ?>
+            <?php if (empty($tareas)) { ?>
                 <div id="informacion">
                     <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
                 </div>
-                <?php } ?>
+            <?php } ?>
             <div id="tareas-grid">
                 <?php foreach ($tareas as $t) { ?>
                     <div class="tareas" style="background-color:<?php echo $t["valor_color"] ?>">
@@ -62,7 +62,7 @@
                         <?php } ?>
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
-                            <p>Fecha límite: <?php echo isset($t["fecha_limite"]) ? $t["fecha_limite"] : "No tiene fecha límite" ?></p>
+                            <p>Fecha límite: <?php echo isset($t["fecha_limite_tarea"]) ? $t["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
                             <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
                             <div class="botones-tareas">    
                                 <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Ver</a>

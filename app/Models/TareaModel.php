@@ -53,7 +53,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta LEFT JOIN proyectos p "
                 . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios_tareas ut "
                 . "ON ta.id_usuario_tarea_prop=ut.id_usuarioTAsoc LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
-                . "WHERE id_tarea = ? GROUP BY ut.id_tareaTAsoc");
+                . "LEFT JOIN usuarios us ON ta.id_usuario_tarea_prop = us.id_usuario WHERE id_tarea = ? GROUP BY ut.id_tareaTAsoc");
         $stmt->execute([$idTarea]);
 
         $tareaEncontrada = $stmt->fetch();
@@ -100,7 +100,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, ?array $idUsuariosAsociados, string $descripcionTarea): bool {
         $stmt = $this->pdo->prepare("INSERT INTO tareas "
-                . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite, id_usuario_tarea_prop, id_proyecto) "
+                . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite_tarea, id_usuario_tarea_prop, id_proyecto) "
                 . "VALUES (?, ?, ?, ?, ?, ?)");
 
         // Si la fecha límite no se especifica se cambia por null
@@ -157,7 +157,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function editTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, ?array $idUsuariosAsociados, string $descripcionTarea, int $idTarea): bool {
         $stmt = $this->pdo->prepare("UPDATE tareas"
-                . " SET nombre_tarea=?, id_color_tarea=?, descripcion_tarea=?, fecha_limite=?, id_proyecto=?"
+                . " SET nombre_tarea=?, id_color_tarea=?, descripcion_tarea=?, fecha_limite_tarea=?, id_proyecto=?"
                 . " WHERE id_tarea=?");
 
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $idProyecto, $idTarea])) {

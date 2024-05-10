@@ -1,4 +1,4 @@
-/* Hoja de estilos utilizada en ver proyectos */
+/* Hoja de estilos utilizada en ver proyectos y ver tareas */
 .proyectos {
     border: none;
     justify-content: center;
@@ -18,8 +18,9 @@
     text-align: center;
 }
 
-.imagen-proyecto {
-    width: 50%;
+.imagen-proyecto-tarea {
+    width: 30%;
+    border-radius: 50px;
 }
 
 .lista-tareas {
