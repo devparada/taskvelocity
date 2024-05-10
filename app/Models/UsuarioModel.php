@@ -11,6 +11,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    public function mostrarUsuariosFormulario(): array {
+        $stmt = $this->pdo->query("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
+        return $stmt->fetchAll();
+    }
+
     public function buscarUsuarioPorId(int $idUsuario): ?array {
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
@@ -96,8 +101,8 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt = $this->pdo->prepare("UPDATE usuarios SET id_proyecto_personal = ? WHERE id_usuario = ?");
             $stmt->execute([$idProyectoPersonal, $idUsuario]);
 
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
-                $modeloFiles->guardarImagen("usuarios", "avatar", (int) $idUsuario);
+            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            $modeloFiles->guardarImagen("usuarios", "avatar", (int) $idUsuario);
 
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Creado el usuario con el id $idUsuario", (int) $idUsuario);
@@ -140,7 +145,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
         $modeloLog->crearLog("Editado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
 
-            if (!empty($_FILES["imagen_avatar"]["name"])) {
+        if (!empty($_FILES["imagen_avatar"]["name"])) {
             $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
             return $modeloFiles->actualizarImagen("usuarios", "avatar", (int) $idUsuario) ? true : false;
         } else {

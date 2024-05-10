@@ -1,0 +1,8 @@
+/* Hoja de estilos utilizada en ver proyectos */
+.enlace-ir-tarea {
+    margin-left: 2px;
+}
+
+.enlace-ir-tarea:hover {
+    color: var(--color-secundario-complementario);
+}

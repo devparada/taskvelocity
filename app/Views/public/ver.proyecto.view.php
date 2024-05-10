@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosVer.css">
+        <link rel="stylesheet" href="assets/css/public/estilosProyectosVer.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->  
@@ -56,13 +57,11 @@
                     <?php if (!empty($tareas)) { ?>
                         <ul class="lista-tareas">
                             <?php foreach ($tareas as $t) { ?>
-                                <div>
-                                    <li><?php echo $t["nombre_tarea"] ?></li>
-                                </div>
+                                <li><a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="enlace-ir-tarea"><?php echo $t["nombre_tarea"] ?> <i class="fas fa-external-link-alt"></i></a></li>
                             <?php } ?>
                         </ul>
                     <?php } else { ?>
-                        <p>No hay tareas asociadas a este proyecto </p>
+                        <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
                     <p>Miembros: <?php
                         foreach ($usuarios as $u) {

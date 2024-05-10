@@ -86,7 +86,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -110,7 +110,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
         unset($_POST["enviar"]);
 
@@ -119,15 +119,15 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $errores = $this->comprobarAdd($datos);
 
+        if (empty($datos["id_usuarios_asociados"])) {
+            $datos["id_usuarios_asociados"] = null;
+        }
+
+        if (empty($datos["fecha_limite_proyecto"])) {
+            $datos["fecha_limite_proyecto"] = null;
+        }
+
         if (empty($errores)) {
-            if (empty($datos["id_usuarios_asociados"])) {
-                $datos["id_usuarios_asociados"] = null;
-            }
-
-            if (empty($datos["fecha_limite_proyecto"])) {
-                $datos["fecha_limite_proyecto"] = null;
-            }
-
             $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
@@ -139,7 +139,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             }
         } else {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
             $data["errores"] = $errores;
 
@@ -180,7 +180,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
                 $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
@@ -229,15 +229,15 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $errores = $this->comprobarEdit($datos);
 
+            if (empty($datos["id_usuarios_asociados"])) {
+                $datos["id_usuarios_asociados"] = null;
+            }
+
+            if (empty($datos["fecha_limite_proyecto"])) {
+                $datos["fecha_limite_proyecto"] = null;
+            }
+
             if (empty($errores)) {
-                if (empty($datos["id_usuarios_asociados"])) {
-                    $datos["id_usuarios_asociados"] = null;
-                }
-
-                if (empty($datos["fecha_limite_proyecto"])) {
-                    $datos["fecha_limite_proyecto"] = null;
-                }
-
                 if ($modeloProyecto->editProyecto($datos["nombre_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"], $datos["descripcion_proyecto"], $idProyecto)) {
                     if ($_SESSION["usuario"]["id_rol"] == 1) {
                         header("location: /admin/proyectos");

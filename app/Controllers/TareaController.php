@@ -43,7 +43,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
@@ -69,15 +69,15 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
         unset($_POST["enviar"]);
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        // Si id_color_tarea está vacio se añade el 1 que es el color por defecto
+        // Si id_color_tarea está vacio se añade el color favorito del usuario por defecto
         if ($datos["id_color_tarea"] == "") {
-            $datos["id_color_tarea"] = "1";
+            $datos["id_color_tarea"] = $_SESSION["usuario"]["id_color_favorito"];
         }
 
         if (empty($datos["fecha_limite_tarea"])) {
@@ -107,15 +107,6 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 }
             }
         } else {
-            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-            $data["colores"] = $modeloColor->mostrarColores();
-
-            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-            $data["proyectos"] = $modeloProyecto->mostrarProyectos();
-
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
-
             $data["errores"] = $errores;
 
             if ($_SESSION["usuario"]["id_rol"] == 1) {
@@ -175,7 +166,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['titulo'] = 'Editar tarea';
 
                 $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-                $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+                $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
                 $this->view->show('public/crear.tarea.view.php', $data);
             }
@@ -208,9 +199,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-            // Si id_color_tarea está vacio se añade el 1 que es el color por defecto
+            // Si id_color_tarea está vacio se añade el color favorito del usuario por defecto
             if ($datos["id_color_tarea"] == "") {
-                $datos["id_color_tarea"] = "1";
+                $datos["id_color_tarea"] = $_SESSION["usuario"]["id_color_favorito"];
             }
 
             if (empty($datos["fecha_limite_tarea"])) {
@@ -229,17 +220,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             $data["modoEdit"] = true;
 
-            $errores = [];
+            $errores = $this->comprobarAddTareas($datos);
 
             if (empty($errores)) {
-                if (empty($datos["id_usuarios_asociados"])) {
-                    $datos["id_usuarios_asociados"] = null;
-                }
-
-                if (empty($datos["fecha_limite_proyecto"])) {
-                    $datos["fecha_limite_proyecto"] = null;
-                }
-
                 if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $idTarea)) {
                     if ($_SESSION["usuario"]["id_rol"] == 1) {
                         header("location: /admin/tareas");
@@ -249,12 +232,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 }
             } else {
                 $data["errores"] = $errores;
-
-                if ($_SESSION["usuario"]["id_rol"] == 1) {
-                    $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
-                } else {
-                    $this->view->show('public/crear.tareas.view.php', $data);
-                }
+                $this->view->show('public/crear.tarea.view.php', $data);
             }
         } else {
             header("location: /tareas");

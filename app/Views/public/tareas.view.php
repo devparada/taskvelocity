@@ -67,9 +67,9 @@
                             <p>Fecha límite: <?php echo isset($t["fecha_limite_tarea"]) ? $t["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
                             <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
                             <div class="botones-tareas">    
-                                <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Ver</a>
                                 <a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                 <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Ver</a>
                             </div>
                         </div>
                     </div>

@@ -58,7 +58,6 @@
                         <p class="texto-error"><?php echo isset($errores["imagen_tarea"]) ? $errores["imagen_tarea"] : "" ?></p>
                     </div>
                     <div class="campo-formulario-grupo">
-
                         <div class="campo-formulario">
                             <label for="fecha_limite_tarea">Fecha límite</label>
                             <input type="date" id="fecha_limite_tarea" name="fecha_limite_tarea" value="<?php echo isset($datos["fecha_limite_tarea"]) ? $datos["fecha_limite_tarea"] : "" ?>">
@@ -83,8 +82,8 @@
                                         <?php } ?>
                             </select>
                             <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
-                        </div>                                            </div>
-
+                        </div>                                            
+                    </div>
 
                     <div class="campo-formulario-grupo">
                         <div class="campo-formulario">
@@ -93,7 +92,7 @@
                                 <option value=""></option>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" 
-                                            <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == 1) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?> ><?php echo $color["nombre_color"]; ?></option>
+                                            <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == $_SESSION["usuario"]["id_color_favorito"]) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?> ><?php echo $color["nombre_color"]; ?></option>
                                         <?php } ?>
                             </select>
                             <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>
