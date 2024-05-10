@@ -16,6 +16,8 @@
         <link rel="stylesheet" href="assets/css/admin/adminlte.min.css">
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/admin/admin.css">
+        <!-- Favicon -->
+        <link rel="icon" href="assets/img/logo.png">
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">

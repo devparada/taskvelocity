@@ -7,12 +7,14 @@
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-        <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <!-- Estilos propios -->
+        <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosCrear.css">
+        <!-- Favicon -->
+        <link rel="icon" href="assets/img/logo.png">
+        <!-- Iconos -->
+        <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
 
     </head>
     <body>

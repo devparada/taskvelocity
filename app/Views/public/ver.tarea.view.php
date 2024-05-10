@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasVer.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosVer.css">
+        <!-- Favicon -->
+        <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->  
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
     </head>

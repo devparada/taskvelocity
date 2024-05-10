@@ -7,6 +7,8 @@
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosError.css">
+        <!-- Favicon -->
+        <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
     </head>
