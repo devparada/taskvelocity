@@ -37,24 +37,24 @@
         </header>
         <main>
             <div id="main-introduccion">
-                <h1 class="apartados">TaskVelocity</h1>
+                <h1 class="apartados apartados-inicio">TaskVelocity</h1>
                 <p>TaskVelocity es una aplicación web que es un gestor de tareas y proyectos veloz.</p>
                 <p>Con solo crear una cuenta tienes acceso a este gestor de tareas y proyectos.</p>
             </div>
             <div id="div-caracteristicas">
-                <h2 class="apartados">Características</h2>
+                <h2 class="apartados apartados-inicio">Características</h2>
                 <p>Tiene las siguientes caracteristicas:</p>
                 <div id="main-caracteristicas">
                     <div class="imagen-caracteristicas">
                         <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
                     </div>
                     <div id="caracteristica-proyectos" class="caracteristicas-texto">
-                        <p>Un gestor de proyectos veloz donde ver todas las tareas asociadas a un proyecto, 
+                        <p>Un gestor de proyectos veloz donde ver todoslos proyectos, 
                             añadir una fecha límite y una imagen y añadir más miembros para trabajar en compañia</p>
                     </div>
                     <div id="caracteristica-tareas" class="caracteristicas-texto">
-                        <p>Un gestor de tareas que pueden tener distinto color según lo prefiera el usuario, una fecha límite y una imagen y añadir 
-                            a más personas para trabjar juntos</p>
+                        <p>Un gestor de tareas que pueden tener distinto color las tareas según lo prefiera el usuario, una fecha límite, un proyecto asociado
+                            y una imagen y añadir a más personas para trabjar juntos</p>
                     </div>
                     <div class="imagen-caracteristicas">
                         <img src="assets/img/ejemplo-tareas.png" alt="Ejemplo Tareas"></img>
@@ -64,7 +64,7 @@
                         <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Perfil"></img>
                     </div>
                     <div id="caracteristica-perfil" class="caracteristicas-texto">
-                        <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción</p>
+                        <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción (en construcción)</p>
                     </div>
                 </div>
             </div>
