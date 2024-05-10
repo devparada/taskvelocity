@@ -14,7 +14,7 @@
         <header>
             <div id="logo">
                 <a href="/">
-                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
                 </a>
                 <h2>TaskVelocity</h2>
             </div>
@@ -63,24 +63,23 @@
                                 <div class="botones-proyecto">
                                     <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                     <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                                </div>
-                            <?php } else { ?>
-                                <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
-                                <div class="botones-proyecto">
+                                <?php } else { ?>
+                                    <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                                    <div class="botones-proyecto">
+                                    <?php } ?>
                                     <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
                                 </div>
-                            <?php } ?>
+                            </div>
                         </div>
-                    </div>
-                <?php } ?>
-            </div>
+                    <?php } ?>
+                </div>
         </main>
         <footer>
             <div>
                 <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
             </div>
             <div id="logo-footer">
-                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
                     <p>TaskVelocity</p></a>
             </div>
             <div id="iconos-footer">

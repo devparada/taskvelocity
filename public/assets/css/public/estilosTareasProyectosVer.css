@@ -21,3 +21,11 @@
 .imagen-proyecto {
     width: 50%;
 }
+
+.lista-tareas {
+    list-style-type: none;
+}
+
+.lista-tareas li {
+    margin-left: 42px;
+}

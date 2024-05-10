@@ -22,7 +22,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     public function mostrarLogin() {
         $data = [];
 
-        $this->view->show('admin/login.view.php', $data);
+        $this->view->show('public/login.view.php', $data);
     }
 
     public function procesarLogin() {
@@ -36,7 +36,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $this->crearLogin($datos["email"]);
         } else {
             $data["loginError"] = "Datos incorrectos";
-            $this->view->show('admin/login.view.php', $data);
+            $this->view->show('public/login.view.php', $data);
         }
     }
 

@@ -218,7 +218,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $miembrosProyecto = $this->comprobarUsuarioMiembros($modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"]);
+        $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);

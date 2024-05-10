@@ -15,7 +15,7 @@
         <header>
             <div id="logo">
                 <a href="/">
-                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                    <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
                 </a>
                 <h2>TaskVelocity</h2>
             </div>
@@ -52,7 +52,7 @@
                     <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
                     <p>Tareas:</p>
                     <?php if (!empty($tareas)) { ?>
-                        <ul>
+                    <ul class="lista-tareas">
                             <?php foreach ($tareas as $t) { ?>
                                 <div>
                                     <li><?php echo $t["nombre_tarea"] ?></li>
@@ -87,7 +87,7 @@
                 <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
             </div>
             <div id="logo-footer">
-                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequeñas">
+                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
                     <p>TaskVelocity</p></a>
             </div>
             <div id="iconos-footer">
