@@ -18,6 +18,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
+        
+        $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
+        $data["etiquetas"] = $modeloEiqueta->mostrarEtiquetas();
 
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
@@ -45,6 +48,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
+        $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
+        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
+
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
@@ -70,6 +76,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
+
+        $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
+        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
         unset($_POST["enviar"]);
 
@@ -99,7 +108,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if (empty($errores)) {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
-            if ($modeloTarea->addTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"])) {
+            if ($modeloTarea->addTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"])) {
                 if ($_SESSION["usuario"]["id_rol"] == 1) {
                     header("location: /admin/tareas");
                 } else {
@@ -154,6 +163,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
+            $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
+            $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
@@ -223,7 +235,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $errores = $this->comprobarAddTareas($datos);
 
             if (empty($errores)) {
-                if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $idTarea)) {
+                if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"], $idTarea)) {
                     if ($_SESSION["usuario"]["id_rol"] == 1) {
                         header("location: /admin/tareas");
                     } else {
@@ -316,9 +328,16 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
 
         if (empty($data["nombre_tarea"])) {
             $errores["nombre_tarea"] = "El nombre de la tarea no debe estar vacío";
+        }
+        
+        if (empty($data["id_etiqueta"])) {
+            $errores["id_etiqueta"] = "Tienes que seleccionar una etiqueta";
+        } else if (!$modeloEtiqueta->comprobarEtiqueta($data["id_etiqueta"])) {
+            $errores["id_etiqueta"] = "Tiene que ser una etiqueta válida";
         }
 
         if (!empty($_FILES["imagen_tarea"]["name"])) {

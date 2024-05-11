@@ -103,6 +103,11 @@ main {
     margin: 16px;
 }
 
+input, select, option, textarea {
+    color: black;
+    outline: var(--color-secundario-principal);
+}
+
 #introduccion {
     display: flex;
     align-items: center;
@@ -121,11 +126,12 @@ main {
 
 .botones {
     border-radius: 20px;
-    padding-top: 10px;
+    padding-top: 12px;
     padding-bottom: 10px;
     padding-left: 20px;
     padding-right: 20px;
     background-color: var(--color-secundario-principal);
+    border: var(--color-secundario-complementario);
     text-align: center;
     transition: background-color 1s;
 }

@@ -46,10 +46,24 @@
             <h1 class="apartados"><?php echo $titulo ?></h1>
             <div class="formulario">
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
-                    <div class="campo-formulario">
-                        <label for="nombre_tarea">Nombre del tarea <span class="campo-obligatorio">*</span></label>
-                        <input type="text" id="nombre_tarea" name="nombre_tarea" placeholder="Introduzca el nombre de la tarea" size="26" value="<?php echo isset($datos["nombre_tarea"]) ? $datos["nombre_tarea"] : "" ?>" required>
-                        <p class="texto-error"><?php echo isset($errores["nombre_tarea"]) ? $errores["nombre_tarea"] : "" ?></p>
+                    <div class="campo-formulario-grupo">
+                        <div class="campo-formulario">
+                            <label for="nombre_tarea">Nombre del tarea <span class="campo-obligatorio">*</span></label>
+                            <input type="text" id="nombre_tarea" name="nombre_tarea" placeholder="Introduzca el nombre de la tarea" size="26" value="<?php echo isset($datos["nombre_tarea"]) ? $datos["nombre_tarea"] : "" ?>">
+                            <p class="texto-error"><?php echo isset($errores["nombre_tarea"]) ? $errores["nombre_tarea"] : "" ?></p>
+                        </div>
+
+                        <div class="campo-formulario">
+                            <label for="id_etiqueta">Etiqueta  <span class="campo-obligatorio">*</span></label>
+                            <select id="id_etiqueta" class="select2" name="id_etiqueta" data-placeholder="Selecciona una etiqueta">
+                                <option value=""></option>
+                                <?php foreach ($etiquetas as $etiqueta) { ?>
+                                    <option value="<?php echo $etiqueta["id_etiqueta"] ?>" 
+                                            <?php echo (!isset($datos["id_etiqueta"])) && $etiqueta["id_etiqueta"] == 1 ? "selected" : "" ?> <?php echo (isset($datos["id_etiqueta"]) && $datos["id_etiqueta"] == $etiqueta["id_etiqueta"]) ? "selected" : "" ?> ><?php echo $etiqueta["nombre_etiqueta"]; ?></option>
+                                        <?php } ?>
+                            </select>
+                            <p class="texto-error"><?php echo isset($errores["id_etiqueta"]) ? $errores["id_etiqueta"] : "" ?></p>
+                        </div>
                     </div>
 
                     <div class="campo-formulario">
@@ -88,7 +102,7 @@
                     <div class="campo-formulario-grupo">
                         <div class="campo-formulario">
                             <label for="id_color_tarea">Color favorito <span class="campo-obligatorio">*</span></label>
-                            <select id="id_color_tarea" class="select2" name="id_color_tarea" data-placeholder="Selecciona un color" size="26" required>
+                            <select id="id_color_tarea" class="select2" name="id_color_tarea" data-placeholder="Selecciona un color" size="26">
                                 <option value=""></option>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" 
@@ -100,7 +114,7 @@
 
                         <div class="campo-formulario">
                             <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
-                            <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26" required>
+                            <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26">
                                 <option value=""></option>
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 

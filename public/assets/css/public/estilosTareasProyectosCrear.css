@@ -1,7 +1,7 @@
 /* Hoja de estilos utilizada en crear y editar proyectos y tareas */
-input, select, option, textarea {
-    color: black;
-    outline: var(--color-secundario-principal);
+body {
+    /* ! Debido al select2 en el formulario */
+    overflow-x: hidden;
 }
 
 input, label, textarea {

@@ -40,6 +40,11 @@
         <main>
             <div id="introduccion">
                 <h1>Tus tareas</h1>
+                <div>
+                    <?php foreach ($etiquetas as $etiqueta) { ?>
+                        <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
+                    <?php } ?>
+                </div>
                 <a href="/tareas/crear" class="botones">Crear una tarea</a>
             </div>
             <?php if (isset($informacion)) { ?>
@@ -64,6 +69,7 @@
                         <?php } ?>
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
+                            <p>Etiqueta: <?php echo $t["nombre_etiqueta"] ?></p>
                             <p>Fecha límite: <?php echo isset($t["fecha_limite_tarea"]) ? $t["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
                             <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
                             <div class="botones-tareas">    
@@ -78,7 +84,7 @@
         </main>
         <footer>
             <div>
-                <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
+                <p>Proyecto de Ciclo DAW 2024</p>
             </div>
             <div id="logo-footer">
                 <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">

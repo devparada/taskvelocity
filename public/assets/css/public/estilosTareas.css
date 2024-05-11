@@ -49,8 +49,19 @@
     margin-bottom: 16px;
 }
 
+.botones-filtros {
+    background-color: var(--color-secundario-complementario);
+}
+
+.botones-tareas {
+        margin-top: 10px;
+}
+
 .botones-tareas a {
-    padding: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 #informacion {

@@ -15,9 +15,6 @@ class ColorModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("SELECT * FROM colores WHERE id_color = ?");
         $stmt->execute([$idColor]);
 
-        if (!$stmt->fetch()) {
-            return false;
-        }
-        return true;
+        return ($stmt->fetch()) ? true : false;
     }
 }
