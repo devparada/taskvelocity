@@ -44,21 +44,4 @@
             <div id="boton-volver">
                 <a href="/" class="botones">Inicio</a>
             </div>
-        </main>
-        <footer>
-            <div>
-                <p>Proyecto de Fin de Ciclo Superior DAW 2024</p>
-            </div>
-            <div id="logo-footer">
-                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
-                    <p>TaskVelocity</p></a>
-            </div>
-            <div id="iconos-footer">
-                <a href="https://es.linkedin.com"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://www.youtube.com"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://twitter.com"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-        </footer>
-    </body>
-</html>
+        </main> <!-- Continua en plantillas/footer -->

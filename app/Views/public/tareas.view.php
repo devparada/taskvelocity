@@ -44,6 +44,7 @@
                     <?php foreach ($etiquetas as $etiqueta) { ?>
                         <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
                     <?php } ?>
+                    <a class="botones botones-filtros" href="/tareas">Mostrar todas</a>
                 </div>
                 <a href="/tareas/crear" class="botones">Crear una tarea</a>
             </div>
@@ -52,10 +53,14 @@
                     <p><?php echo $informacion["texto"] ?></p>
                 </div>
             <?php } ?>
-            <?php if (empty($tareas)) { ?>
+            <?php if (empty($tareas) && $_SERVER["REQUEST_URI"] == "/tareas") { ?>
                 <div id="informacion">
                     <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
                 </div>
+            <?php } else if ((empty($tareas)) && $_SERVER["REQUEST_URI"] != "/tareas") { ?>
+            <div class="informacion informacion-warning">
+                <p><i class="fa-solid fa-circle-info"></i> No se han encontrado tareas con esta etiqueta</p>
+            </div>
             <?php } ?>
             <div id="tareas-grid">
                 <?php foreach ($tareas as $t) { ?>
@@ -81,21 +86,4 @@
                     </div>
                 <?php } ?>
             </div>
-        </main>
-        <footer>
-            <div>
-                <p>Proyecto de Ciclo DAW 2024</p>
-            </div>
-            <div id="logo-footer">
-                <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
-                    <p>TaskVelocity</p></a>
-            </div>
-            <div id="iconos-footer">
-                <a href="https://es.linkedin.com"><i class="fa-brands fa-linkedin"></i></a>
-                <a href="https://www.youtube.com"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://twitter.com"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
-            </div>
-        </footer>
-    </body>
-</html>
+        </main> <!-- Continua en plantillas/footer -->

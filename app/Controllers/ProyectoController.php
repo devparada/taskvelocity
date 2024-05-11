@@ -28,7 +28,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
-            $this->view->show('public/proyectos.view.php', $data);
+            $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
         }
     }
 
@@ -64,7 +64,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             if ($_SESSION["usuario"]["id_rol"] == 1) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
-                $this->view->show('public/ver.proyecto.view.php', $data);
+                $this->view->showViews(array('public/ver.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
             header("location: /proyectos");
@@ -91,7 +91,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
-            $this->view->show('public/crear.proyecto.view.php', $data);
+            $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
         }
     }
 
@@ -146,7 +146,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             if ($_SESSION["usuario"]["id_rol"] == 1) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
-                $this->view->show('public/crear.proyecto.view.php', $data);
+                $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         }
     }
@@ -192,7 +192,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $data['seccion'] = '/proyectos/editar/' . $idProyecto;
                 $data['titulo'] = 'Editar proyecto';
 
-                $this->view->show('public/crear.proyecto.view.php', $data);
+                $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
             header("location: /proyectos");
@@ -251,7 +251,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 if ($_SESSION["usuario"]["id_rol"] == 1) {
                     $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
                 } else {
-                    $this->view->show('public/crear.proyecto.view.php', $data);
+                    $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
                 }
             }
         } else {
@@ -288,7 +288,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             if ($_SESSION["usuario"]["id_rol"] == 1) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
-                $this->view->show('public/proyectos.view.php', $data);
+                $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
             header("location: /proyectos");

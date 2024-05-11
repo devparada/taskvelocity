@@ -1,18 +1,18 @@
 <!--Comienzo footer -->
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+</div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
 </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer text-center footer-personalizado">
+<!-- /.content-wrapper -->
+<footer class="main-footer text-center footer-personalizado">
     <strong>Administración de TaskVelocity</strong>    
-  </footer>
+</footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
+</aside>
+<!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
 
@@ -22,7 +22,7 @@
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button);
+    $.widget.bridge('uibutton', $.ui.button);
 </script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -45,9 +45,5 @@
 <script src="plugins/select2/js/select2.full.min.js"></script>
 <script src="assets/js/admin/adminlte.js"></script>
 <script src="assets/js/admin/pages/main.js"></script>
-<!-- AdminLTE for demo purposes -->
-<!--<script src="dist/js/demo.js"></script>-->
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<!--<script src="dist/js/pages/dashboard.js"></script>-_>
 </body>
 </html>

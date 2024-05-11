@@ -11,7 +11,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
                 . "ON ta.id_tarea=ut.id_tareaTAsoc ";
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $stmt = $this->pdo->prepare($baseConsulta . "GROUP BY ut.id_tareaTAsoc");
+            $stmt = $this->pdo->query($baseConsulta . "GROUP BY ut.id_tareaTAsoc");
         } else {
             $stmt = $this->pdo->prepare($baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc");
 

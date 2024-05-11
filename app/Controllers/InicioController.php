@@ -28,7 +28,7 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
     public function index(): void {
         $data = [];
 
-        $this->view->show('public/inicio.view.php', $data);
+        $this->view->showViews(array('public/inicio.view.php', 'public/plantillas/footer.view.php'), $data);
     }
 
     /**

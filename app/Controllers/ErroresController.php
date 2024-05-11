@@ -14,7 +14,7 @@ class ErroresController extends \Com\TaskVelocity\Core\BaseController {
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/error.php', 'admin/templates/footer.view.php'), $data);
         } else {
-            $this->view->show('public/error.php', $data);
+            $this->view->showViews(array('public/error.php', 'public/plantillas/footer.view.php'), $data);
         }
     }
 
@@ -26,7 +26,7 @@ class ErroresController extends \Com\TaskVelocity\Core\BaseController {
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/error.php', 'admin/templates/footer.view.php'), $data);
         } else {
-            $this->view->show('public/error.php', $data);
+            $this->view->showViews(array('public/error.php', 'public/plantillas/footer.view.php'), $data);
         }
     }
 }
