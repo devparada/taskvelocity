@@ -14,11 +14,16 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data['seccion'] = '/admin/tareas';
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $data['tareas'] = $modeloTarea->mostrarTareas();
+
+        if (array_key_exists("etiqueta", $_GET)) {
+            $data['tareas'] = $modeloTarea->mostrarTareasPorEtiqueta($_GET["etiqueta"]);
+        } else {
+            $data['tareas'] = $modeloTarea->mostrarTareas();
+        }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-        
+
         $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEiqueta->mostrarEtiquetas();
 
@@ -333,7 +338,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if (empty($data["nombre_tarea"])) {
             $errores["nombre_tarea"] = "El nombre de la tarea no debe estar vacío";
         }
-        
+
         if (empty($data["id_etiqueta"])) {
             $errores["id_etiqueta"] = "Tienes que seleccionar una etiqueta";
         } else if (!$modeloEtiqueta->comprobarEtiqueta($data["id_etiqueta"])) {
