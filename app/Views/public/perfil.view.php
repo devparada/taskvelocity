@@ -40,11 +40,15 @@
         <main>
             <div id="introduccion">
                 <h1><?php echo $titulo ?></h1>
-                <a href="/perfil/editar/<?php echo $usuario["id_usuario"] ?>" class="botones">Editar</a>
+                <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                    <a href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones">Editar</a>
+                <?php } else { ?>
+                    <a href="/proyectos" class="botones">Volver</a>
+                <?php } ?>
             </div>
             <div id="contenido-principal">
                 <div id="imagen-editar">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>" id="imagen-perfil">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
                 </div>
                 <div id="informacion-usuario">
                     <h2 class="apartados-inicio">Tus datos</h2>

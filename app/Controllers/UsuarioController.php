@@ -191,23 +191,25 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $errores = $this->comprobarEdit($datos);
 
         if (empty($errores)) {
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-
-            // Si está vacío se actualiza el usuario sin cambiar la contraseña
-            if (empty($datos["contrasena"])) {
-                if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
+            if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+                // Si está vacío se actualiza el usuario sin cambiar la contraseña
+                if (empty($datos["contrasena"])) {
+                    if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
+                        if ($_SESSION["usuario"]["id_rol"] == 1) {
+                            header("location: /admin/usuarios");
+                        } else {
+                            header("location: /perfil/" . $idUsuario);
+                        }
+                    }
+                } else if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
                     if ($_SESSION["usuario"]["id_rol"] == 1) {
                         header("location: /admin/usuarios");
                     } else {
                         header("location: /perfil/" . $idUsuario);
                     }
                 }
-            } else if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                if ($_SESSION["usuario"]["id_rol"] == 1) {
-                    header("location: /admin/usuarios");
-                } else {
-                    header("location: /perfil/" . $idUsuario);
-                }
+            } else {
+                header("location : /");
             }
         } else {
             $modeloRol = new \Com\TaskVelocity\Models\RolModel();
@@ -280,6 +282,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data['tarea'] = $modeloTarea->contadorPorUsuario($idUsuario);
 
+        $data["idUsuario"] = $idUsuario;
+
         $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
     }
 
@@ -298,7 +302,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data["idUsuario"] = $idUsuario;
         $data["modoEdit"] = true;
 
-        $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+        if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+            $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+        } else {
+            header("location: /");
+        }
     }
 
     private function comprobarComun(array $data): array {

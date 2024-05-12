@@ -54,7 +54,7 @@
                 </div>
             <?php } ?>
             <?php if (empty($tareas) && $_SERVER["REQUEST_URI"] == "/tareas") { ?>
-                <div id="informacion">
+                <div class="informacion">
                     <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
                 </div>
             <?php } else if ((empty($tareas)) && $_SERVER["REQUEST_URI"] != "/tareas") { ?>

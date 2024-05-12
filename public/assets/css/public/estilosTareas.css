@@ -39,6 +39,11 @@
     background-color: #F9E79F;
 }
 
+/* El icono cambia de color cuando se usa la clase .informacion-warning */
+.informacion-warning ::before {
+    color: black;
+}
+
 .informacion-warning > p, .informacion-warning > i {
     color: black;
 }
