@@ -10,7 +10,7 @@
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
-        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosCrear.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosPerfil.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
@@ -32,15 +32,15 @@
                     <li><a href="/contacto" class="botones">Contacto</a></li>
                 </ul>
             </nav>
-            <?php if (isset($_SESSION["usuario"])) { ?>
+            <div id="perfil-cerrar">
                 <div id="perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                    <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                    </a>
                 </div>
-            <?php } else { ?>
-                <a href="/login" class="botones">Iniciar sesión</a>
-            <?php } ?>
+                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            </div>
         </header>
         <main>
             <h1 class="apartados"><?php echo $titulo ?></h1>

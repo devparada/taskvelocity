@@ -27,15 +27,15 @@
                     <li><a href="/contacto" class="botones">Contacto</a></li>
                 </ul>
             </nav>
-            <?php if (isset($_SESSION["usuario"])) { ?>
+            <div id="perfil-cerrar">
                 <div id="perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                    <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                    </a>
                 </div>
-            <?php } else { ?>
-                <a href="/login" class="botones">Iniciar sesión</a>
-            <?php } ?>
+                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            </div>
         </header>
         <main>
             <div id="introduccion">
@@ -58,9 +58,9 @@
                     <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
                 </div>
             <?php } else if ((empty($tareas)) && $_SERVER["REQUEST_URI"] != "/tareas") { ?>
-            <div class="informacion informacion-warning">
-                <p><i class="fa-solid fa-circle-info"></i> No se han encontrado tareas con esta etiqueta</p>
-            </div>
+                <div class="informacion informacion-warning">
+                    <p><i class="fa-solid fa-circle-info"></i> No se han encontrado tareas con esta etiqueta</p>
+                </div>
             <?php } ?>
             <div id="tareas-grid">
                 <?php foreach ($tareas as $t) { ?>

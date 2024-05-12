@@ -54,7 +54,12 @@ nav {
 
 nav ul {
     display: flex;
-    border-radius: 20px;
+    /* Se utiliza para centrar bien el nav ul */
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
 }
 
 nav ul li {
@@ -80,8 +85,17 @@ nav ul li a {
     margin-left: 6px;
 }
 
+#perfil-cerrar {
+    display: flex;
+    align-items: center;
+}
 
 #perfil {
+    display: flex;
+    align-items: center;
+}
+
+.enlace-perfil {
     display: flex;
     align-items: center;
 }
@@ -150,7 +164,17 @@ input, select, option, textarea {
     color: #FF8080;
 }
 
-/* Div cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */
+.color-circulo {
+    border-radius: 100px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-right: 6px;
+    margin-left: 6px;
+}
+
+/* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */
 
 .alerta-success, .alerta-danger {
     padding: 16px;

@@ -29,15 +29,15 @@
                     <li><a href="/contacto" class="botones">Contacto</a></li>
                 </ul>
             </nav>
-            <?php if (isset($_SESSION["usuario"])) { ?>
+            <div id="perfil-cerrar">
                 <div id="perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                    <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                    </a>
                 </div>
-            <?php } else { ?>
-                <a href="/login" class="botones">Iniciar sesión</a>
-            <?php } ?>
+                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            </div>
         </header>
         <main>
             <h1 class="apartados">Tarea <?php echo $tarea["nombre_tarea"] ?></h1>
@@ -54,7 +54,7 @@
                     <p>Descripción de la tarea: <?php echo ($tarea["descripcion_tarea"] == "") ? "No tiene descripción" : "" ?></p>
                     <p>Fecha límite: <?php echo isset($tarea["fecha_limite_tarea"]) ? $tarea["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
                     <p>Proyecto: <a href="/proyectos/ver/<?php echo $tarea["id_proyecto"] ?>" id="boton-ir-proyecto"><?php echo isset($tarea["id_proyecto"]) ? $tarea["nombre_proyecto"] : "" ?> <i class="fas fa-external-link-alt"></i></a></p>
-                    <p>Color: <?php echo $tarea["nombre_color"] ?></p>
+                    <p>Color: <span style="background-color: <?php echo $tarea["valor_color"] ?>" class="color-circulo"></span><?php echo $tarea["nombre_color"] ?></p>
                     <p>Miembros: <?php
                         foreach ($usuarios as $u) {
                             echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";

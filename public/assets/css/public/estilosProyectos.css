@@ -1,16 +1,17 @@
-/*Hoja de estilos utilizada en proyectos y tareas */
+/*Hoja de estilos utilizada en proyectos */
 #boton-crear {
     margin-top: 16px;
 }
 
 .proyectos-grid {
     display: grid;
+    margin: 16px;
     grid-template-columns: 1fr 1fr;
     row-gap: 5px;
     column-gap: 5px;
 }
 
-.proyectos {
+.proyectos, .proyectos-sin-imagen {
     display: flex;
     border: 1px var(--color-secundario-principal) solid;
     border-radius: 20px;
@@ -18,13 +19,17 @@
     padding: 16px;
 }
 
-.proyectos p, .proyectos a {
+.proyectos-sin-imagen {
+    justify-content: center;
+}
+
+.proyectos p, .proyectos a, .proyectos-sin-imagen p, .proyectos-sin-imagen a {
     margin-left: 16px;
     margin-bottom: 6px;
     color: white;
 }
 
-.proyectos p {
+.proyectos p, .proyectos-sin-imagen p {
     padding: 6px;
 }
 .informacion-proyecto {

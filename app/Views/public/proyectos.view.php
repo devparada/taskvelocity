@@ -27,15 +27,15 @@
                     <li><a href="/contacto" class="botones">Contacto</a></li>
                 </ul>
             </nav>
-            <?php if (isset($_SESSION["usuario"])) { ?>
+            <div id="perfil-cerrar">
                 <div id="perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                    <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                    </a>
                 </div>
-            <?php } else { ?>
-                <a href="/login" class="botones">Iniciar sesión</a>
-            <?php } ?>
+                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            </div>
         </header>
         <main>
             <div id="introduccion">
@@ -49,30 +49,32 @@
             <?php } ?>
             <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
-                    <div class="proyectos">
-                        <?php
-                        $idProyecto = $p["id_proyecto"];
-                        (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
-                            ?>
+                    <?php
+                    $idProyecto = $p["id_proyecto"];
+                    (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
+                    if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
+                        ?>
+                        <div class="proyectos">
                             <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
-                        <?php } ?>
-                        <div class="informacion-proyecto">
-                            <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
-                            <?php if ($p["editable"] == 1) { ?>
-                                <p>Fecha límite: <?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
-                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["id_usuario_proyecto_prop"] ?></p>
-                                <div class="botones-proyecto">
-                                    <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                                    <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                                <?php } else { ?>
-                                    <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                        <?php } else { ?>
+                            <div class="proyectos-sin-imagen">
+                            <?php } ?>
+                            <div class="informacion-proyecto">
+                                <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
+                                <?php if ($p["editable"] == 1) { ?>
+                                    <p>Fecha límite: <?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                                    <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["id_usuario_proyecto_prop"] ?></p>
                                     <div class="botones-proyecto">
-                                    <?php } ?>
-                                    <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
+                                        <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                        <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                    <?php } else { ?>
+                                        <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                                        <div class="botones-proyecto">
+                                        <?php } ?>
+                                        <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php } ?>
-                </div>
-        </main> <!-- Continua en plantillas/footer -->
+                        <?php } ?>
+                    </div>
+                    </main> <!-- Continua en plantillas/footer -->

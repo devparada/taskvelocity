@@ -293,6 +293,27 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/perfil/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                        $controlador->mostrarPerfil($idProyecto);
+                    }
+                    , 'get');
+
+            Route::add('/perfil/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                        $controlador->mostrarPerfilEditar($idProyecto);
+                    }
+                    , 'get');
+
+            Route::add('/perfil/editar/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                        $controlador->procesarEdit($idProyecto);
+                    }
+                    , 'post');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();

@@ -1,4 +1,4 @@
-/* Hoja de estilos utilizada en crear y editar proyectos y tareas */
+/* Hoja de estilos utilizada en crear y editar proyectos y tareas y perfil */
 body {
     /* ! Debido al select2 en el formulario */
     overflow-x: hidden;
@@ -16,6 +16,10 @@ input[type="submit"] {
     margin-top: 10px;
     border: none;
     color: white;
+}
+
+label {
+    text-align: center;
 }
 
 /* Formulario */
@@ -41,7 +45,7 @@ input[type="submit"] {
     width: 100%;
 }
 
-.campo-formulario > :not(.select2), .campo-formulario > textarea, select2-selection select2-selection--multiple {
+.campo-formulario > :not(.select2), .campo-formulario > .select2 , .campo-formulario > textarea, select2-selection select2-selection--multiple {
     padding: 8px;
 }
 

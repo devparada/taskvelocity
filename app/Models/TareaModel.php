@@ -223,6 +223,14 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
+    public function contadorPorUsuario(int $idUsuario): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
+                . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
+                . "ON ta.id_tarea=ut.id_tareaTAsoc WHERE us.id_usuario = ?");
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetchColumn();
+    }
+
     public function deleteTarea(int $idTarea): bool {
         $valorDevuelto = false;
 

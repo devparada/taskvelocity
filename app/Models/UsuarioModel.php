@@ -21,7 +21,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt->execute([$idUsuario]);
 
         $usuarioEncontrado = $stmt->fetch();
-
+        
         if ($usuarioEncontrado) {
             return $usuarioEncontrado;
         } else {

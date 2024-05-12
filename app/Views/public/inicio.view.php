@@ -28,9 +28,13 @@
                 </ul>
             </nav>
             <?php if (isset($_SESSION["usuario"])) { ?>
-                <div id="perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                    <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                <div id="perfil-cerrar">
+                    <div id="perfil">
+                        <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                            <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                            <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                        </a>
+                    </div>
                     <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
                 </div>
             <?php } else { ?>

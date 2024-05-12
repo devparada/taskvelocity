@@ -1,0 +1,49 @@
+/*Hoja de estilos utilizada en perfil */
+.apartados-inicio {
+    margin-bottom: 16px;
+}
+
+#contenido-principal {
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+}
+
+#imagen-perfil {
+    width: 70%;
+    border-radius: 50px;
+}
+
+#imagen-editar {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+#informacion-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#informacion-usuario > form {
+    width: 20%;
+}
+
+#informacion-usuario > p {
+    margin-bottom: 16px;
+}
+
+#contenedor-estadisticas-usuario {
+    display: flex;
+    column-gap: 20px;
+}
+
+.estadistica-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--color-secundario-complementario);
+    padding: 16px;
+    border-radius: 20px;
+}

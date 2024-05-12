@@ -146,7 +146,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt->execute([$idUsuario, $idProyecto]);
 
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-            $tareasProyecto = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+            // $tareasProyecto = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
         }
     }
 
@@ -208,6 +208,14 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM proyectos");
+        return $stmt->fetchColumn();
+    }
+
+    public function contadorPorUsuario(int $idUsuario): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
+                . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
+                . " ON up.id_usuarioPAsoc = u.id_usuario WHERE id_usuario = ?");
+        $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }
 

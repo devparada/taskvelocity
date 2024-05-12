@@ -161,9 +161,15 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarEdit(int $idUsuario): void {
         $data = [];
-        $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-        $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
-        $data['tituloDiv'] = 'Editar usuario';
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
+            $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
+            $data['tituloDiv'] = 'Editar usuario';
+        } else {
+            $data['titulo'] = 'Tu perfil';
+            $data['seccion'] = '/perfil/editar/' . $idUsuario;
+            $data["tituloDiv"] = "Editando tus datos";
+        }
 
         unset($_POST["enviar"]);
 
@@ -176,6 +182,9 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $datos["id_rol"] = (string) $_SESSION["usuario"]["id_rol"];
+        $data["idUsuario"] = $idUsuario;
+
         $data["datos"] = $datos;
         $data["modoEdit"] = true;
 
@@ -187,10 +196,18 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             // Si está vacío se actualiza el usuario sin cambiar la contraseña
             if (empty($datos["contrasena"])) {
                 if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                    header("location: /admin/usuarios");
+                    if ($_SESSION["usuario"]["id_rol"] == 1) {
+                        header("location: /admin/usuarios");
+                    } else {
+                        header("location: /perfil/" . $idUsuario);
+                    }
                 }
             } else if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                header("location: /admin/usuarios");
+                if ($_SESSION["usuario"]["id_rol"] == 1) {
+                    header("location: /admin/usuarios");
+                } else {
+                    header("location: /perfil/" . $idUsuario);
+                }
             }
         } else {
             $modeloRol = new \Com\TaskVelocity\Models\RolModel();
@@ -201,7 +218,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+            if ($_SESSION["usuario"]["id_rol"] == 1) {
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+            }
         }
     }
 
@@ -245,13 +266,57 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
+    public function mostrarPerfil(int $idUsuario): void {
+        $data = [];
+        $data['titulo'] = 'Tu perfil';
+        $data['seccion'] = '/perfil/' . $idUsuario;
+
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $data['proyecto'] = $modeloProyecto->contadorPorUsuario($idUsuario);
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $data['tarea'] = $modeloTarea->contadorPorUsuario($idUsuario);
+
+        $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+    }
+
+    public function mostrarPerfilEditar(int $idUsuario): void {
+        $data = [];
+        $data['titulo'] = 'Tu perfil';
+        $data['seccion'] = '/perfil/editar/' . $idUsuario;
+        $data["tituloDiv"] = "Editando tus datos";
+
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data['datos'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+
+        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+        $data["colores"] = $modeloColor->mostrarColores();
+
+        $data["idUsuario"] = $idUsuario;
+        $data["modoEdit"] = true;
+
+        $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+    }
+
     private function comprobarComun(array $data): array {
         $errores = [];
 
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $dimensionesAvatar = 256;
+
+        if (empty($data["username"])) {
+            $errores["username"] = "El nombre de usuario no debe estar vacío";
+        } else if ($data["username"] != $_SESSION["usuario"]["username"] && !is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
+            $errores["username"] = "El nombre de usuario ya existe";
+        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
+            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
+        }
 
         if (!empty($_FILES["imagen_avatar"]["name"])) {
             if ($_FILES["imagen_avatar"]["type"] != "image/jpeg" && $_FILES["imagen_avatar"]["type"] != "image/png") {
@@ -261,6 +326,14 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             } else if ($_FILES["imagen_avatar"]["size"] > 10 * self::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
+        }
+
+        if (empty($data["email"])) {
+            $errores["email"] = "El email no debe estar vacío";
+        } else if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
+            $errores["email"] = "El email debe ser un email válido";
+        } else if ($data["email"] != $_SESSION["usuario"]["email"] && !is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
+            $errores["email"] = "El email ya existe";
         }
 
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == 1) {
@@ -316,24 +389,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     private function comprobarAdd(array $data): array {
         $errores = $this->comprobarComun($data);
-
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-
-        if (empty($data["username"])) {
-            $errores["username"] = "El nombre de usuario no debe estar vacío";
-        } else if (!is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
-            $errores["username"] = "El nombre de usuario ya existe";
-        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
-            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
-        }
-
-        if (empty($data["email"])) {
-            $errores["email"] = "El email no debe estar vacío";
-        } else if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
-            $errores["email"] = "El email debe ser un email válido";
-        } else if (!is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
-            $errores["email"] = "El email ya existe";
-        }
 
         if (empty($data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no debe estar vacía";
