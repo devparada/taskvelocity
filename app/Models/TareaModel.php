@@ -74,24 +74,23 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null Devuelve la información de la tarea si la encuentra o null
      */
     public function buscarTareaPorId(int $idTarea): ?array {
-        $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta LEFT JOIN proyectos p "
-                . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios_tareas ut "
-                . "ON ta.id_usuario_tarea_prop=ut.id_usuarioTAsoc LEFT JOIN colores c ON ta.id_color_tarea = c.id_color "
-                . "LEFT JOIN usuarios us ON ta.id_usuario_tarea_prop = us.id_usuario WHERE id_tarea = ? GROUP BY ut.id_tareaTAsoc");
+        $stmt = $this->pdo->prepare("SELECT *, COUNT(ut.id_usuarioTAsoc) FROM tareas ta LEFT JOIN proyectos p 
+                ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios_tareas ut 
+                ON ta.id_tarea = ut.id_tareaTAsoc LEFT JOIN colores c 
+                ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios us 
+                ON ta.id_usuario_tarea_prop = us.id_usuario WHERE id_tarea = ?");
         $stmt->execute([$idTarea]);
 
         $tareaEncontrada = $stmt->fetch();
 
         if (!empty($tareaEncontrada)) {
-            for ($j = 0; $j < $tareaEncontrada["COUNT(id_usuarioTAsoc)"]; $j++) {
-                $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
-                        . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
-                        . " WHERE id_tareaTAsoc =" . $tareaEncontrada["id_tareaTAsoc"]);
+            $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
+                    . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
+                    . " WHERE id_tareaTAsoc =" . $tareaEncontrada["id_tareaTAsoc"]);
 
-                $usuariosProyectos = $stmt->fetchAll();
+            $usuariosProyectos = $stmt->fetchAll();
 
-                $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
-            }
+            $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
         }
 
         return ($tareaEncontrada) ? $tareaEncontrada : null;

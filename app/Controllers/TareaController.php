@@ -133,7 +133,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
     /**
      * Comprueba si el usuario logeado es miembro de la tarea o es admin
-     * @param array $miembros los miembros de la tarea
+     * @param array|null $miembros los miembros de la tarea
      * @return bool Retorna true si es miembro o es admin y false si no
      */
     private function comprobarUsuarioMiembros(?array $miembros): bool {

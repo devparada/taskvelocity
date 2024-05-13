@@ -153,13 +153,15 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
     /**
      * Comprueba si el usuario logeado es miembro del proyecto o es admin
-     * @param array $miembros los miembros del proyecto
+     * @param array|null $miembros los miembros del proyecto
      * @return bool Retorna true si es miembro o es admin y false si no
      */
-    private function comprobarUsuarioMiembros(array $miembros): bool {
-        foreach ($miembros as $persona) {
-            if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == 1) {
-                return true;
+    private function comprobarUsuarioMiembros(?array $miembros): bool {
+        if (!is_null($miembros)) {
+            foreach ($miembros as $persona) {
+                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == 1) {
+                    return true;
+                }
             }
         }
         return false;
@@ -270,6 +272,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
+
         if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
             if ($modeloProyecto->deleteProyecto($idProyecto)) {
                 $data["informacion"]["estado"] = "success";

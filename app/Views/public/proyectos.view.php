@@ -63,7 +63,7 @@
                                 <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
                                 <?php if ($p["editable"] == 1) { ?>
                                     <p>Fecha límite: <?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
-                                    <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["id_usuario_proyecto_prop"] ?></p>
+                                    <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
                                     <div class="botones-proyecto">
                                         <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                         <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>

@@ -56,6 +56,12 @@
                     </div>
 
                     <div class="campo-formulario">
+                        <label for="imagen_avatar">Avatar</label>
+                        <input type="file" id="imagen_avatar" name="imagen_avatar">
+                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                    </div>
+
+                    <div class="campo-formulario">
                         <label for="email">Correo electrónico <span class="campo-obligatorio">*</span></label>
                         <input type="email" id="email" name="email" placeholder="Introduce un nuevo email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" autocomplete="email">
                         <p class="texto-error"><?php echo isset($errores["email"]) ? $errores["email"] : "" ?></p>
