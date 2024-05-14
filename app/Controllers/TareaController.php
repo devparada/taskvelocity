@@ -258,13 +258,18 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    public function procesarDelete(int $idTarea) {
+    /**
+     * Borra una tarea y su imagen
+     * @param int $idTarea el id de la tarea
+     * @return void
+     */
+    public function procesarDelete(int $idTarea): void {
         $data = [];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
 
-        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
+        if (!is_null($miembrosTarea) || $this->comprobarUsuarioMiembros($miembrosTarea["nombresUsuarios"])) {
             if ($modeloTarea->deleteTarea($idTarea)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " ha sido eliminado correctamente";

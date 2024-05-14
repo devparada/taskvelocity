@@ -22,9 +22,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
-                    <li><a href="/tareas" class="botones">Tareas</a></li>
-                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                    <li><a href="/proyectos" class="">Proyectos</a></li>
+                    <li><a href="/tareas" class="">Tareas</a></li>
+                    <li><a href="/contacto" class="">Contacto</a></li>
                 </ul>
             </nav>
             <?php if (isset($_SESSION["usuario"])) { ?>
@@ -36,10 +36,10 @@
                         </a>
                     </div>
                     <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
-                </div>
-            <?php } else { ?>
-                <a href="/login" class="botones">Iniciar sesión</a>
-            <?php } ?>
+                <?php } else { ?>
+                    <a href="/login" class="botones">Iniciar sesión</a>
+                <?php } ?>
+            </div>
         </header>
         <main>
             <div id="main-introduccion">
@@ -55,7 +55,7 @@
                         <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
                     </div>
                     <div id="caracteristica-proyectos" class="caracteristicas-texto">
-                        <p>Un gestor de proyectos veloz donde ver todoslos proyectos, 
+                        <p>Un gestor de proyectos veloz donde ver todos los proyectos, 
                             añadir una fecha límite y una imagen y añadir más miembros para trabajar en compañia</p>
                     </div>
                     <div id="caracteristica-tareas" class="caracteristicas-texto">

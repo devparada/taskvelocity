@@ -40,7 +40,7 @@
             </div>
         </header>
         <main>
-            <h1 class="apartados">Proyecto <?php echo $proyecto["nombre_proyecto"] ?></h1>
+            <h1 class="apartados"> <?php echo $proyecto["nombre_proyecto"] ?></h1>
             <div class="proyectos">
                 <?php
                 $idProyecto = $proyecto["id_proyecto"];
@@ -50,16 +50,25 @@
                     <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto">
-                    <p>Nombre del proyecto: <?php echo $proyecto["nombre_proyecto"] ?></p>
-                    <p>Descripción del proyecto: <?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : "" ?></p>
+                    <p>Descripción del proyecto: </p>
+                    <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
-                    <p>Tareas:</p>
                     <?php if (!empty($tareas)) { ?>
-                        <ul class="lista-tareas">
+                        <table id="tabla-tareas" border="1">
+                            <thead>
+                            <caption>Tareas del proyecto</caption>
+                            <th>Nombre</th>
+                            <th>Fecha límite</th>
+                            <th>Etiqueta</th>
+                            </thead>
                             <?php foreach ($tareas as $t) { ?>
-                                <li><a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="enlace-ir-tarea"><?php echo $t["nombre_tarea"] ?> <i class="fas fa-external-link-alt"></i></a></li>
+                                <tr>
+                                    <td><a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="enlace-ir-tarea"><?php echo $t["nombre_tarea"] ?> <i class="fas fa-external-link-alt"></i></a></td>
+                                    <td><?php echo $t["fecha_limite_tarea"] ?? "No tiene" ?></td>
+                                    <td><?php echo $t["nombre_etiqueta"] ?></td>
+                                </tr>
                             <?php } ?>
-                        </ul>
+                        </table>
                     <?php } else { ?>
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
@@ -68,7 +77,7 @@
                             echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";
                         }
                         ?></p>
-                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú eres el propietario" : $proyecto["id_usuario_proyecto_prop"] ?></p>
+                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <?php if ($proyecto["editable"] == 1) { ?>
                         <div class="botones-proyecto">
                             <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>

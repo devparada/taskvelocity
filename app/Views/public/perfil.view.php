@@ -56,7 +56,11 @@
                     <p>Tu correo electrónico es: <?php echo $usuario["email"] ?></p>
                     <p>Tu fecha de nacimiento es: <?php echo $usuario["fecha_nacimiento"] ?></p>
                     <p>Tu color favorito es: <span style="background-color: <?php echo $usuario["valor_color"] ?>" class="color-circulo"></span> <?php echo $usuario["nombre_color"] ?></p>
-                    <p>Tu descripción es: <?php echo $usuario["descripcion_usuario"]; ?></p>
+                    <?php if ($usuario["descripcion_usuario"] != "") { ?>
+                        <p>Tu descripción es: <?php echo $usuario["descripcion_usuario"]; ?></p>
+                    <?php } else { ?>
+                        <p>No tienes una descripción</p>
+                    <?php } ?>
                     <h2 class="apartados-inicio">Estadísticas</h2>
                     <p>Tienes las siguientes estadísticas:</p>
                     <div id="contenedor-estadisticas-usuario">

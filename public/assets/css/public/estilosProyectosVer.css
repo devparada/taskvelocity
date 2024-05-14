@@ -1,4 +1,13 @@
 /* Hoja de estilos utilizada en ver proyectos */
+#tabla-tareas {
+    border: 1px var(--color-secundario-principal) solid;
+    text-align: center;
+}
+
+#tabla-tareas tr td, #tabla-tareas tr th, caption {
+    padding: 8px;
+}
+
 .enlace-ir-tarea {
     margin-left: 2px;
 }

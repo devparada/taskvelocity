@@ -173,7 +173,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         unset($_POST["enviar"]);
 
-        // Si id_color está vacio se añade el 1 que es el color por defecto
+// Si id_color está vacio se añade el 1 que es el color por defecto
         if ($_POST["id_color"] == "") {
             $_POST["id_color"] = "1";
         }
@@ -192,7 +192,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($errores)) {
             if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
-                // Si está vacío se actualiza el usuario sin cambiar la contraseña
+// Si está vacío se actualiza el usuario sin cambiar la contraseña
                 if (empty($datos["contrasena"])) {
                     if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
                         if ($_SESSION["usuario"]["id_rol"] == 1) {
@@ -320,8 +320,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["username"])) {
             $errores["username"] = "El nombre de usuario no debe estar vacío";
-        } else if ($data["username"] != $_SESSION["usuario"]["username"] && !is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
-            $errores["username"] = "El nombre de usuario ya existe";
         } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
             $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
         }
@@ -340,8 +338,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $errores["email"] = "El email no debe estar vacío";
         } else if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
             $errores["email"] = "El email debe ser un email válido";
-        } else if ($data["email"] != $_SESSION["usuario"]["email"] && !is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
-            $errores["email"] = "El email ya existe";
         }
 
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == 1) {
@@ -374,7 +370,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        if (!is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"])) && $data["email"] != $modeloUsuario->buscarUsuarioPorEmail($data["email"])["email"]) {
+        if ($data["username"] != $_SESSION["usuario"]["username"] && !is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
+            $errores["username"] = "El nombre de usuario ya existe";
+        }
+
+        if ($data["email"] != $_SESSION["usuario"]["email"] && !is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
             $errores["email"] = "El email ya existe";
         }
 
@@ -397,6 +397,16 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     private function comprobarAdd(array $data): array {
         $errores = $this->comprobarComun($data);
+
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+
+        if (!is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
+            $errores["username"] = "El nombre de usuario ya existe";
+        }
+
+        if (!is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"])) && $data["email"] != $modeloUsuario->buscarUsuarioPorEmail($data["email"])["email"]) {
+            $errores["email"] = "El email ya existe";
+        }
 
         if (empty($data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no debe estar vacía";

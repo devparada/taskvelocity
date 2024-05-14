@@ -83,7 +83,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $tareaEncontrada = $stmt->fetch();
 
-        if (!empty($tareaEncontrada)) {
+        if ($tareaEncontrada["id_tarea"] != null && $tareaEncontrada["id_tareaTAsoc"] != null) {
             $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
                     . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
                     . " WHERE id_tareaTAsoc =" . $tareaEncontrada["id_tareaTAsoc"]);
@@ -91,6 +91,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             $usuariosProyectos = $stmt->fetchAll();
 
             $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
+        } else {
+            $tareaEncontrada["nombresUsuarios"] = null;
         }
 
         return ($tareaEncontrada) ? $tareaEncontrada : null;
@@ -116,7 +118,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function mostrarTareasPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
-                . "WHERE ta.id_proyecto = ?");
+                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_proyecto = ?");
         $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
     }
@@ -155,6 +157,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                 . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
 
+        var_dump($stmt);
+        var_dump($idUsuario);
+        var_dump($idTarea);
+
         $stmt->execute([$idUsuario, $idTarea]);
     }
 
@@ -184,7 +190,6 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 . " WHERE id_tarea=?");
 
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $idEtiqueta, $idProyecto, $idTarea])) {
-            // Se consigue el id del proyecto debido a que es la última tarea insertada
             if (!empty($idUsuariosAsociados)) {
                 $this->editarUsuariosTareas($idUsuariosAsociados, $idTarea);
             }
@@ -207,6 +212,14 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "WHERE id_tareaTAsoc=?");
 
         $stmt->execute([$idTarea]);
+
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas"
+                . " WHERE id_tarea=?");
+
+        $stmt->execute([$idTarea]);
+
+        $idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
+        $this->añadirPropietario($idUsuarioProp, $idTarea);
 
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
