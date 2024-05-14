@@ -237,6 +237,20 @@ class FrontController {
                     }
                     , 'post');
 
+            Route::add('/proyectos/addTareasProyecto/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                        $controlador->mostrarAddTareasProyecto($idProyecto);
+                    }
+                    , 'get');
+
+            Route::add('/proyectos/addTareasProyecto/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                        $controlador->procesarAddTareasProyecto($idProyecto);
+                    }
+                    , 'post');
+
             Route::add('/proyectos/borrar/([0-9]+)',
                     function ($idProyecto) {
                         $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();

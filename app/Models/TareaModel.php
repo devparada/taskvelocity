@@ -34,6 +34,15 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $datos;
     }
 
+    public function addTareasProyecto($idTareas, $idProyecto): bool {
+        foreach ($idTareas as $idTarea) {
+            $stmt = $this->pdo->prepare("UPDATE tareas SET id_proyecto = ? WHERE id_tarea = ?");
+            $stmt->execute([$idProyecto, $idTarea]);
+            return true;
+        }
+        return false;
+    }
+
     public function mostrarTareasPorEtiqueta(string $idEtiqueta): array {
         $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
                 . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "

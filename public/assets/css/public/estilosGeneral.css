@@ -120,7 +120,8 @@ input, select, option, textarea {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .apartados {

@@ -261,6 +261,40 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
+    public function mostrarAddTareasProyecto(int $idProyecto): void {
+        $data = [];
+
+        $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
+        $data["seccion"] = "/proyecto/addTareasProyecto/$idProyecto";
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $data["tareas"] = $modeloTarea->mostrarTareas();
+        $data["idProyecto"] = $idProyecto;
+
+        $this->view->showViews(array('public/add.tareas.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
+    }
+
+    public function procesarAddTareasProyecto(int $idProyecto): void {
+        $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
+        $data["seccion"] = "/proyecto/addTareasProyecto/$idProyecto";
+
+        $data["idProyecto"] = $idProyecto;
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+
+        $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto)) {
+            header("location: /proyectos/ver/$idProyecto");
+        } else {
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $data["tareas"] = $modeloTarea->mostrarTareas();
+            $data["idProyecto"] = $idProyecto;
+
+            $this->view->showViews(array('public/add.tareas.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
+        }
+    }
+
     /**
      * Procesa al eliminar un proyecto
      * @param int $idProyecto el id del proyecto

@@ -4,6 +4,12 @@
     text-align: center;
 }
 
+#titulo-tabla {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
 #tabla-tareas tr td, #tabla-tareas tr th, caption {
     padding: 8px;
 }

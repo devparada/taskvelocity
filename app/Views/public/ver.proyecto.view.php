@@ -53,10 +53,13 @@
                     <p>Descripción del proyecto: </p>
                     <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <div id="titulo-tabla">
+                        <p>Tareas del proyecto</p>
+                        <a href="/proyecto/addTareasProyecto/<?php echo $proyecto["id_proyecto"] ?>" class="botones">Añadir tarea</a>
+                    </div>
                     <?php if (!empty($tareas)) { ?>
                         <table id="tabla-tareas" border="1">
                             <thead>
-                            <caption>Tareas del proyecto</caption>
                             <th>Nombre</th>
                             <th>Fecha límite</th>
                             <th>Etiqueta</th>

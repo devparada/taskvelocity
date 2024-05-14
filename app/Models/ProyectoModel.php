@@ -197,13 +197,15 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $stmt->execute([$idProyecto]);
 
-        foreach ($idUsuarios as $idUsuario) {
-            $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
-                    . "(id_usuarioPAsoc, id_proyectoPAsoc) "
-                    . "VALUES(?, ?)");
+        $stmt = $this->pdo->prepare("SELECT * FROM proyectos "
+                . "WHERE id_proyecto=?");
 
-            $stmt->execute([$idUsuario, $idProyecto]);
-        }
+        $stmt->execute([$idProyecto]);
+
+        $idUsuarioProp = $stmt->fetch()["id_usuario_proyecto_prop"];
+        $this->añadirPropietario($idUsuarioProp, $idProyecto);
+
+        $this->addProyectoUsuarios($idUsuarios, $idProyecto);
     }
 
     public function contador(): int {
