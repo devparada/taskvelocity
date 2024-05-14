@@ -11,6 +11,8 @@
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
     </head>
     <body>
         <header>
@@ -62,7 +64,7 @@
                             <div class="informacion-proyecto">
                                 <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
                                 <?php if ($p["editable"] == 1) { ?>
-                                    <p>Fecha límite: <?php echo isset($p["fecha_limite_proyecto"]) ? $p["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                                    <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
                                     <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
                                     <div class="botones-proyecto">
                                         <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
@@ -77,4 +79,14 @@
                             </div>
                         <?php } ?>
                     </div>
+                    <script>
+                        moment.locale('es');
+                        for (var i = 0; i < document.getElementsByClassName("fecha-limite").length; i++) {
+                            if (moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
+                                document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: " + moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow();
+                            } else {
+                                document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: No tiene fecha límite";
+                            }
+                        }
+                    </script>
                     </main> <!-- Continua en plantillas/footer -->

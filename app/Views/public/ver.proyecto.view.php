@@ -13,6 +13,8 @@
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->  
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
     </head>
     <body>
         <header>
@@ -52,13 +54,13 @@
                 <div class="informacion-proyecto">
                     <p>Descripción del proyecto: </p>
                     <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
-                    <p>Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <p id="fecha-limite">Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
                     <div id="titulo-tabla">
                         <p>Tareas del proyecto</p>
-                        <a href="/proyecto/addTareasProyecto/<?php echo $proyecto["id_proyecto"] ?>" class="botones">Añadir tarea</a>
+                        <a href="/proyectos/addTareasProyecto/<?php echo $proyecto["id_proyecto"] ?>" class="botones">Añadir tarea</a>
                     </div>
                     <?php if (!empty($tareas)) { ?>
-                        <table id="tabla-tareas" border="1">
+                        <table id="tabla-tareas">
                             <thead>
                             <th>Nombre</th>
                             <th>Fecha límite</th>
@@ -94,4 +96,14 @@
                     <?php } ?>
                 </div>
             </div>
+
+            <script>
+                moment.locale('es');
+                if (moment([document.getElementById("fecha-limite").innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
+                    document.getElementById("fecha-limite").innerHTML = "Fecha límite: " + moment([document.getElementById("fecha-limite").innerText], "YYYY-MM-DD").fromNow();
+                } else {
+                    document.getElementById("fecha-limite").innerHTML = "Fecha límite: No tiene fecha límite";
+                }
+            </script>
+
         </main> <!-- Continua en plantillas/footer -->

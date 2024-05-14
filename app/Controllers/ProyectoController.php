@@ -265,7 +265,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
-        $data["seccion"] = "/proyecto/addTareasProyecto/$idProyecto";
+        $data["seccion"] = "/proyectos/addTareasProyecto/$idProyecto";
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data["tareas"] = $modeloTarea->mostrarTareas();
@@ -276,7 +276,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
     public function procesarAddTareasProyecto(int $idProyecto): void {
         $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
-        $data["seccion"] = "/proyecto/addTareasProyecto/$idProyecto";
+        $data["seccion"] = "/proyectos/addTareasProyecto/$idProyecto";
 
         $data["idProyecto"] = $idProyecto;
 

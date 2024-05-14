@@ -11,6 +11,8 @@
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
     </head>
     <body>
         <header>
@@ -75,7 +77,7 @@
                         <div class="informacion-tarea">
                             <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
                             <p>Etiqueta: <?php echo $t["nombre_etiqueta"] ?></p>
-                            <p>Fecha límite: <?php echo isset($t["fecha_limite_tarea"]) ? $t["fecha_limite_tarea"] : "No tiene fecha límite" ?></p>
+                            <p class="fecha-limite"><?php echo $t["fecha_limite_tarea"] ?></p>
                             <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
                             <p>Proyecto: <?php echo $t["nombre_proyecto"] ?></p>
                             <div class="botones-tareas">    
@@ -87,4 +89,16 @@
                     </div>
                 <?php } ?>
             </div>
-        </main> <!-- Continua en plantillas/footer -->
+        </div>
+
+        <script>
+            moment.locale('es');
+            for (var i = 0; i < document.getElementsByClassName("fecha-limite").length; i++) {
+                if (moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
+                    document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: " + moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow();
+                } else {
+                    document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: No tiene fecha límite";
+                }
+            }
+        </script>
+    </main> <!-- Continua en plantillas/footer -->
