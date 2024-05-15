@@ -119,9 +119,9 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto_asociado"]) && $proyecto["editable"] == 0) {
+                                    if (!isset($datos["id_proyecto"]) && $proyecto["editable"] == 0) {
                                         echo "selected";
-                                    } else if (isset($datos["id_proyecto_asociado"]) && $datos["id_proyecto_asociado"] == $proyecto["id_proyecto"]) {
+                                    } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";
                                     }
                                     ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>

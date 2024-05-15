@@ -11,6 +11,7 @@
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <!-- Moment -->
         <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
     </head>
@@ -24,9 +25,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
-                    <li><a href="/tareas" class="botones">Tareas</a></li>
-                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/tareas">Tareas</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
             <div id="perfil-cerrar">
@@ -65,40 +66,45 @@
                 </div>
             <?php } ?>
             <div id="tareas-grid">
-                <?php foreach ($tareas as $t) { ?>
-                    <div class="tareas" style="background-color:<?php echo $t["valor_color"] ?>">
-                        <?php
-                        $idTarea = $t["id_tarea"];
-                        (file_exists("./assets/img/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
-                        if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
-                            ?>
-                            <img src="/assets/img/tareas/tarea-<?php echo $t["id_tarea"] ?>.jpg" alt="Imagen Tarea <?php echo $t["nombre_tarea"] ?>" class="imagen-proyecto">        
-                        <?php } ?>
-                        <div class="informacion-tarea">
-                            <p>Nombre de la tarea: <?php echo $t["nombre_tarea"] ?></p>
-                            <p>Etiqueta: <?php echo $t["nombre_etiqueta"] ?></p>
-                            <p class="fecha-limite"><?php echo $t["fecha_limite_tarea"] ?></p>
-                            <p>Propietario: <?php echo isset($t["id_usuario_tarea_prop"]) && ($t["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $t["username"] ?></p>
-                            <p>Proyecto: <?php echo $t["nombre_proyecto"] ?></p>
-                            <div class="botones-tareas">    
-                                <a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                                <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                                <a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Ver</a>
+                <?php foreach ($tareas as $proyecto => $value) { ?>
+                    <div class="columnas">
+                        <h2><?php echo $proyecto ?></h2>
+                        <?php for ($i = 0; $i < count($value); $i++) { ?>
+                            <div class="tarjetas"  id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
+                                <div class="informacion-tarea">
+                                    <p>Tarea: <?php echo $value[$i]["nombre_tarea"] ?></p>
+                                    <p>Etiqueta: <?php echo $value[$i]["nombre_etiqueta"] ?></p>
+                                    <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
+                                    <p>Propietario: <?php echo isset($value[$i]["id_usuario_tarea_prop"]) && ($value[$i]["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $value[$i]["username"] ?></p>
+                                    <div class="botones-tareas">
+                                        <a href="/tareas/editar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                        <a href="/tareas/borrar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 <?php } ?>
             </div>
-        </div>
 
-        <script>
-            moment.locale('es');
-            for (var i = 0; i < document.getElementsByClassName("fecha-limite").length; i++) {
-                if (moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
-                    document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: " + moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow();
-                } else {
-                    document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: No tiene fecha límite";
+            <script>
+                moment.locale('es');
+                for (var i = 0; i < document.getElementsByClassName("fecha-limite").length; i++) {
+                    if (moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
+                        document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: " + moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow();
+                    } else {
+                        document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: No tiene";
+                    }
                 }
-            }
-        </script>
-    </main> <!-- Continua en plantillas/footer -->
+
+                const tarjetas = document.getElementsByClassName("tarjetas");
+
+                for (var i = 0; i < tarjetas.length; i++) {
+                    (function (i) {
+                        tarjetas[i].addEventListener("click", function () {
+                            window.location.href = "/tareas/ver/" + tarjetas[i].id;
+                        });
+                    })(i);
+                }
+            </script>
+        </main> <!-- Continua en plantillas/footer -->

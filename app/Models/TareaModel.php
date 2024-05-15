@@ -6,20 +6,31 @@ namespace Com\TaskVelocity\Models;
 
 class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
+    private const baseConsulta = "SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p "
+            . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
+            . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
+            . "ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
+            . "ON ta.id_tarea=ut.id_tareaTAsoc ";
+
     public function mostrarTareas(): array {
-        $baseConsulta = "SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
-                . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
-                . "ON ta.id_tarea=ut.id_tareaTAsoc ";
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $stmt = $this->pdo->query($baseConsulta . "GROUP BY ut.id_tareaTAsoc");
+            $stmt = $this->pdo->query(self::baseConsulta . "GROUP BY ut.id_tareaTAsoc");
         } else {
-            $stmt = $this->pdo->prepare($baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc");
+            $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc");
 
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
 
         $datos = $stmt->fetchAll();
 
+        $datosFinal = $this->recogerNombresUsuarios($datos);
+
+        $grupos = $this->agruparPorTarea($datosFinal);
+
+        return $grupos;
+    }
+
+    private function recogerNombresUsuarios(array $datos) {
         for ($i = 0; $i < count($datos); $i++) {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
@@ -32,6 +43,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             }
         }
         return $datos;
+    }
+
+    public function agruparPorTarea(array $datos) {
+        $grupos = [];
+
+        foreach ($datos as $dato) {
+            $valor = $dato["nombre_proyecto"];
+            $grupos[$valor][] = $dato;
+        }
+
+        return $grupos;
     }
 
     public function addTareasProyecto($idTareas, $idProyecto): bool {
@@ -44,27 +66,18 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function mostrarTareasPorEtiqueta(string $idEtiqueta): array {
-        $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
-                . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
-                . "ON ta.id_tarea=ut.id_tareaTAsoc LEFT JOIN etiquetas as et "
+        $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
                 . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
 
         $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
 
         $datos = $stmt->fetchAll();
 
-        for ($i = 0; $i < count($datos); $i++) {
-            for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
-                $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
-                        . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
-                        . " WHERE id_tareaTAsoc =" . $datos[$i]["id_tareaTAsoc"]);
+        $datosFinal = $this->recogerNombresUsuarios($datos);
 
-                $usuariosTareas = $stmt->fetchAll();
+        $grupos = $this->agruparPorTarea($datosFinal);
 
-                $datos[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
-            }
-        }
-        return $datos;
+        return $grupos;
     }
 
     private function mostrarUsernamesTarea(array $usuariosTareas): array {
@@ -83,11 +96,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null Devuelve la información de la tarea si la encuentra o null
      */
     public function buscarTareaPorId(int $idTarea): ?array {
-        $stmt = $this->pdo->prepare("SELECT *, COUNT(ut.id_usuarioTAsoc) FROM tareas ta LEFT JOIN proyectos p 
-                ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios_tareas ut 
-                ON ta.id_tarea = ut.id_tareaTAsoc LEFT JOIN colores c 
-                ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios us 
-                ON ta.id_usuario_tarea_prop = us.id_usuario WHERE id_tarea = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_tarea = ?");
         $stmt->execute([$idTarea]);
 
         $tareaEncontrada = $stmt->fetch();
