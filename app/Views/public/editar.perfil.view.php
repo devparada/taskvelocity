@@ -3,6 +3,7 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>TaskVelocity | Editando tu perfil</title>
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
@@ -26,9 +27,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
-                    <li><a href="/tareas" class="botones">Tareas</a></li>
-                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/tareas">Tareas</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
             <div id="perfil-cerrar">

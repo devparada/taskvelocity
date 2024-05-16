@@ -13,6 +13,7 @@
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->  
         <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <!-- Moment -->
         <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
     </head>
@@ -26,9 +27,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
-                    <li><a href="/tareas" class="botones">Tareas</a></li>
-                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/tareas">Tareas</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
             <div id="perfil-cerrar">
@@ -97,13 +98,5 @@
                 </div>
             </div>
 
-            <script>
-                moment.locale('es');
-                if (moment([document.getElementById("fecha-limite").innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
-                    document.getElementById("fecha-limite").innerHTML = "Fecha límite: " + moment([document.getElementById("fecha-limite").innerText], "YYYY-MM-DD").fromNow();
-                } else {
-                    document.getElementById("fecha-limite").innerHTML = "Fecha límite: No tiene fecha límite";
-                }
-            </script>
-
+            <script src="assets/js/public/fechasTareasProyectosVer.js"></script>
         </main> <!-- Continua en plantillas/footer -->

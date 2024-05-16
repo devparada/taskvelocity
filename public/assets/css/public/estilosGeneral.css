@@ -17,6 +17,10 @@
 
 /* Elementos HTML */
 
+html, body {
+    height:100%;
+}
+
 body {
     margin:10px;
     background-color: var(--color-primario);
@@ -107,6 +111,11 @@ nav ul li a {
 
 /* MAIN */
 
+main {
+    position: relative;
+    min-height: 80vh;
+}
+
 input, select, option, textarea {
     color: black;
     outline: var(--color-secundario-principal);
@@ -183,21 +192,20 @@ footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
+    padding: 20px;
     background: linear-gradient(90deg, rgba(51,108,174,1) 0%, rgba(9,9,121,1) 45%, rgba(43,71,142,1) 100%);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     margin-top: 16px;
-    margin-left: 16px;
     margin-right: 16px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+
 }
 
 footer a > i {
     font-size: 26px;
-}
-
-footer p {
-    text-align: center;
 }
 
 #iconos-footer i {
@@ -209,6 +217,6 @@ footer p {
     align-items: center;
 }
 
-.logo-enlace p {
+.logo-enlace h2 {
     margin-left: 10px;
 }

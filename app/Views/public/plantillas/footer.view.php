@@ -3,9 +3,9 @@
     <div>
         <p>Proyecto de Ciclo DAW 2024</p>
     </div>
-    <div id="logo-footer">
+    <div>
         <a href="/" class="logo-enlace"><img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
-            <p>TaskVelocity</p></a>
+            <h2>TaskVelocity</h2></a>
     </div>
     <div id="iconos-footer">
         <a href="https://es.linkedin.com" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>

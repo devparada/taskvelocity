@@ -3,6 +3,7 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>TaskVelocity | <?php echo $titulo ?></title>
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
@@ -106,7 +107,7 @@
                                 <option value=""></option>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" 
-                                            <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == $_SESSION["usuario"]["id_color_favorito"]) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?> ><?php echo $color["nombre_color"]; ?></option>
+                                            <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == $_SESSION["usuario"]["id_color_favorito"]) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?>><?php echo $color["simbolo_color"] . " " . $color["nombre_color"]; ?></option>
                                         <?php } ?>
                             </select>
                             <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>

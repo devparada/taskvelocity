@@ -3,6 +3,7 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>TaskVelocity | Tus tareas</title>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
@@ -70,7 +71,14 @@
                     <div class="columnas">
                         <h2><?php echo $proyecto ?></h2>
                         <?php for ($i = 0; $i < count($value); $i++) { ?>
-                            <div class="tarjetas"  id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
+                            <div class="tarjetas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
+                                <?php
+                                $idTarea = $value[$i]["id_tarea"];
+                                (file_exists("./assets/img/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
+                                if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
+                                    ?>
+                                    <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>.jpg" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
+                                <?php } ?>
                                 <div class="informacion-tarea">
                                     <p>Tarea: <?php echo $value[$i]["nombre_tarea"] ?></p>
                                     <p>Etiqueta: <?php echo $value[$i]["nombre_etiqueta"] ?></p>
@@ -87,24 +95,43 @@
                 <?php } ?>
             </div>
 
-            <script>
-                moment.locale('es');
-                for (var i = 0; i < document.getElementsByClassName("fecha-limite").length; i++) {
-                    if (moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow() !== "Fecha inválida") {
-                        document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: " + moment([document.getElementsByClassName("fecha-limite")[i].innerText], "YYYY-MM-DD").fromNow();
-                    } else {
-                        document.getElementsByClassName("fecha-limite")[i].innerHTML = "Fecha límite: No tiene";
-                    }
-                }
+            <script src="assets/js/public/fechasTareasProyectos.js"></script>
 
+            <script>
+                const contenedorTarjetas = document.getElementById("tareas-grid");
                 const tarjetas = document.getElementsByClassName("tarjetas");
 
                 for (var i = 0; i < tarjetas.length; i++) {
                     (function (i) {
+                        // Al hacer click en la tarjeta va a la siguiente url
                         tarjetas[i].addEventListener("click", function () {
                             window.location.href = "/tareas/ver/" + tarjetas[i].id;
                         });
                     })(i);
                 }
+
+                var inicialX, offsetX;
+
+                contenedorTarjetas.addEventListener("mousedown", function (evento) {
+                    evento.preventDefault();
+                    // Guarda la posición inicial del ratón y la posición inicial del elemento
+                    inicialX = evento.clientX;
+                    offsetX = contenedorTarjetas.scrollLeft;
+
+                    contenedorTarjetas.addEventListener("mousemove", moverContenedor);
+                });
+
+                document.addEventListener("mouseup", function () {
+                    contenedorTarjetas.removeEventListener("mousemove", moverContenedor);
+                });
+
+                function moverContenedor(evento) {
+                    var distanciaX = evento.clientX - inicialX;
+                    var nuevaPosicionX = offsetX - distanciaX;
+
+                    // Establece la nueva posición del elemento
+                    contenedorTarjetas.scrollLeft = nuevaPosicionX;
+                }
             </script>
+
         </main> <!-- Continua en plantillas/footer -->
