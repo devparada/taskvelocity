@@ -11,7 +11,7 @@
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
-        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosPerfil.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosFormularios.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
@@ -58,33 +58,38 @@
                         <p class="texto-error"><?php echo isset($errores["imagen_proyecto"]) ? $errores["imagen_proyecto"] : "" ?></p>
                     </div>
 
-                    <div class="campo-formulario">
-                        <label for="fecha_limite_proyecto">Fecha límite</label>
-                        <input type="date" id="fecha_limite_proyecto" name="fecha_limite_proyecto" value="<?php echo isset($datos["fecha_limite_proyecto"]) ? $datos["fecha_limite_proyecto"] : "" ?>">
-                    </div>
+                    <div class="campo-formulario-grupo">
+                        <div class="campo-formulario">
+                            <label for="fecha_limite_proyecto">Fecha límite</label>
+                            <input type="date" id="fecha_limite_proyecto" name="fecha_limite_proyecto" value="<?php echo isset($datos["fecha_limite_proyecto"]) ? $datos["fecha_limite_proyecto"] : "" ?>">
+                        </div>
 
-                    <div class="campo-formulario">
-                        <label for="id_usuarios_asociados[]">Usuarios asociados</label>
-                        <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
-                            <option value=""></option>
-                            <?php foreach ($usuarios as $usuario) { ?>
-                                <option value="<?php echo $usuario["id_usuario"] ?>" 
-                                <?php
-                                if (isset($datos["nombresUsuarios"])) {
-                                    foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
-                                        if (trim($nombreUsuario) == $usuario["username"]) {
-                                            echo "selected";
+                        <div class="campo-formulario">
+                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
+                            <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
+                                <option value=""></option>
+                                <?php foreach ($usuarios as $usuario) { ?>
+                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
+                                    <?php
+                                    if (isset($datos["nombresUsuarios"])) {
+                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
+                                            if (trim($nombreUsuario) == $usuario["username"]) {
+                                                echo "selected";
+                                            }
                                         }
                                     }
-                                }
-                                ?>><?php echo $usuario["username"]; ?></option>
-                                    <?php } ?>
-                        </select>
+                                    ?>><?php echo $usuario["username"]; ?></option>
+                                        <?php } ?>
+                            </select>
+                        </div>
                     </div>
+                    <p class="texto-error"><?php echo isset($errores["fecha_limite_proyecto"]) ? $errores["fecha_limite_proyecto"] : "" ?></p>
+                    <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
 
                     <div class="campo-formulario">
                         <label for="descripcion_proyecto">Descripción del proyecto</label>
                         <textarea id="descripcion_proyecto" name="descripcion_proyecto" placeholder="Introduzca una descripción del proyecto (opcional)" rows="3"><?php echo isset($datos["descripcion_proyecto"]) ? $datos["descripcion_proyecto"] : "" ?></textarea>
+                        <p class="texto-error"><?php echo isset($errores["descripcion_proyecto"]) ? $errores["descripcion_proyecto"] : "" ?></p>
                     </div>
 
                     <div class="campo-formulario">

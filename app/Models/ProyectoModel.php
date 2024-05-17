@@ -8,7 +8,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function mostrarProyectos(): array {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $stmt = $this->pdo->query("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us "
+            $stmt = $this->pdo->query("SELECT *, COUNT(id_usuarioPAsoc), COUNT(id_proyecto) FROM proyectos pr LEFT JOIN usuarios us "
                     . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
                     . "ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY up.id_proyectoPAsoc "
                     . "ORDER BY pr.id_proyecto desc");
@@ -33,7 +33,11 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
                 $datos[$i]["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
             }
+
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
         }
+
         return $datos;
     }
 
@@ -217,6 +221,14 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
                 . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
                 . " ON up.id_usuarioPAsoc = u.id_usuario WHERE id_usuario = ?");
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetchColumn();
+    }
+
+    public function contadorPorUsuarioPropietario(int $idUsuario): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
+                . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
+                . " ON up.id_usuarioPAsoc = u.id_usuario WHERE pr.id_usuario_proyecto_prop = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }

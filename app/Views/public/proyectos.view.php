@@ -43,7 +43,7 @@
         <main>
             <div id="introduccion">
                 <h1>Tus proyectos</h1>
-                <a href="/proyectos/crear" class="botones">Crear un proyecto</a>
+                <a href="/proyectos/crear" class="botones"><i class="fa-solid fa-circle-plus"></i> Crear un proyecto</a>
             </div>
             <?php if (isset($informacion)) { ?>
                 <div class="alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
@@ -60,15 +60,16 @@
                             <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
                         <?php } ?>
                         <div class="informacion-proyecto">
-                            <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
+                            <h3>Proyecto: <?php echo $p["nombre_proyecto"] ?></h3>
                             <?php if ($p["editable"] == 1) { ?>
                                 <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
+                                <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "0" ?></p>
                                 <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
                                 <div class="botones-proyecto">
                                     <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                     <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
                                 <?php } else { ?>
-                                    <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                                    <p id="texto-personal">Este es tu proyecto personal se usa por defecto y no se puede borrar</p>
                                 <?php } ?>
                             </div>
                         </div>

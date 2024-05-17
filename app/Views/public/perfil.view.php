@@ -41,38 +41,68 @@
         <main>
             <div id="introduccion">
                 <h1><?php echo $titulo ?></h1>
-                <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
-                    <a href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones">Editar</a>
-                <?php } else { ?>
-                    <a href="/proyectos" class="botones">Volver</a>
-                <?php } ?>
             </div>
             <div id="contenido-principal">
                 <div id="imagen-editar">
                     <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
+                    <div id="informacion-adicional">
+                        <p><i class="fa-solid fa-cake-candles"></i> <?php
+                            setlocale(LC_TIME, 'es_ES.UTF-8');
+                            $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
+                            echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
+                            ?></p>
+                        <p><i class="fa-solid fa-user-plus"></i> <?php
+                            setlocale(LC_TIME, 'es_ES.UTF-8');
+                            $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
+                            echo strftime("%e de %B", $fechaUsuario->getTimestamp())
+                            ?></p>
+                        <p>Color favorito: <span style="background-color: <?php echo $usuario["valor_color"] ?>" class="color-circulo"></span> <?php echo $usuario["nombre_color"] ?></p>
+                    </div>
                 </div>
                 <div id="informacion-usuario">
-                    <h2 class="apartados-inicio">Tus datos</h2>
-                    <p>Tu nombre de usuario es: <?php echo $usuario["username"] ?></p>
-                    <p>Tu correo electrónico es: <?php echo $usuario["email"] ?></p>
-                    <p>Tu fecha de nacimiento es: <?php echo $usuario["fecha_nacimiento"] ?></p>
-                    <p>Tu color favorito es: <span style="background-color: <?php echo $usuario["valor_color"] ?>" class="color-circulo"></span> <?php echo $usuario["nombre_color"] ?></p>
+                    <h2 class="apartados-inicio">Hola, <?php echo $usuario["username"] ?></h2>
+                    <p>Tu correo electrónico es: <?php echo $usuario["email"] ?></p>                   
                     <?php if ($usuario["descripcion_usuario"] != "") { ?>
-                        <p>Tu descripción es: <?php echo $usuario["descripcion_usuario"]; ?></p>
+                        <p>Tu descripción es:</p> 
+                        <p><?php echo $usuario["descripcion_usuario"]; ?></p>
                     <?php } else { ?>
                         <p>No tienes una descripción</p>
                     <?php } ?>
-                    <h2 class="apartados-inicio">Estadísticas</h2>
-                    <p>Tienes las siguientes estadísticas:</p>
-                    <div id="contenedor-estadisticas-usuario">
-                        <div class="estadistica-usuario">
-                            <p>Proyectos</p>
-                            <p><?php echo $proyecto ?></p>
+                    <div id="estadistica-usuario-apartado">
+                        <h2 class="apartados-inicio">Estadísticas</h2>
+                        <div id="contenedor-estadisticas-usuario">
+                            <div class="estadistica-usuario">
+                                <p>Eres propietario de </p>
+                                <p> <?php echo $proyectoPropietario ?> proyectos</p>
+                            </div>
+                            <div class="estadistica-usuario">
+                                <p>Eres propietario de </p>
+                                <p> <?php echo $tareaPropietario ?> tareas</p>
+                            </div>
+
+                            <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>">
+                                <p>Tienes </p>
+                                <p> <?php echo count($tareasPendientes) ?> tareas pendiente</p>
+                            </div>
+
+                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>">
+                                <p>Tienes </p>
+                                <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
+                            </div>
+
+                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>">
+                                <p>Tienes </p>
+                                <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
+                            </div>
                         </div>
-                        <div class="estadistica-usuario">
-                            <p>Tareas</p>
-                            <p><?php echo $tarea ?></p>
-                        </div>
+                    </div>
+                    <div id="informacion-pie">
+                        <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
+                        <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                            <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+                        <?php } else { ?>
+                            <a id="boton-editar" href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

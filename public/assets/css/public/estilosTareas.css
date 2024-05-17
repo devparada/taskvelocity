@@ -1,8 +1,4 @@
 /*Hoja de estilos utilizada en tareas */
-#introduccion h1 {
-    margin-left: 4em;
-}
-
 #boton-crear {
     margin-top: 16px;
 }
@@ -87,6 +83,11 @@
 
 .botones-filtros {
     background-color: var(--color-secundario-complementario);
+}
+
+.enlace-imagen-perfil-tarea {
+    color:black;
+    font-weight: bold;
 }
 
 .botones-tareas {

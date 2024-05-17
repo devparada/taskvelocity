@@ -1,49 +1,115 @@
 /*Hoja de estilos utilizada en perfil */
+input, textarea {
+    border-radius: 20px;
+    border: 1px var(--color-secundario-principal) solid;
+    padding: 6px;
+}
+
 .apartados-inicio {
+    font-size: 32px;
     margin-bottom: 16px;
 }
 
 #contenido-principal {
     display: flex;
+    width: 100%;
     justify-content: center;
     column-gap: 30px;
 }
 
+#contenido-principal form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 #imagen-perfil {
-    width: 70%;
+    width: 50%;
     border-radius: 50px;
 }
 
 #imagen-editar {
     display: flex;
+    width: 20%;
     align-items: center;
     flex-direction: column;
 }
 
+#informacion-adicional {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#informacion-adicional > p {
+    line-height: 2em;
+}
+
 #informacion-usuario {
+    display: flex;
+    width: 20%;
+    flex-direction: column;
+}
+
+#informacion-usuario-formulario {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#informacion-usuario > form {
+#informacion-usuario-formulario > form {
     width: 20%;
 }
 
 #informacion-usuario > p {
     margin-bottom: 16px;
+    line-height: 1em;
+    text-align: left;
 }
 
 #contenedor-estadisticas-usuario {
     display: flex;
+    flex-wrap: wrap;
     column-gap: 20px;
 }
 
 .estadistica-usuario {
+    margin-top: 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: var(--color-secundario-complementario);
     padding: 16px;
     border-radius: 20px;
+}
+
+.estadistica-usuario-contraste > p {
+    color: black;
+}
+
+#estadistica-usuario-apartado {
+    display: flex;
+    flex-direction: column;
+}
+
+.botones {
+    padding-left: 26px;
+    padding-right: 26px;
+}
+
+#boton-borrar {
+    background-color: #c0392b;
+}
+
+#informacion-pie {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#informacion-pie-editar {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
 }

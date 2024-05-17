@@ -21,7 +21,7 @@
     cursor: pointer;
 }
 
-.proyectos p, .proyectos a {
+.proyectos a {
     margin-left: 16px;
     margin-bottom: 6px;
 }

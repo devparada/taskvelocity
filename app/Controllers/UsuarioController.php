@@ -277,11 +277,18 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data['proyecto'] = $modeloProyecto->contadorPorUsuario($idUsuario);
+        $data["proyectoPropietario"] = $modeloProyecto->contadorPorUsuarioPropietario($idUsuario);
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $data['tarea'] = $modeloTarea->contadorPorUsuario($idUsuario);
+        $data["tareaPropietario"] = $modeloTarea->contadorPorUsuarioPropietario($idUsuario);
 
+        $data["tareasPendientes"] = $modeloTarea->contadorTareasPorEtiqueta("1");
+        $data["tareasProgresos"] = $modeloTarea->contadorTareasPorEtiqueta("2");
+        $data["tareasFinalizadas"] = $modeloTarea->contadorTareasPorEtiqueta("3");
+
+        $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
+        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
+        
         $data["idUsuario"] = $idUsuario;
 
         $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);

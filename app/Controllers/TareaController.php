@@ -292,6 +292,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
                 $data["etiquetas"] = $modeloEiqueta->mostrarEtiquetas();
 
+                $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+                $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
                 $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
@@ -351,6 +354,10 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             } if (!$modeloUsuario->comprobarUsuarios($data["id_usuarios_asociados"])) {
                 $errores["id_usuarios_asociados"] = "Algún usuario asociado no existe";
             }
+        }
+
+        if (!empty($data["descripcion_tarea"]) && strlen($data["descripcion_tarea"]) > 255) {
+            $errores["descripcion_tarea"] = "La descripción es muy larga";
         }
 
         return $errores;

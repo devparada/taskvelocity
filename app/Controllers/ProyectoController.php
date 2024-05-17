@@ -24,7 +24,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-
+       
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
@@ -393,6 +393,10 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             if (!$modeloUsuario->comprobarUsuarios($data["usuarios_asociados"])) {
                 $errores["usuarios_asociados"] = "Algún usuario no existe";
             }
+        }
+
+        if (!empty($data["descripcion_proyecto"]) && strlen($data["descripcion_proyecto"]) > 255) {
+            $errores["descripcion_proyecto"] = "La descripción es muy larga";
         }
 
         return $errores;

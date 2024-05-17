@@ -16,7 +16,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $stmt = $this->pdo->query(self::baseConsulta . "GROUP BY ut.id_tareaTAsoc");
         } else {
-            $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc");
+            $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta "
+                    . "WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc "
+                    . "ORDER BY ta.id_etiqueta, fecha_limite_tarea ASC");
 
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
@@ -78,6 +80,15 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $grupos = $this->agruparPorTarea($datosFinal);
 
         return $grupos;
+    }
+
+    public function contadorTareasPorEtiqueta(string $idEtiqueta): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
+                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
+
+        $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
+
+        return $stmt->fetchAll();
     }
 
     private function mostrarUsernamesTarea(array $usuariosTareas): array {
@@ -254,9 +265,14 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function contadorPorUsuario(int $idUsuario): int {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
-                . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
-                . "ON ta.id_tarea=ut.id_tareaTAsoc WHERE us.id_usuario = ?");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta LEFT JOIN usuarios_tareas ut "
+                . "ON ta.id_tarea=ut.id_tareaTAsoc WHERE ut.id_usuarioTAsoc = ?");
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetchColumn();
+    }
+
+    public function contadorPorUsuarioPropietario(int $idUsuario): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta WHERE ta.id_usuario_tarea_prop = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }

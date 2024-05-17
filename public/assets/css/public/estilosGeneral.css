@@ -75,7 +75,7 @@ nav ul li a {
 #logo {
     display: flex;
     align-items: center;
-    width: 300px;
+    width: 310px;
 }
 
 #logo h2 {
@@ -85,7 +85,7 @@ nav ul li a {
 #perfil-cerrar {
     display: flex;
     align-items: center;
-    width: 300px;
+    width: 310px;
 }
 
 #perfil {
@@ -126,6 +126,14 @@ input, select, option, textarea {
     align-items: center;
     justify-content: space-between;
     margin: 16px;
+}
+
+#introduccion h1 {
+    width: 186px;
+}
+
+#introduccion a {
+    width: 186px;
 }
 
 .apartados {
@@ -173,7 +181,8 @@ input, select, option, textarea {
 }
 
 .enlace-imagen-perfil {
-    color: var(--color-secundario-principal);
+    color: white;
+    font-weight: bold;
 }
 
 /* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */

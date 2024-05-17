@@ -11,7 +11,7 @@
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
-        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosPerfil.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosFormularios.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
@@ -51,7 +51,6 @@
                         <div class="campo-formulario">
                             <label for="nombre_tarea">Nombre del tarea <span class="campo-obligatorio">*</span></label>
                             <input type="text" id="nombre_tarea" name="nombre_tarea" placeholder="Introduzca el nombre de la tarea" size="26" value="<?php echo isset($datos["nombre_tarea"]) ? $datos["nombre_tarea"] : "" ?>">
-                            <p class="texto-error"><?php echo isset($errores["nombre_tarea"]) ? $errores["nombre_tarea"] : "" ?></p>
                         </div>
 
                         <div class="campo-formulario">
@@ -63,9 +62,11 @@
                                             <?php echo (!isset($datos["id_etiqueta"])) && $etiqueta["id_etiqueta"] == 1 ? "selected" : "" ?> <?php echo (isset($datos["id_etiqueta"]) && $datos["id_etiqueta"] == $etiqueta["id_etiqueta"]) ? "selected" : "" ?> ><?php echo $etiqueta["nombre_etiqueta"]; ?></option>
                                         <?php } ?>
                             </select>
-                            <p class="texto-error"><?php echo isset($errores["id_etiqueta"]) ? $errores["id_etiqueta"] : "" ?></p>
                         </div>
                     </div>
+                    <p class="texto-error"><?php echo isset($errores["nombre_tarea"]) ? $errores["nombre_tarea"] : "" ?></p>
+                    <p class="texto-error"><?php echo isset($errores["id_etiqueta"]) ? $errores["id_etiqueta"] : "" ?></p>
+
 
                     <div class="campo-formulario">
                         <label for="imagen_tarea">Imagen</label>
@@ -76,7 +77,6 @@
                         <div class="campo-formulario">
                             <label for="fecha_limite_tarea">Fecha límite</label>
                             <input type="date" id="fecha_limite_tarea" name="fecha_limite_tarea" value="<?php echo isset($datos["fecha_limite_tarea"]) ? $datos["fecha_limite_tarea"] : "" ?>">
-                            <p class="texto-error"><?php echo isset($errores["fecha_limite_tarea"]) ? $errores["fecha_limite_tarea"] : "" ?></p>
                         </div>
 
                         <div class="campo-formulario">
@@ -96,9 +96,10 @@
                                     ?>><?php echo $usuario["username"]; ?></option>
                                         <?php } ?>
                             </select>
-                            <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
-                        </div>                                            
+                        </div>                                 
                     </div>
+                    <p class="texto-error"><?php echo isset($errores["fecha_limite_tarea"]) ? $errores["fecha_limite_tarea"] : "" ?></p>
+                    <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
 
                     <div class="campo-formulario-grupo">
                         <div class="campo-formulario">
@@ -110,7 +111,6 @@
                                             <?php echo (!isset($datos["id_color_tarea"]) && $color["id_color"] == $_SESSION["usuario"]["id_color_favorito"]) ? "selected" : "" ?> <?php echo (isset($datos["id_color_tarea"]) && $datos["id_color_tarea"] == $color["id_color"]) ? "selected" : "" ?>><?php echo $color["simbolo_color"] . " " . $color["nombre_color"]; ?></option>
                                         <?php } ?>
                             </select>
-                            <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>
                         </div>
 
                         <div class="campo-formulario">
@@ -128,9 +128,10 @@
                                     ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
                                         <?php } ?>
                             </select>
-                            <p class="texto-error"><?php echo isset($errores["id_proyecto_asociado"]) ? $errores["id_proyecto_asociado"] : "" ?></p>
                         </div>
                     </div>
+                    <p class="texto-error"><?php echo isset($errores["id_color_tarea"]) ? $errores["id_color_tarea"] : "" ?></p>
+                    <p class="texto-error"><?php echo isset($errores["id_proyecto_asociado"]) ? $errores["id_proyecto_asociado"] : "" ?></p>
 
                     <div class="campo-formulario">
                         <label for="descripcion_tarea">Descripción de la tarea</label>

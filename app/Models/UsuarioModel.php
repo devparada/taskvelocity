@@ -6,22 +6,27 @@ namespace Com\TaskVelocity\Models;
 
 class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
 
+    /**
+     * Consulta base para algunos métodos de esta clase
+     */
+    private const baseConsulta = "SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color ";
+
     public function mostrarUsuarios(): array {
-        $stmt = $this->pdo->query("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color");
+        $stmt = $this->pdo->query(self::baseConsulta);
         return $stmt->fetchAll();
     }
 
     public function mostrarUsuariosFormulario(): array {
-        $stmt = $this->pdo->query("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
+        $stmt = $this->pdo->query(self::baseConsulta . "WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
         return $stmt->fetchAll();
     }
 
     public function buscarUsuarioPorId(int $idUsuario): ?array {
-        $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE id_usuario = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
 
         $usuarioEncontrado = $stmt->fetch();
-        
+
         if ($usuarioEncontrado) {
             return $usuarioEncontrado;
         } else {
@@ -30,7 +35,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function buscarUsuarioPorUsername(string $username): ?array {
-        $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE username = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE username = ?");
         $stmt->execute([$username]);
 
         $usuarioEncontrado = $stmt->fetch();
@@ -43,7 +48,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function buscarUsuarioPorEmail(string $email): ?array {
-        $stmt = $this->pdo->prepare("SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color WHERE email = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE email = ?");
         $stmt->execute([$email]);
 
         $usuarioEncontrado = $stmt->fetch();
@@ -127,8 +132,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
         if (is_null($contrasena)) {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
-                    . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?,"
-                    . "descripcion_usuario=?, id_color_favorito=? "
+                    . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?, descripcion_usuario=?, id_color_favorito=? "
                     . "WHERE id_usuario=?");
             if (!$stmt->execute([$username, $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor, $idUsuario])) {
                 return false;

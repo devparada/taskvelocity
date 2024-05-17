@@ -45,12 +45,12 @@
             <div id="introduccion">
                 <h1>Tus tareas</h1>
                 <div>
-                    <?php foreach ($etiquetas as $etiqueta) { ?>
+                        <?php foreach ($etiquetas as $etiqueta) { ?>
                         <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
-                    <?php } ?>
+                        <?php } ?>
                     <a class="botones botones-filtros" href="/tareas">Mostrar todas</a>
                 </div>
-                <a href="/tareas/crear" class="botones">Crear una tarea</a>
+                <a href="/tareas/crear" class="botones"><i class="fa-solid fa-circle-plus"></i> Crear una tarea</a>
             </div>
             <?php if (isset($informacion)) { ?>
                 <div class="alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
@@ -80,14 +80,14 @@
                                 <?php } ?>
                                 <div class="informacion-tarea">
                                     <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
-                                    <p>Etiqueta: <?php echo $value[$i]["nombre_etiqueta"] ?></p>
+                                    <p><span class="color-circulo" style="background-color: <?php echo $value[$i]["color_etiqueta"] ?>"></span> <?php echo $value[$i]["nombre_etiqueta"] ?></p>
                                     <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
                                     <p>Miembros:</p><p><?php
                                         foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
                                             foreach ($usuarios as $u) {
                                                 if ($u["username"] == $nombreUsuario) {
                                                     ?>
-                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
+                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil-tarea"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
                                                     <?php
                                                 }
                                             }
