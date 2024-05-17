@@ -44,6 +44,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["titulo"] = "Ver proyecto $idProyecto";
             $data["tituloDiv"] = "Ver proyecto $idProyecto";
             $data["seccion"] = "/admin/proyectos/view/$idProyecto";
+        } else {
+            $data["seccion"] = "/proyectos/ver/$idProyecto";
         }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
@@ -56,6 +58,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+            $data["todasTareas"] = $modeloTarea->mostrarTareas();
+
             $data["usuarios"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
 
             $data["modoVer"] = true;

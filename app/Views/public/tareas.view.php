@@ -74,16 +74,27 @@
                             <div class="tarjetas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
                                 <?php
                                 $idTarea = $value[$i]["id_tarea"];
-                                (file_exists("./assets/img/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
-                                if (file_exists("./assets/img/tareas/tarea-$idTarea.$extension")) {
+                                if (file_exists("./assets/img/tareas/tarea-$idTarea")) {
                                     ?>
-                                    <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>.jpg" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
+                                    <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
                                 <?php } ?>
                                 <div class="informacion-tarea">
-                                    <p>Tarea: <?php echo $value[$i]["nombre_tarea"] ?></p>
+                                    <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
                                     <p>Etiqueta: <?php echo $value[$i]["nombre_etiqueta"] ?></p>
                                     <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
+                                    <p>Miembros:</p><p><?php
+                                        foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
+                                            foreach ($usuarios as $u) {
+                                                if ($u["username"] == $nombreUsuario) {
+                                                    ?>
+                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
+                                                    <?php
+                                                }
+                                            }
+                                        }
+                                        ?></p>
                                     <p>Propietario: <?php echo isset($value[$i]["id_usuario_tarea_prop"]) && ($value[$i]["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $value[$i]["username"] ?></p>
+                                    <p class="descripcion-tarea"><?php echo ($value[$i]["descripcion_tarea"] == "") ? "No tiene descripción" : $value[$i]["descripcion_tarea"] ?></p>
                                     <div class="botones-tareas">
                                         <a href="/tareas/editar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                                         <a href="/tareas/borrar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
@@ -99,21 +110,10 @@
 
             <script>
                 const contenedorTarjetas = document.getElementById("tareas-grid");
-                const tarjetas = document.getElementsByClassName("tarjetas");
-
-                for (var i = 0; i < tarjetas.length; i++) {
-                    (function (i) {
-                        // Al hacer click en la tarjeta va a la siguiente url
-                        tarjetas[i].addEventListener("click", function () {
-                            window.location.href = "/tareas/ver/" + tarjetas[i].id;
-                        });
-                    })(i);
-                }
 
                 var inicialX, offsetX;
 
                 contenedorTarjetas.addEventListener("mousedown", function (evento) {
-                    evento.preventDefault();
                     // Guarda la posición inicial del ratón y la posición inicial del elemento
                     inicialX = evento.clientX;
                     offsetX = contenedorTarjetas.scrollLeft;

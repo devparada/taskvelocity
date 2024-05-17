@@ -1,14 +1,4 @@
 /*Hoja de estilos utilizada en tareas */
-@keyframes ampliarReducir {
-    10%, 70% {
-        transform: scale(1.0);
-    }
-
-    40%, 90% {
-        transform: scale(0.8);
-    }
-}
-
 #introduccion h1 {
     margin-left: 4em;
 }
@@ -38,24 +28,21 @@
 
 .tarjetas {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     margin: 16px;
     border-radius: 20px;
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 90px;
-    padding-right: 90px;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
     align-content: center;
-    cursor: pointer;
-}
-
-.tarjetas:hover {
-    animation: 0.9s ampliarReducir 1;
+    align-items: center;
 }
 
 .imagen-proyecto {
-    width: 75%;
+    width: 300px;
     border-radius: 20px;
 }
 
@@ -79,12 +66,18 @@
     color: black;
 }
 
+.tarea-titulo {
+    color: black;
+    margin-top: 2px;
+    margin-bottom: 10px;
+}
+
 .informacion-tarea {
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 6px;
-    width: 14em;
+    width: 16em;
 }
 
 .informacion-tarea p {
@@ -113,4 +106,14 @@
     padding-bottom: 10px;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+.imagen-perfil-pequena {
+    width: 20px;
+    border-radius: 25px;
+    margin-right: 6px;
+}
+
+.descripcion-tarea {
+    word-wrap: break-word;
 }

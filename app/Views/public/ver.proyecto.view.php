@@ -9,6 +9,10 @@
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectosVer.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosVer.css">
+        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosFormularios.css">
+        <!-- Select 2 -->
+        <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
+        <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->  
@@ -47,18 +51,36 @@
             <div class="proyectos">
                 <?php
                 $idProyecto = $proyecto["id_proyecto"];
-                (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
-                if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
+                if (file_exists("./assets/img/proyectos/proyecto-$idProyecto")) {
                     ?>
                     <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto">
-                    <p>Descripción del proyecto: </p>
-                    <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <p id="fecha-limite">Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
+                    <div id="anadirTareaProyecto">
+                        <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
+                            <div class="campo-formulario">
+                                <label for="id_tareas_asociadas[]">Añade una tarea al proyecto</label>
+                                <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas[]" data-placeholder="Selecciona una tarea" multiple>
+                                    <option value=""></option>
+                                    <?php foreach ($todasTareas as $tarea) { ?>
+                                        <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <div class="campo-formulario">
+                                <input type="submit" value="Enviar" name="enviar" class="botones">
+                            </div>
+                        </form>
+                        <script src="plugins/jquery/jquery.min.js"></script>
+                        <!-- Select2 -->
+                        <script src="plugins/select2/js/select2.full.min.js"></script>
+                        <script src="assets/js/admin/pages/main.js"></script>
+                    </div>
                     <div id="titulo-tabla">
                         <p>Tareas del proyecto</p>
-                        <a href="/proyectos/addTareasProyecto/<?php echo $proyecto["id_proyecto"] ?>" class="botones">Añadir tarea</a>
                     </div>
                     <?php if (!empty($tareas)) { ?>
                         <table id="tabla-tareas">
@@ -78,12 +100,12 @@
                     <?php } else { ?>
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
-                    <p>Miembros: <?php
-                        foreach ($usuarios as $u) {
-                            echo "<img src='/assets/img/usuarios/avatar-" . $u["id_usuario"] . "' class='imagen-perfil-pequena'>" . $u["username"] . " ";
-                        }
+                    <p>Miembros: <?php foreach ($usuarios as $u) { ?>
+                            <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                        <?php }
                         ?></p>
-                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
+                    <p>Descripción del proyecto: </p>
+                    <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <?php if ($proyecto["editable"] == 1) { ?>
                         <div class="botones-proyecto">
                             <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
@@ -97,6 +119,10 @@
                     <?php } ?>
                 </div>
             </div>
+            <script src="plugins/jquery/jquery.min.js"></script>
+            <!-- Select2 -->
+            <script src="plugins/select2/js/select2.full.min.js"></script>
+            <script src="assets/js/admin/pages/main.js"></script>
 
             <script src="assets/js/public/fechasTareasProyectosVer.js"></script>
         </main> <!-- Continua en plantillas/footer -->

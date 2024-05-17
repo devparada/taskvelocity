@@ -136,7 +136,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function mostrarTareasPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
-                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_proyecto = ?");
+                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_proyecto = ? ORDER BY ta.id_etiqueta ASC");
         $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
     }
@@ -160,7 +160,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             }
 
             if (!empty($_FILES["imagen_tarea"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
             }
 
@@ -213,7 +213,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             }
 
             if (!empty($_FILES["imagen_tarea"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->actualizarImagen("tareas", "tarea", $idTarea);
             }
 
@@ -267,7 +267,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!is_null($this->buscarTareaPorId($idTarea))) {
             $stmt = $this->pdo->prepare("DELETE FROM tareas WHERE id_tarea = ?");
             $stmt->execute([$idTarea]);
-            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
             if (!$modeloFiles->buscarImagen("tareas", "tarea", $idTarea) || $modeloFiles->eliminarImagen("tareas", "tarea", $idTarea)) {
                 $modeloLog = new \Com\TaskVelocity\Models\LogModel();
                 $modeloLog->crearLog("Eliminada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);

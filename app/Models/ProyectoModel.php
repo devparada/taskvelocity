@@ -106,7 +106,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             }
 
             if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
 
@@ -179,7 +179,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             }
 
             if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->actualizarImagen("proyectos", "proyecto", (int) $idProyecto);
             }
 
@@ -232,7 +232,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!is_null($this->buscarProyectoPorId($idProyecto)) && $this->buscarProyectoPorId($idProyecto)["editable"] == 1) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);
-            $modeloFiles = new \Com\TaskVelocity\Models\FilesModel();
+            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
             if (!$modeloFiles->buscarImagen("proyectos", "proyecto", $idProyecto) || $modeloFiles->eliminarImagen("proyectos", "proyecto", $idProyecto)) {
                 $modeloLog = new \Com\TaskVelocity\Models\LogModel();
                 $modeloLog->crearLog("Eliminado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);

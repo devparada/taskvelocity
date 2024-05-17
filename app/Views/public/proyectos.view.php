@@ -52,33 +52,40 @@
             <?php } ?>
             <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
-                    <?php
-                    $idProyecto = $p["id_proyecto"];
-                    (file_exists("./assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
-                    if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.$extension")) {
-                        ?>
-                        <div class="proyectos">
+                    <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">
+                        <?php
+                        $idProyecto = $p["id_proyecto"];
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto")) {
+                            ?>
                             <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
-                        <?php } else { ?>
-                            <div class="proyectos-sin-imagen">
-                            <?php } ?>
-                            <div class="informacion-proyecto">
-                                <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
-                                <?php if ($p["editable"] == 1) { ?>
-                                    <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
-                                    <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
-                                    <div class="botones-proyecto">
-                                        <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                                        <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                                    <?php } else { ?>
-                                        <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
-                                        <div class="botones-proyecto">
-                                        <?php } ?>
-                                        <a href="/proyectos/ver/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-expand"></i> Más detalles</a>
-                                    </div>
-                                </div>
-                            </div>
                         <?php } ?>
+                        <div class="informacion-proyecto">
+                            <p>Nombre del proyecto: <?php echo $p["nombre_proyecto"] ?></p>
+                            <?php if ($p["editable"] == 1) { ?>
+                                <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
+                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
+                                <div class="botones-proyecto">
+                                    <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                    <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                <?php } else { ?>
+                                    <p id="texto-personal">Este es tu proyecto personal no lo puedes borrar</p>
+                                <?php } ?>
+                            </div>
+                        </div>
                     </div>
-                    <script src="assets/js/public/fechasTareasProyectos.js"></script>
-                    </main> <!-- Continua en plantillas/footer -->
+                <?php } ?>
+            </div>
+            <script src="assets/js/public/fechasTareasProyectos.js"></script>
+            <script>
+                const proyectos = document.getElementsByClassName("proyectos");
+
+                for (var i = 0; i < proyectos.length; i++) {
+                    (function (i) {
+                        // Al hacer click en el proyecto va a la siguiente url
+                        proyectos[i].addEventListener("click", function () {
+                            window.location.href = "/proyectos/ver/" + proyectos[i].id;
+                        });
+                    })(i);
+                }
+            </script>
+        </main> <!-- Continua en plantillas/footer -->

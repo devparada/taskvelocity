@@ -209,6 +209,13 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/proyectos/ver/([0-9]+)',
+                    function ($idProyecto) {
+                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                        $controlador->procesarAddTareasProyecto($idProyecto);
+                    }
+                    , 'post');
+
             Route::add('/proyectos/crear',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
@@ -237,20 +244,6 @@ class FrontController {
                     }
                     , 'post');
 
-            Route::add('/proyectos/addTareasProyecto/([0-9]+)',
-                    function ($idProyecto) {
-                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
-                        $controlador->mostrarAddTareasProyecto($idProyecto);
-                    }
-                    , 'get');
-
-            Route::add('/proyectos/addTareasProyecto/([0-9]+)',
-                    function ($idProyecto) {
-                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
-                        $controlador->procesarAddTareasProyecto($idProyecto);
-                    }
-                    , 'post');
-
             Route::add('/proyectos/borrar/([0-9]+)',
                     function ($idProyecto) {
                         $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
@@ -262,13 +255,6 @@ class FrontController {
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
                         $controlador->mostrarTareas();
-                    }
-                    , 'get');
-
-            Route::add('/tareas/ver/([0-9]+)',
-                    function ($idTarea) {
-                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
-                        $controlador->verTarea($idTarea);
                     }
                     , 'get');
 

@@ -27,6 +27,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEiqueta->mostrarEtiquetas();
 
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
         if ($_SESSION["usuario"]["id_rol"] == 1) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
@@ -290,47 +293,6 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data["etiquetas"] = $modeloEiqueta->mostrarEtiquetas();
 
                 $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
-            }
-        } else {
-            header("location: /tareas");
-        }
-    }
-
-    /**
-     * Mustra la información de una tarea específicada a partir del id específicado
-     * @param int $idTarea el id de la tarea
-     * @return void
-     * */
-    public function verTarea(int $idTarea): void {
-        $data = [];
-
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $data["titulo"] = "Ver tarea $idTarea";
-            $data["tituloDiv"] = "Ver tarea $idTarea";
-            $data["seccion"] = "/admin/tareas/view/$idTarea";
-        }
-
-        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
-
-        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
-            $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
-            $data["tarea"] = $data["datos"];
-            $data["usuarios"] = $modeloTarea->mostrarUsuariosPorTarea($idTarea);
-
-            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-            $data["colores"] = $modeloColor->mostrarColores();
-
-            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-            $data["proyectos"] = $modeloProyecto->mostrarProyectos();
-
-            $data["modoVer"] = true;
-            $data["idTarea"] = $idTarea;
-
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
-                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
-            } else {
-                $this->view->showViews(array('public/ver.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
             header("location: /tareas");

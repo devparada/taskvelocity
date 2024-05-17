@@ -147,6 +147,7 @@ input, select, option, textarea {
     border: var(--color-secundario-complementario);
     text-align: center;
     transition: background-color 1s;
+    color: white;
 }
 
 .botones :hover {
@@ -169,6 +170,10 @@ input, select, option, textarea {
     padding-bottom: 1px;
     margin-right: 6px;
     margin-left: 6px;
+}
+
+.enlace-imagen-perfil {
+    color: var(--color-secundario-principal);
 }
 
 /* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */

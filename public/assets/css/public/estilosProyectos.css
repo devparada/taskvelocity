@@ -11,27 +11,25 @@
     column-gap: 5px;
 }
 
-.proyectos, .proyectos-sin-imagen {
+.proyectos {
     display: flex;
+    justify-content: center;
     border: 1px var(--color-secundario-principal) solid;
     border-radius: 20px;
     margin-top: 16px;
     padding: 16px;
+    cursor: pointer;
 }
 
-.proyectos-sin-imagen {
-    justify-content: center;
-}
-
-.proyectos p, .proyectos a, .proyectos-sin-imagen p, .proyectos-sin-imagen a {
+.proyectos p, .proyectos a {
     margin-left: 16px;
     margin-bottom: 6px;
-    color: white;
 }
 
-.proyectos p, .proyectos-sin-imagen p {
+.proyectos p {
     padding: 6px;
 }
+
 .informacion-proyecto {
     display: flex;
     flex-direction: column;
