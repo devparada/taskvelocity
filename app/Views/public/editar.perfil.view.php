@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Editando tu perfil</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
@@ -49,11 +49,13 @@
             <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
                 <div id="imagen-editar">
                     <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
-                    <p>Editar avatar <span class="campo-obligatorio">*</span></p>
-                    <input type="file" id="imagen_avatar" name="imagen_avatar">
-                    <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                    <div id="editar-avatar">
+                        <p>Editar avatar</p>
+                        <input type="file" id="imagen_avatar" name="imagen_avatar">
+                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                    </div>
                     <div id="informacion-adicional">
-                        <p><i class="fa-solid fa-cake-candles"></i><span class="campo-obligatorio">*</span>
+                        <p><i class="fa-solid fa-cake-candles"></i>
                             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
                             <?php
                             ?></p>
@@ -65,7 +67,7 @@
                             ?></p>
                     </div>
                 </div>
-                <div id="informacion-usuario">
+                <div id="informacion-usuario-editar">
                     <h2 class="apartados-inicio">Hola, <?php echo $datos["username"] ?></h2>
                     <p>Correo electrónico <span class="campo-obligatorio">*</span></p>
                     <input type="email" id="email" name="email" placeholder="Introduce un nuevo email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" autocomplete="email">

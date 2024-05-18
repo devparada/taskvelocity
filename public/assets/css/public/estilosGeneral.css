@@ -84,6 +84,7 @@ nav ul li a {
 
 #perfil-cerrar {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     width: 310px;
 }
@@ -183,6 +184,12 @@ input, select, option, textarea {
 .enlace-imagen-perfil {
     color: white;
     font-weight: bold;
+}
+
+.imagen-perfil-pequena {
+    width: 20px;
+    border-radius: 25px;
+    margin-right: 6px;
 }
 
 /* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */

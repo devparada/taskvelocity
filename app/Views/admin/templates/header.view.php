@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <base href="/">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Admin</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -51,8 +51,7 @@
                             <img src="assets/img/usuarios/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/usuarios/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
                         </div>
                         <div class="info">
-                            <a href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/admin/profile/' . $_SESSION['usuario']['id_usuario'] : ''; ?>"
-                               class="d-block"> <?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?> </a>    
+                            <p><?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?></p>
                         </div>
 
                     </div>
@@ -70,21 +69,6 @@
                             }
                             ?>
                         </a>        
-                    </li>
-
-                    <!-- Navbar Search -->
-                    <li class="nav-item">
-                        <?php /*
-                         * echo isset($_COOKIE['dark']) ?
-                          '<a class="nav-link" href="/light" role="button">
-                          <i class="text fas fa-sun"></i>
-                          </a>
-                          </li>' :
-                          '   <a class="nav-link" href="/dark" role="button">
-                          <i class="text fas fa-moon"></i>
-                          </a>
-                          </li>';
-                         */ ?>
                     </li>
                 </ul>
             </nav>

@@ -6,6 +6,9 @@ namespace Com\TaskVelocity\Models;
 
 class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
+    /**
+     * Consulta base para los métodos que recogen datos
+     */
     private const baseConsulta = "SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p "
             . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
             . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
@@ -27,9 +30,13 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $datosFinal = $this->recogerNombresUsuarios($datos);
 
-        $grupos = $this->agruparPorTarea($datosFinal);
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            return $datosFinal;
+        } else {
+            $grupos = $this->agruparPorTarea($datosFinal);
 
-        return $grupos;
+            return $grupos;
+        }
     }
 
     private function recogerNombresUsuarios(array $datos) {

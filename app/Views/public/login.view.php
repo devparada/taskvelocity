@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Login</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -33,7 +33,7 @@
                     <p class="login-box-msg">Iniciar sesión</p>
                     <form action="/login" method="post">
                         <div class="input-group mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo isset($email) ? $email : ''; ?>">
+                            <input type="text" name="emailUsername" id="emailUsername" class="form-control" placeholder="Email o username" value="<?php echo isset($emailUsername) ? $emailUsername : ''; ?>">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-user"></span>
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" name="password" placeholder="Contraseña">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Contraseña">
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-lock"></span>

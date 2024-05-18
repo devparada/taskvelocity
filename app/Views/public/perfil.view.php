@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Tu perfil</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosPerfil.css">
@@ -46,11 +46,13 @@
                 <div id="imagen-editar">
                     <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
                     <div id="informacion-adicional">
-                        <p><i class="fa-solid fa-cake-candles"></i> <?php
-                            setlocale(LC_TIME, 'es_ES.UTF-8');
-                            $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
-                            echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
-                            ?></p>
+                        <?php if ($usuario["fecha_nacimiento"]) { ?>
+                            <p><i class="fa-solid fa-cake-candles"></i> <?php
+                                setlocale(LC_TIME, 'es_ES.UTF-8');
+                                $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
+                                echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
+                                ?></p>
+                        <?php } ?>
                         <p><i class="fa-solid fa-user-plus"></i> <?php
                             setlocale(LC_TIME, 'es_ES.UTF-8');
                             $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
@@ -82,7 +84,7 @@
 
                             <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>">
                                 <p>Tienes </p>
-                                <p> <?php echo count($tareasPendientes) ?> tareas pendiente</p>
+                                <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
                             </div>
 
                             <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>">
@@ -96,13 +98,16 @@
                             </div>
                         </div>
                     </div>
-                    <div id="informacion-pie">
-                        <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
-                        <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
-                            <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
-                        <?php } else { ?>
-                            <a id="boton-editar" href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                        <?php } ?>
+                    <div id="informacion-pie-contenedor">
+                        <h2>Opciones</h2>
+                        <div id="informacion-pie">
+                            <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                                <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
+                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+                            <?php } else { ?>
+                                <a id="boton-editar" href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
             </div>

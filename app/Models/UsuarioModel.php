@@ -27,11 +27,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $usuarioEncontrado = $stmt->fetch();
 
-        if ($usuarioEncontrado) {
-            return $usuarioEncontrado;
-        } else {
-            return null;
-        }
+        return ($usuarioEncontrado) ? $usuarioEncontrado : null;
     }
 
     public function buscarUsuarioPorUsername(string $username): ?array {
@@ -40,11 +36,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $usuarioEncontrado = $stmt->fetch();
 
-        if ($usuarioEncontrado) {
-            return $usuarioEncontrado;
-        } else {
-            return null;
-        }
+        return ($usuarioEncontrado) ? $usuarioEncontrado : null;
     }
 
     public function buscarUsuarioPorEmail(string $email): ?array {
@@ -53,24 +45,24 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $usuarioEncontrado = $stmt->fetch();
 
-        if ($usuarioEncontrado) {
-            return $usuarioEncontrado;
-        } else {
-            return null;
-        }
+        return ($usuarioEncontrado) ? $usuarioEncontrado : null;
     }
 
     /**
      * Comprueba si los datos introducidos en el login existen en un usuario y hace login en caso afirmativo
-     * @param string $email El email introducido
+     * @param string $emailUsername El email o username introducido
      * @param string $password La contraseña introducida
      * @return bool Retorna true si se hace el login o false si no
      */
-    public function procesarLogin(string $email, string $password): bool {
-        $usuarioEncontrado = $this->buscarUsuarioPorEmail($email);
+    public function procesarLogin(string $emailUsername, string $password): bool {
+        if (str_contains($emailUsername, "@")) {
+            $usuarioEncontrado = $this->buscarUsuarioPorEmail($emailUsername);
+        } else {
+            $usuarioEncontrado = $this->buscarUsuarioPorUsername($emailUsername);
+        }
 
         if (!is_null($usuarioEncontrado)) {
-            if ($email == $usuarioEncontrado["email"] && password_verify($password, $usuarioEncontrado["password"])) {
+            if ($emailUsername == $usuarioEncontrado["email"] || $emailUsername == $usuarioEncontrado["username"] && password_verify($password, $usuarioEncontrado["password"])) {
                 $this->actualizarFechaLogin($usuarioEncontrado["id_usuario"]);
                 return true;
             }
@@ -94,9 +86,13 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @param string $idColor el id del color
      * @return bool Devuelve true si se añade correctamente o false si no
      */
-    public function addUsuario(string $username, string $contrasena, string $email, $idRol, string $fechaNacimiento, ?string $descripcionUsuario, string $idColor): bool {
+    public function addUsuario(string $username, string $contrasena, string $email, $idRol, ?string $fechaNacimiento, ?string $descripcionUsuario, string $idColor): bool {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios (username, password, email, id_rol, fecha_nacimiento, fecha_login, 
-            descripcion_usuario, id_color_favorito) VALUES (?, ?, ?, ?, ?, NULL, ?, ?)");
+            descripcion_usuario, id_color_favorito, fecha_usuario_creado) VALUES (?, ?, ?, ?, ?, NULL, ?, ?, current_timestamp())");
+
+        if ($fechaNacimiento == "") {
+            $fechaNacimiento = null;
+        }
 
         if ($stmt->execute([$username, password_hash($contrasena, '2y'), $email, $idRol, $fechaNacimiento, $descripcionUsuario, $idColor],)) {
             $idUsuario = $this->pdo->lastInsertId();

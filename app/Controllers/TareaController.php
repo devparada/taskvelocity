@@ -6,12 +6,17 @@ namespace Com\TaskVelocity\Controllers;
 
 class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
-    private const MB = 1048576;
+    private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     public function mostrarTareas(): void {
         $data = [];
-        $data['titulo'] = 'Todas las tareas';
-        $data['seccion'] = '/admin/tareas';
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+            $data['titulo'] = 'Todas las tareas';
+            $data['seccion'] = '/admin/tareas';
+        } else {
+            $data['titulo'] = 'Tus tareas';
+            $data['seccion'] = '/tareas';
+        }
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
@@ -30,7 +35,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -40,7 +45,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     public function mostrarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir tareas';
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/tareas/add';
             $data['tituloDiv'] = 'Añadir tarea';
         } else {
@@ -59,7 +64,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -69,7 +74,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     public function procesarAdd() {
         $data = [];
         $data['titulo'] = 'Añadir tareas';
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/tareas/add';
             $data['tituloDiv'] = 'Añadir tarea';
         } else {
@@ -117,7 +122,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
             if ($modeloTarea->addTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"])) {
-                if ($_SESSION["usuario"]["id_rol"] == 1) {
+                if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     header("location: /admin/tareas");
                 } else {
                     header("location: /tareas");
@@ -126,7 +131,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $data["errores"] = $errores;
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -142,7 +147,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     private function comprobarUsuarioMiembros(?array $miembros): bool {
         if (!is_null($miembros)) {
             foreach ($miembros as $persona) {
-                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == 1) {
+                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     return true;
                 }
             }
@@ -205,7 +210,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     public function procesarEdit(int $idTarea): void {
         $data = [];
         $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/tareas/edit';
             $data['tituloDiv'] = 'Editar tarea';
         } else {
@@ -246,7 +251,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             if (empty($errores)) {
                 if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"], $idTarea)) {
-                    if ($_SESSION["usuario"]["id_rol"] == 1) {
+                    if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                         header("location: /admin/tareas");
                     } else {
                         header("location: /tareas");
@@ -286,7 +291,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             $data['tareas'] = $modeloTarea->mostrarTareas();
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
@@ -296,6 +301,49 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
                 $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
+            }
+        } else {
+            header("location: /tareas");
+        }
+    }
+
+    /**
+     * Mustra la información de una tarea específicada a partir del id específicado
+     * @param int $idTarea el id de la tarea
+     * @return void
+     * */
+    public function verTarea(int $idTarea): void {
+        $data = [];
+
+        if ($_SESSION["usuario"]["id_rol"] == 1) {
+            $data["titulo"] = "Ver tarea $idTarea";
+            $data["tituloDiv"] = "Ver tarea $idTarea";
+            $data["seccion"] = "/admin/tareas/view/$idTarea";
+        }
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
+
+        $data["modoVer"] = true;
+
+        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
+            $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
+            $data["tarea"] = $data["datos"];
+            $data["usuarios"] = $modeloTarea->mostrarUsuariosPorTarea($idTarea);
+
+            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+            $data["colores"] = $modeloColor->mostrarColores();
+
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+            $data["proyectos"] = $modeloProyecto->mostrarProyectos();
+
+            $data["modoVer"] = true;
+            $data["idTarea"] = $idTarea;
+
+            if ($_SESSION["usuario"]["id_rol"] == 1) {
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->show('public/ver.tarea.view.php', $data);
             }
         } else {
             header("location: /tareas");
@@ -325,7 +373,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $errores["imagen_tarea"] = "Tipo de imagen no aceptado";
             } else if (getimagesize($_FILES["imagen_tarea"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_tarea"]["tmp_name"])[1] > 1624) {
                 $errores["imagen_tarea"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1624";
-            } else if ($_FILES["imagen_tarea"]["size"] > 20 * self::MB) {
+            } else if ($_FILES["imagen_tarea"]["size"] > 20 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_tarea"] = "Imagen demasiada pesada";
             }
         }

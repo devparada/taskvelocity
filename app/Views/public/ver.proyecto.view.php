@@ -3,7 +3,8 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
-        <title>TaskVelocity | Proyecto <?php echo $proyecto["nombre_proyecto"]; ?></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">

@@ -4,10 +4,14 @@ namespace Com\TaskVelocity\Controllers;
 
 class InicioController extends \Com\TaskVelocity\Core\BaseController {
 
+    /**
+     * Muestra el inicio de Administración
+     * @return void
+     */
     public function indexAdmin(): void {
         $data = array(
-            'titulo' => 'Página de inicio',
-            'seccion' => '/admin',
+            "titulo" => "Inicio admin",
+            "seccion" => "/admin",
         );
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
@@ -25,8 +29,14 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/inicio.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
+    /**
+     * Muestra el inicio de los usuarios
+     * @return void
+     */
     public function index(): void {
-        $data = [];
+        $data = array(
+            "titulo" => "Inicio"
+        );
 
         $this->view->showViews(array('public/inicio.view.php', 'public/plantillas/footer.view.php'), $data);
     }

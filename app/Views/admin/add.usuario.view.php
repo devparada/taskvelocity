@@ -11,7 +11,7 @@
                 <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
                     <div class="row">
                         <div class="mb-3 col-sm-4">
-                            <label for="username">Nombre de usuario *</label>
+                            <label for="username">Nombre de usuario <span class="campo-obligatorio">*</span></label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Introduzca un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['username']) ? $errores['username'] : ''; ?></p>
                         </div>
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="mb-3 col-sm-3">
-                            <label for="id_rol">Rol *</label>
+                            <label for="id_rol">Rol <span class="campo-obligatorio">*</span></label>
                             <select class="form-control" id="id_rol" name="id_rol" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value="">Selecciona un rol</option>
                                 <?php foreach ($roles as $rol) { ?>
@@ -34,25 +34,25 @@
                         </div>
 
                         <div class="mb-3 col-sm-4">
-                            <label for="email">Email *</label>
+                            <label for="email">Email <span class="campo-obligatorio">*</span></label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Introduzca un email" autocomplete="email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['email']) ? $errores['email'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-4">
-                            <label for="contrasena">Contraseña *</label>
+                            <label for="contrasena">Contraseña <span class="campo-obligatorio">*</span></label>
                             <input type="password" class="form-control" id="contrasena" name="contrasena" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['contrasena']) ? $errores['contrasena'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-4">
-                            <label for="confirmarContrasena">Confirmar contraseña *</label>
+                            <label for="confirmarContrasena">Confirmar contraseña <span class="campo-obligatorio">*</span></label>
                             <input type="password" class="form-control" id="confirmarContrasena" name="confirmarContrasena" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['confirmarContrasena']) ? $errores['confirmarContrasena'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">
-                            <label for="fecha_nacimiento">Fecha de nacimiento *</label>
+                            <label for="fecha_nacimiento">Fecha de nacimiento</label>
                             <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['fecha_nacimiento']) ? $errores['fecha_nacimiento'] : ''; ?></p>
                         </div>
@@ -60,7 +60,6 @@
                         <div class="mb-3 col-sm-3">
                             <label for="id_color">Color favorito</label>
                             <select class="form-control" id="id_color" name="id_color"  <?php echo isset($modoVer) ? "disabled" : "" ?>>
-                                <option value="">Selecciona un color</option>
                                 <?php foreach ($colores as $color) { ?>
                                     <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color"]) && $color["id_color"] == $datos["id_color"] ? "selected" : "" ?>><?php echo $color["nombre_color"]; ?></option>
                                 <?php } ?>
@@ -75,8 +74,9 @@
                         </div>
 
                         <div class="col-12 text-right">
-                            <?php
-                            if (!isset($modoVer)) {
+                            <?php if (isset($modoEdit) && !$modoEdit) { ?>
+                                <input type="submit" value="Añadir usuario" name="enviar" class="btn btn-primary"/>
+                            <?php } else if (!isset($modoVer)) {
                                 ?>
                                 <input type="submit" value="Enviar" name="enviar" class="btn btn-primary"/>
                                 <a href="/admin/usuarios" class="btn btn-danger ml-3">Cancelar</a>

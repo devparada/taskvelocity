@@ -1,8 +1,20 @@
 /*Hoja de estilos utilizada en perfil */
+#introduccion {
+    justify-content: center;
+}
+
+#introduccion h1 {
+    width: unset;
+}
+
 input, textarea {
     border-radius: 20px;
     border: 1px var(--color-secundario-principal) solid;
     padding: 6px;
+}
+
+label, input, textarea {
+    text-align: center;
 }
 
 .apartados-inicio {
@@ -46,7 +58,7 @@ input, textarea {
     line-height: 2em;
 }
 
-#informacion-usuario {
+#informacion-usuario, #informacion-usuario-editar {
     display: flex;
     width: 20%;
     flex-direction: column;
@@ -62,14 +74,18 @@ input, textarea {
     width: 20%;
 }
 
-#informacion-usuario > p {
+#informacion-usuario > p, #informacion-usuario-editar > p {
     margin-bottom: 16px;
     line-height: 1em;
+}
+
+#informacion-usuario {
     text-align: left;
 }
 
 #contenedor-estadisticas-usuario {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     column-gap: 20px;
 }
@@ -102,6 +118,10 @@ input, textarea {
     background-color: #c0392b;
 }
 
+#informacion-pie-contenedor {
+    margin-top: 20px;
+}
+
 #informacion-pie {
     margin-top: 16px;
     display: flex;
@@ -112,4 +132,13 @@ input, textarea {
     margin-top: 16px;
     display: flex;
     justify-content: center;
+}
+
+#editar-avatar {
+    margin-top: 16px;
+    text-align: center;
+}
+
+#informacion-usuario-editar {
+    text-align: center;
 }

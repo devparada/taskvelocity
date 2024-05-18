@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | 404</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosError.css">
@@ -28,14 +28,18 @@
                     <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
-            <div id="perfil-cerrar">
-                <div id="perfil">
-                    <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
-                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
-                        <p><?php echo $_SESSION["usuario"]["username"] ?></p>
-                    </a>
-                </div>
-                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            <?php if (isset($_SESSION["usuario"])) { ?>
+                <div id="perfil-cerrar">
+                    <div id="perfil">
+                        <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                            <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                            <p><?php echo $_SESSION["usuario"]["username"] ?></p>
+                        </a>
+                    </div>
+                    <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                <?php } else { ?>
+                    <a href="/login" class="botones">Iniciar sesión</a>
+                <?php } ?>
             </div>
         </header>
         <main>

@@ -6,10 +6,7 @@ namespace Com\TaskVelocity\Controllers;
 
 class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
-    /**
-     * El valor de 1MB en bytes
-     */
-    private const MB = 1048576;
+    private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     /**
      * Muestra la información de los proyectos
@@ -17,15 +14,21 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function mostrarProyectos(): void {
         $data = [];
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todos los proyectos';
             $data['seccion'] = '/admin/proyectos';
+        } else {
+            $data["titulo"] = "Tus proyectos";
+            $data["seccion"] = "/proyectos";
         }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-       
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -40,12 +43,13 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     public function verProyecto(int $idProyecto): void {
         $data = [];
 
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data["titulo"] = "Ver proyecto $idProyecto";
             $data["tituloDiv"] = "Ver proyecto $idProyecto";
             $data["seccion"] = "/admin/proyectos/view/$idProyecto";
         } else {
             $data["seccion"] = "/proyectos/ver/$idProyecto";
+            $data["titulo"] = "Ver proyecto";
         }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
@@ -65,7 +69,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["modoVer"] = true;
             $data["idProyecto"] = $idProyecto;
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/ver.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -82,7 +86,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     public function mostrarAdd(): void {
         $data = [];
         $data['titulo'] = 'Añadir proyecto';
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/proyectos/add';
             $data['tituloDiv'] = 'Añadir proyecto';
         } else {
@@ -92,7 +96,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -106,7 +110,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     public function procesarAdd(): void {
         $data = [];
         $data['titulo'] = 'Añadir proyecto';
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/proyectos/add';
             $data['tituloDiv'] = 'Añadir proyecto';
         } else {
@@ -135,7 +139,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
             if ($modeloProyecto->addProyecto($datos["nombre_proyecto"], $datos["descripcion_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"])) {
-                if ($_SESSION["usuario"]["id_rol"] == 1) {
+                if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     header("location: /admin/proyectos");
                 } else {
                     header("location: /proyectos");
@@ -147,7 +151,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -163,7 +167,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     private function comprobarUsuarioMiembros(?array $miembros): bool {
         if (!is_null($miembros)) {
             foreach ($miembros as $persona) {
-                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == 1) {
+                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     return true;
                 }
             }
@@ -188,10 +192,12 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
+            $data["modoEdit"] = true;
+
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
-                $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
+                $data['tituloDiv'] = 'Editar proyecto con el id ' . $idProyecto;
                 $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
-                $data['tituloDiv'] = 'Editar proyecto';
+                $data['titulo'] = 'Editar proyecto ' . $idProyecto;
 
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
@@ -213,9 +219,9 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     public function procesarEdit(int $idProyecto): void {
         $data = [];
         $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['seccion'] = '/admin/proyectos/edit';
-            $data['tituloDiv'] = 'Editar proyecto';
+            $data['tituloDiv'] = 'Editar proyecto ' . $idProyecto;
         } else {
             $data['seccion'] = '/proyectos/editar';
         }
@@ -245,7 +251,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             if (empty($errores)) {
                 if ($modeloProyecto->editProyecto($datos["nombre_proyecto"], $datos["fecha_limite_proyecto"], $datos["id_usuarios_asociados"], $datos["descripcion_proyecto"], $idProyecto)) {
-                    if ($_SESSION["usuario"]["id_rol"] == 1) {
+                    if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                         header("location: /admin/proyectos");
                     } else {
                         header("location: /proyectos");
@@ -254,7 +260,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             } else {
                 $data["errores"] = $errores;
 
-                if ($_SESSION["usuario"]["id_rol"] == 1) {
+                if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
                 } else {
                     $this->view->showViews(array('public/crear.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -308,16 +314,17 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $proyectoEncontrado = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
 
         if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
             if ($modeloProyecto->deleteProyecto($idProyecto)) {
                 $data["informacion"]["estado"] = "success";
-                $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " ha sido eliminado correctamente";
+                $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " ha sido eliminado correctamente";
             } else {
                 $data["informacion"]["estado"] = "danger";
-                $data["informacion"]["texto"] = "El proyecto con el id " . $idProyecto . " no ha sido eliminado correctamente";
+                $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " no ha sido eliminado correctamente";
             }
 
 
@@ -326,7 +333,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -375,7 +382,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
             } else if (getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[1] > 1624) {
                 $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1624";
-            } else if ($_FILES["imagen_proyecto"]["size"] > 10 * self::MB) {
+            } else if ($_FILES["imagen_proyecto"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_proyecto"] = "Imagen demasiada pesada";
             }
         }

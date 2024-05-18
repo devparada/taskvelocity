@@ -3,7 +3,8 @@
     <head>
         <base href="/">
         <meta charset="UTF-8">
-        <title>TaskVelocity | Tus proyectos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>TaskVelocity | <?php echo $titulo ?></title>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
@@ -55,15 +56,22 @@
                     <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">
                         <?php
                         $idProyecto = $p["id_proyecto"];
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto")) {
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
                             ?>
                             <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
                         <?php } ?>
                         <div class="informacion-proyecto">
-                            <h3>Proyecto: <?php echo $p["nombre_proyecto"] ?></h3>
+                            <h3><?php echo $p["nombre_proyecto"] ?></h3>
                             <?php if ($p["editable"] == 1) { ?>
                                 <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
-                                <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "0" ?></p>
+                                <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
+                                <p><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
+                                        <?php foreach ($usuarios as $u) { ?>
+                                            <?php if ($u["username"] == $nombreUsuario) { ?>
+                                                <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?php } ?></p>
                                 <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
                                 <div class="botones-proyecto">
                                     <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>

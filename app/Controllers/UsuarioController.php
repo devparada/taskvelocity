@@ -6,7 +6,8 @@ namespace Com\TaskVelocity\Controllers;
 
 class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
-    private const MB = 1048576;
+    public const ROL_ADMIN = 1;
+    public const ROL_USUARIO = 2;
 
     public function mostrarUsuarios() {
         $data = [];
@@ -21,33 +22,39 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarLogin() {
         $data = [];
+        $data["titulo"] = "Login";
 
         $this->view->show('public/login.view.php', $data);
     }
 
-    public function procesarLogin() {
+    public function procesarLogin(): void {
         $data = [];
+        $data["titulo"] = "Login";
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        if ($modeloUsuario->procesarLogin($datos["email"], $datos["password"]) && !empty($datos["email"]) && !empty($datos["password"])) {
-            $this->crearLogin($datos["email"]);
+        if ($modeloUsuario->procesarLogin($datos["emailUsername"], $datos["password"]) && !empty($datos["emailUsername"]) && !empty($datos["password"])) {
+            $this->crearLogin($datos["emailUsername"]);
         } else {
             $data["loginError"] = "Datos incorrectos";
             $this->view->show('public/login.view.php', $data);
         }
     }
 
-    private function crearLogin(string $email): void {
+    private function crearLogin(string $emailUsername): void {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($email);
+        if (str_contains($emailUsername, "@")) {
+            $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorEmail($emailUsername);
+        } else {
+            $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorUsername($emailUsername);
+        }
 
         $_SESSION["usuario"] = $usuarioEncontrado;
         $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
 
-        if ($usuarioEncontrado["id_rol"] == 1) {
+        if ($usuarioEncontrado["id_rol"] == self::ROL_ADMIN) {
             header("location: /admin");
         } else {
             header("location: /proyectos");
@@ -56,6 +63,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarRegister() {
         $data = [];
+        $data["titulo"] = "Register";
 
         $modeloColores = new \Com\TaskVelocity\Models\ColorModel();
         $data["colores"] = $modeloColores->mostrarColores();
@@ -86,7 +94,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarAddUsuario(): void {
         $data = [];
-        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == 1) {
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
             $data['titulo'] = 'Añadir usuario';
             $data['seccion'] = '/admin/usuarios/add';
             $data['tituloDiv'] = 'Añadir usuario';
@@ -106,13 +114,13 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($errores)) {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = 1) {
+            if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = self::ROL_ADMIN) {
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
                     header("location: /admin/usuarios");
                 }
             } else {
                 // El 2 es el id de rol del usuario (cuando se registra el usuario se añade el id de rol 2 que es usuario)
-                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], 2, $datos["fecha_nacimiento"], "", $datos["id_color"])) {
+                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], self::ROL_USUARIO, $datos["fecha_nacimiento"], "", $datos["id_color"])) {
                     $this->crearLogin($datos["email"]);
                     header("location: /proyectos");
                 }
@@ -136,9 +144,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarEdit(int $idUsuario) {
         $data = [];
-        $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-        $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
-        $data['tituloDiv'] = 'Editar usuario';
+
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
+            $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
+            $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
+            $data['tituloDiv'] = 'Editar usuario';
+            $data["titulo"] = "Editando tu perfil";
+        } else {
+            $data["titulo"] = "Editando tu perfil";
+            $data['seccion'] = '/perfil/editar/' . $idUsuario;
+        }
+
 
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
@@ -149,9 +165,18 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
+        $data["idUsuario"] = $idUsuario;
         $data["modoEdit"] = true;
 
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+        if (!empty($_SESSION["usuario"]) && ($_SESSION["usuario"]["id_usuario"] == $idUsuario || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN)) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
+                $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
+            } else {
+                $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+            }
+        } else {
+            header("location: /");
+        }
     }
 
     /**
@@ -161,7 +186,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarEdit(int $idUsuario): void {
         $data = [];
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
             $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
             $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
             $data['tituloDiv'] = 'Editar usuario';
@@ -173,7 +198,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         unset($_POST["enviar"]);
 
-// Si id_color está vacio se añade el 1 que es el color por defecto
+        // Si id_color está vacio se añade el 1 que es el color por defecto
         if ($_POST["id_color"] == "") {
             $_POST["id_color"] = "1";
         }
@@ -192,17 +217,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($errores)) {
             if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
-// Si está vacío se actualiza el usuario sin cambiar la contraseña
+                // Si está vacío se actualiza el usuario sin cambiar la contraseña
                 if (empty($datos["contrasena"])) {
                     if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                        if ($_SESSION["usuario"]["id_rol"] == 1) {
+                        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
                             header("location: /admin/usuarios");
                         } else {
                             header("location: /perfil/" . $idUsuario);
                         }
                     }
                 } else if ($modeloUsuario->editUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
-                    if ($_SESSION["usuario"]["id_rol"] == 1) {
+                    if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
                         header("location: /admin/usuarios");
                     } else {
                         header("location: /perfil/" . $idUsuario);
@@ -220,7 +245,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
             $data["errores"] = $errores;
 
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -228,11 +253,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    public function verUsuario(int $idUsuario): void {
+    public function verUsuarioAdmin(int $idUsuario): void {
         $data = [];
-        $data['titulo'] = 'Ver usuario con el id ' . $idUsuario;
+        $data['titulo'] = 'Ver usuario ' . $idUsuario;
         $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;
-        $data['tituloDiv'] = 'Ver usuario';
+        $data['tituloDiv'] = 'Mostrando datos del usuario ' . $idUsuario;
 
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
@@ -251,13 +276,20 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+
+        if (!is_null($usuarioEncontrado)) {
+            $nombreUsuario = $usuarioEncontrado["username"];
+        } else {
+            $nombreUsuario = "con el id " . $idUsuario;
+        }
 
         if ($modeloUsuario->deleteUsuario($idUsuario)) {
             $data["informacion"]["estado"] = "success";
-            $data["informacion"]["texto"] = "El usuario con el id " . $idUsuario . " ha sido eliminado correctamente";
+            $data["informacion"]["texto"] = "El usuario ha sido eliminado correctamente";
         } else {
             $data["informacion"]["estado"] = "danger";
-            $data["informacion"]["texto"] = "El usuario con el id " . $idUsuario . " no ha sido eliminado correctamente";
+            $data["informacion"]["texto"] = "El usuario no ha sido eliminado correctamente";
         }
 
         $data['titulo'] = 'Todos los usuarios';
@@ -270,8 +302,13 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarPerfil(int $idUsuario): void {
         $data = [];
-        $data['titulo'] = 'Tu perfil';
         $data['seccion'] = '/perfil/' . $idUsuario;
+        if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+            $data["titulo"] = "Tu perfil";
+        } else {
+            $data["titulo"] = "Perfil $idUsuario";
+        }
+
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
@@ -288,32 +325,10 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
-        
+
         $data["idUsuario"] = $idUsuario;
 
         $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
-    }
-
-    public function mostrarPerfilEditar(int $idUsuario): void {
-        $data = [];
-        $data['titulo'] = 'Tu perfil';
-        $data['seccion'] = '/perfil/editar/' . $idUsuario;
-        $data["tituloDiv"] = "Editando tus datos";
-
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data['datos'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
-
-        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColor->mostrarColores();
-
-        $data["idUsuario"] = $idUsuario;
-        $data["modoEdit"] = true;
-
-        if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
-            $this->view->showViews(array('public/editar.perfil.view.php', 'public/plantillas/footer.view.php'), $data);
-        } else {
-            header("location: /");
-        }
     }
 
     private function comprobarComun(array $data): array {
@@ -321,7 +336,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $dimensionesAvatar = 256;
 
@@ -336,7 +350,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                 $errores["imagen_avatar"] = "Tipo de imagen no aceptado";
             } else if (getimagesize($_FILES["imagen_avatar"]["tmp_name"])[0] > $dimensionesAvatar || getimagesize($_FILES["imagen_avatar"]["tmp_name"])[1] > $dimensionesAvatar) {
                 $errores["imagen_avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
-            } else if ($_FILES["imagen_avatar"]["size"] > 10 * self::MB) {
+            } else if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
         }
@@ -347,7 +361,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $errores["email"] = "El email debe ser un email válido";
         }
 
-        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == 1) {
+        if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == self::ROL_ADMIN) {
             if (empty($data["id_rol"])) {
                 $errores["id_rol"] = "Debes seleccionar un rol";
             } else if (!filter_var($data["id_rol"], FILTER_VALIDATE_INT)) {
@@ -357,13 +371,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             }
         }
 
-        if (empty($data["fecha_nacimiento"])) {
-            $errores["fecha_nacimiento"] = "La fecha de nacimiento no debe estar vacía";
-        } else if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
+        if (!empty($data["fecha_nacimiento"]) && !preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_nacimiento"])) {
             $errores["fecha_nacimiento"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
         }
 
-        if (!filter_var($data["id_color"], FILTER_VALIDATE_INT)) {
+        if (!$modeloColor->comprobarColorNumero($data["id_color"])) {
             $errores["id_color"] = "El color debe ser un número";
         } else if (!empty($data["id_color"]) && !$modeloColor->comprobarColor($data["id_color"])) {
             $errores["id_color"] = "Debes seleccionar un color válido";
@@ -444,14 +456,14 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         );
 
         switch ($idRol) {
-            case 1:
+            case self::ROL_ADMIN:
                 $permisos["inicio"] = "rwd";
                 $permisos["usuarios"] = "rwd";
                 $permisos["tareas"] = "rwd";
                 $permisos["proyectos"] = "rwd";
                 $permisos["logs"] = "rwd";
                 break;
-            case 2:
+            case self::ROL_USUARIO:
                 $permisos["inicio"] = "";
                 $permisos["usuarios"] = "";
                 $permisos["tareas"] = "";

@@ -6,17 +6,26 @@ namespace Com\TaskVelocity\Models;
 
 class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
+    /**
+     * Consulta base para los métodos que recogen datos
+     */
+    private const baseConsulta = "SELECT *, COUNT(id_usuarioPAsoc), COUNT(id_proyecto) FROM proyectos pr LEFT JOIN usuarios us "
+            . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
+            . "ON pr.id_proyecto = up.id_proyectoPAsoc ";
+
+    /**
+     * Consulta base cuándo se cuentan los proyectos de un usuario
+     */
+    private const contadorConsulta = "SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
+            . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
+            . " ON up.id_usuarioPAsoc = u.id_usuario ";
+
     public function mostrarProyectos(): array {
         if ($_SESSION["usuario"]["id_rol"] == 1) {
-            $stmt = $this->pdo->query("SELECT *, COUNT(id_usuarioPAsoc), COUNT(id_proyecto) FROM proyectos pr LEFT JOIN usuarios us "
-                    . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
-                    . "ON pr.id_proyecto = up.id_proyectoPAsoc GROUP BY up.id_proyectoPAsoc "
+            $stmt = $this->pdo->query(self::baseConsulta . " GROUP BY up.id_proyectoPAsoc "
                     . "ORDER BY pr.id_proyecto desc");
         } else {
-            $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us "
-                    . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
-                    . "ON pr.id_proyecto = up.id_proyectoPAsoc "
-                    . "WHERE id_usuario_proyecto_prop = ? "
+            $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
                     . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
                     . "ORDER BY pr.id_proyecto desc");
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
@@ -69,9 +78,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null los datos del proyecto si lo encontra o null si no lo encuentra
      */
     public function buscarProyectoPorId(int $idProyecto): ?array {
-        $stmt = $this->pdo->prepare("SELECT *, COUNT(id_usuarioPAsoc) FROM proyectos pr LEFT JOIN usuarios us"
-                . " ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up"
-                . " ON pr.id_proyecto = up.id_proyectoPAsoc WHERE id_proyecto = ? GROUP BY up.id_proyectoPAsoc");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_proyecto = ? GROUP BY up.id_proyectoPAsoc");
         $stmt->execute([$idProyecto]);
 
         $proyectoEncontrado = $stmt->fetch();
@@ -141,7 +148,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         return (int) $idProyectoPersonal;
     }
 
-    private function addProyectoUsuarios(array $idUsuarios, string $idProyecto): void {
+    private function addProyectoUsuarios(array $idUsuarios, int $idProyecto): void {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                     . "(id_usuarioPAsoc, id_proyectoPAsoc) "
@@ -218,17 +225,13 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function contadorPorUsuario(int $idUsuario): int {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
-                . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
-                . " ON up.id_usuarioPAsoc = u.id_usuario WHERE id_usuario = ?");
+        $stmt = $this->pdo->prepare(self::contadorConsulta . "WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }
 
     public function contadorPorUsuarioPropietario(int $idUsuario): int {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
-                . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
-                . " ON up.id_usuarioPAsoc = u.id_usuario WHERE pr.id_usuario_proyecto_prop = ?");
+        $stmt = $this->pdo->prepare(self::contadorConsulta . "WHERE pr.id_usuario_proyecto_prop = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }

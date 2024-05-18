@@ -17,4 +17,12 @@ class ColorModel extends \Com\TaskVelocity\Core\BaseModel {
 
         return ($stmt->fetch()) ? true : false;
     }
+
+    public function comprobarColorNumero(string $idColor): bool {
+        if (filter_var($idColor, FILTER_VALIDATE_INT)) {
+            return true;
+        }
+        die();
+        return false;
+    }
 }

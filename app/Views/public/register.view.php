@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Register</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -72,11 +72,6 @@
                             </div>
                         </div>
                         <p class="text-danger text-center"><?php echo isset($errores["confirmarContrasena"]) ? $errores["confirmarContrasena"] : "" ?></p>
-
-                        <div class="input-group mb-3">
-                            <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
-                        </div>
-                        <p class="text-danger text-center"><?php echo isset($errores["fecha_nacimiento"]) ? $errores["fecha_nacimiento"] : "" ?></p>
 
                         <div class="input-group mb-3">
                             <select class="form-control" name="id_color" id="id_color">

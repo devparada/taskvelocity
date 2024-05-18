@@ -1,6 +1,6 @@
-/* Personaliza todos los enlaces a */
-a {
-    text-decoration: none;
+/* Centra el texto en forma vertical de las celdas de las tablas */
+.table td {
+    vertical-align: baseline;
 }
 
 /* Personaliza el icono y nombre del usuario del header */
@@ -9,9 +9,8 @@ a {
     align-items: center;
 }
 
-/* Centra el texto en forma vertical de las celdas de las tablas */
-.table td {
-    vertical-align: baseline;
+.user-panel-personalizado p {
+    margin-bottom: 0;
 }
 
 /* Hace las imágenes con un tamaño predeterminado y más pequeñas */
@@ -48,4 +47,8 @@ a {
 
 .footer-personalizado {
     color: white;
+}
+
+.dark-mode .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+    color: black;
 }

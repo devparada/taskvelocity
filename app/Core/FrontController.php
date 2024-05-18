@@ -30,7 +30,7 @@ class FrontController {
                 Route::add('/admin/usuarios/view/([0-9]+)',
                         function ($idUsuario) {
                             $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                            $controlador->verUsuario($idUsuario);
+                            $controlador->verUsuarioAdmin($idUsuario);
                         }
                         , 'get');
             }
@@ -303,7 +303,7 @@ class FrontController {
             Route::add('/perfil/editar/([0-9]+)',
                     function ($idProyecto) {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                        $controlador->mostrarPerfilEditar($idProyecto);
+                        $controlador->mostrarEdit($idProyecto);
                     }
                     , 'get');
 

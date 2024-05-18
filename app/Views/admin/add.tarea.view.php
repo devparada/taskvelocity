@@ -87,13 +87,14 @@
                         </div>
 
                         <div class="col-12 text-right">
-                            <?php
-                            if (!isset($modoVer)) {
+                            <?php if (isset($modoEdit) && !$modoEdit) { ?>
+                                <input type="submit" value="Añadir tarea" name="enviar" class="btn btn-primary"/>
+                            <?php } else if (!isset($modoVer)) {
                                 ?>
                                 <input type="submit" value="Enviar" name="enviar" class="btn btn-primary"/>
-                                <a href="/admin/tareas" class="btn btn-danger ml-3">Cancelar</a>
+                                <a href="/admin/usuarios" class="btn btn-danger ml-3">Cancelar</a>
                             <?php } else { ?>
-                                <a href="/admin/tareas" class="btn btn-danger ml-3">Volver</a>
+                                <a href="/admin/usuarios" class="btn btn-danger ml-3">Volver</a>
                             <?php } ?>
                         </div>
                     </div>

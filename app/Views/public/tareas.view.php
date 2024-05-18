@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Tus tareas</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareas.css">
@@ -74,7 +74,7 @@
                             <div class="tarjetas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
                                 <?php
                                 $idTarea = $value[$i]["id_tarea"];
-                                if (file_exists("./assets/img/tareas/tarea-$idTarea")) {
+                                if (file_exists("./assets/img/tareas/tarea-$idTarea.jpg")) {
                                     ?>
                                     <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
                                 <?php } ?>
@@ -82,7 +82,7 @@
                                     <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
                                     <p><span class="color-circulo" style="background-color: <?php echo $value[$i]["color_etiqueta"] ?>"></span> <?php echo $value[$i]["nombre_etiqueta"] ?></p>
                                     <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
-                                    <p>Miembros:</p><p><?php
+                                    <p><?php
                                         foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
                                             foreach ($usuarios as $u) {
                                                 if ($u["username"] == $nombreUsuario) {

@@ -4,7 +4,7 @@
         <base href="/">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>TaskVelocity | Inicio</title>
+        <title><?php echo $titulo ?> | TaskVelocity</title>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosInicio.css">
@@ -28,9 +28,9 @@
                     <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
-            <?php if (isset($_SESSION["usuario"])) { ?>
-                <div id="perfil-cerrar">
-                    <div id="perfil">
+            <div id="perfil-cerrar">
+                <div id="perfil">
+                    <?php if (isset($_SESSION["usuario"])) { ?>
                         <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
                             <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                             <p><?php echo $_SESSION["usuario"]["username"] ?></p>
@@ -41,38 +41,39 @@
                     <a href="/login" class="botones">Iniciar sesión</a>
                 <?php } ?>
             </div>
-        </header>
-        <main>
-            <div id="main-introduccion">
-                <h1 class="apartados apartados-inicio">TaskVelocity</h1>
-                <p>TaskVelocity es una aplicación web que es un gestor de tareas y proyectos veloz.</p>
-                <p>Con solo crear una cuenta tienes acceso a este gestor de tareas y proyectos.</p>
-            </div>
-            <div id="div-caracteristicas">
-                <h2 class="apartados apartados-inicio">Características</h2>
-                <p>Tiene las siguientes caracteristicas:</p>
-                <div id="main-caracteristicas">
-                    <div class="imagen-caracteristicas">
-                        <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
-                    </div>
-                    <div id="caracteristica-proyectos" class="caracteristicas-texto">
-                        <p>Un gestor de proyectos veloz donde ver todos los proyectos, 
-                            añadir una fecha límite y una imagen y añadir más miembros para trabajar en compañia</p>
-                    </div>
-                    <div id="caracteristica-tareas" class="caracteristicas-texto">
-                        <p>Un gestor de tareas que pueden tener distinto color las tareas según lo prefiera el usuario, una fecha límite, un proyecto asociado
-                            y una imagen y añadir a más personas para trabjar juntos</p>
-                    </div>
-                    <div class="imagen-caracteristicas">
-                        <img src="assets/img/ejemplo-tareas.png" alt="Ejemplo Tareas"></img>
-                    </div>
+        </div>
+    </header>
+    <main>
+        <div id="main-introduccion">
+            <h1 class="apartados apartados-inicio">TaskVelocity</h1>
+            <p>TaskVelocity es una aplicación web que es un gestor de tareas y proyectos veloz.</p>
+            <p>Con solo crear una cuenta tienes acceso a este gestor de tareas y proyectos.</p>
+        </div>
+        <div id="div-caracteristicas">
+            <h2 class="apartados apartados-inicio">Características</h2>
+            <p>Tiene las siguientes caracteristicas:</p>
+            <div id="main-caracteristicas">
+                <div class="imagen-caracteristicas">
+                    <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
+                </div>
+                <div id="caracteristica-proyectos" class="caracteristicas-texto">
+                    <p>Un gestor de proyectos veloz donde ver todos los proyectos, 
+                        añadir una fecha límite y una imagen y añadir más miembros para trabajar en compañia</p>
+                </div>
+                <div id="caracteristica-tareas" class="caracteristicas-texto">
+                    <p>Un gestor de tareas que pueden tener distinto color las tareas según lo prefiera el usuario, una fecha límite, un proyecto asociado
+                        y una imagen y añadir a más personas para trabjar juntos</p>
+                </div>
+                <div class="imagen-caracteristicas">
+                    <img src="assets/img/ejemplo-tareas.png" alt="Ejemplo Tareas"></img>
+                </div>
 
-                    <div class="imagen-caracteristicas">
-                        <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Perfil"></img>
-                    </div>
-                    <div id="caracteristica-perfil" class="caracteristicas-texto">
-                        <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción (en construcción)</p>
-                    </div>
+                <div class="imagen-caracteristicas">
+                    <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Perfil"></img>
+                </div>
+                <div id="caracteristica-perfil" class="caracteristicas-texto">
+                    <p>También puedes editar tu perfil a tu gusto como por ejemplo cambiando el color favorito, la imagen y la descripción (en construcción)</p>
                 </div>
             </div>
-        </main> <!-- Continua en plantillas/footer -->
+        </div>
+    </main> <!-- Continua en plantillas/footer -->
