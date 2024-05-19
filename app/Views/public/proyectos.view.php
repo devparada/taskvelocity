@@ -11,7 +11,7 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e2a74f45d0.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
         <!-- Moment -->
         <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
@@ -53,49 +53,50 @@
             <?php } ?>
             <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
-                        <?php
-                        $idProyecto = $p["id_proyecto"];
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) { ?>
-                                    <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">        
-                <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
+                    <?php
+                    $idProyecto = $p["id_proyecto"];
+                    if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
+                        ?>
+                        <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">        
+                            <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
                         <?php } else { ?>
-                <div class="proyectos proyectos-sin-imagen" id="<?php echo $p["id_proyecto"] ?>">
-                        <?php } ?>    
-                    <div class="informacion-proyecto">
-                            <h3><?php echo $p["nombre_proyecto"] ?></h3>
-                            <?php if ($p["editable"] == 1) { ?>
-                                <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
-                                <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
-                                <p class="miembros-tarea"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
-                                        <?php foreach ($usuarios as $u) { ?>
-                                            <?php if ($u["username"] == $nombreUsuario) { ?>
-                                                <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                            <div class="proyectos proyectos-sin-imagen" id="<?php echo $p["id_proyecto"] ?>">      
+                            <?php } ?>
+                            <div class="informacion-proyecto">
+                                <h3><?php echo $p["nombre_proyecto"] ?></h3>
+                                <?php if ($p["editable"] == 1) { ?>
+                                    <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
+                                    <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
+                                    <p class="miembros-tarea"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
+                                            <?php foreach ($usuarios as $u) { ?>
+                                                <?php if ($u["username"] == $nombreUsuario) { ?>
+                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                                                <?php } ?>
                                             <?php } ?>
-                                        <?php } ?>
-                                        <?php } ?></p>
-                                <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
-                                <div class="botones-proyecto">
-                                    <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                                    <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                            <?php } ?></p>
+                                    <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
+                                    <div class="botones-proyecto">
+                                        <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
+                                        <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                                    </div>
                                 <?php } else { ?>
                                     <p id="texto-personal">Este es tu proyecto personal se usa por defecto y no se puede borrar</p>
                                 <?php } ?>
                             </div>
                         </div>
-                    </div>
-                <?php } ?>
-            </div>
-            <script src="assets/js/public/fechasTareasProyectos.js"></script>
-            <script>
-                const proyectos = document.getElementsByClassName("proyectos");
+                    <?php } ?>
+                </div>
+                <script src="assets/js/public/fechasTareasProyectos.js"></script>
+                <script>
+                    const proyectos = document.getElementsByClassName("proyectos");
 
-                for (var i = 0; i < proyectos.length; i++) {
-                    (function (i) {
-                        // Al hacer click en el proyecto va a la siguiente url
-                        proyectos[i].addEventListener("click", function () {
-                            window.location.href = "/proyectos/ver/" + proyectos[i].id;
-                        });
-                    })(i);
-                }
-            </script>
+                    for (var i = 0; i < proyectos.length; i++) {
+                        (function (i) {
+                            // Al hacer click en el proyecto va a la siguiente url
+                            proyectos[i].addEventListener("click", function () {
+                                window.location.href = "/proyectos/ver/" + proyectos[i].id;
+                            });
+                        })(i);
+                    }
+                </script>
         </main> <!-- Continua en plantillas/footer -->

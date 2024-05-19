@@ -21,13 +21,13 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             . " ON up.id_usuarioPAsoc = u.id_usuario ";
 
     public function mostrarProyectos(): array {
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN) {
             $stmt = $this->pdo->query(self::baseConsulta . " GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY pr.id_proyecto desc");
+                    . "ORDER BY pr.id_proyecto DESC");
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
                     . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY pr.fecha_limite_proyecto desc");
+                    . "ORDER BY pr.nombre_proyecto ASC");
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
         $datos = $stmt->fetchAll();
