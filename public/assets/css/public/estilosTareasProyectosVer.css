@@ -8,6 +8,12 @@
     margin-top: 16px;
     padding: 16px;
     cursor: unset;
+    column-gap: 20px;
+}
+
+.imagen-proyecto-tarea {
+    width: 40%;
+    border-radius: 50px;
 }
 
 .informacion-proyecto {

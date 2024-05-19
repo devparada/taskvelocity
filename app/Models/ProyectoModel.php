@@ -27,7 +27,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
                     . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY pr.id_proyecto desc");
+                    . "ORDER BY fecha_limite_proyecto desc");
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
         $datos = $stmt->fetchAll();
@@ -111,15 +111,15 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $_SESSION["usuario"]["id_usuario"]])) {
             // Se consigue el id del proyecto debido a que es la última tarea insertada
             $idProyecto = $this->pdo->lastInsertId();
-            $this->añadirPropietario($_SESSION["usuario"]["id_usuario"], (int) $idProyecto);
+            $this->addProyectoUsuario($_SESSION["usuario"]["id_usuario"], (int) $idProyecto);
             if (!empty($idUsuariosAsociados)) {
-                $this->addProyectoUsuarios($idUsuariosAsociados, $idProyecto);
+                foreach ($idUsuariosAsociados as $idUsuario) {
+                    $this->addProyectoUsuario((int) $idUsuario, (int) $idProyecto);
+                }
             }
 
-            if (!empty($_FILES["imagen_proyecto"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
-                $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
-            }
+            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
+            $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
 
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Creado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);
@@ -148,25 +148,19 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         return (int) $idProyectoPersonal;
     }
 
-    private function addProyectoUsuarios(array $idUsuarios, int $idProyecto): void {
-        foreach ($idUsuarios as $idUsuario) {
-            $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
-                    . "(id_usuarioPAsoc, id_proyectoPAsoc) "
-                    . "VALUES(?, ?)");
-
-            $stmt->execute([$idUsuario, $idProyecto]);
-
-            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-            // $tareasProyecto = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
-        }
-    }
-
-    private function añadirPropietario(int $idUsuario, int $idProyecto): void {
+    private function addProyectoUsuario(int $idUsuario, int $idProyecto): void {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                 . "(id_usuarioPAsoc, id_proyectoPAsoc) "
                 . "VALUES(?, ?)");
 
         $stmt->execute([$idUsuario, $idProyecto]);
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+
+        foreach ($tareas as $tarea) {
+            $modeloTarea->añadirUsuarioTarea((int) $idUsuario, $tarea["id_tarea"]);
+        }
     }
 
     /**
@@ -214,9 +208,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt->execute([$idProyecto]);
 
         $idUsuarioProp = $stmt->fetch()["id_usuario_proyecto_prop"];
-        $this->añadirPropietario($idUsuarioProp, $idProyecto);
+        $this->addProyectoUsuario($idUsuarioProp, $idProyecto);
 
-        $this->addProyectoUsuarios($idUsuarios, $idProyecto);
+        $this->addProyectoUsuario($idUsuarios, $idProyecto);
     }
 
     public function contador(): int {

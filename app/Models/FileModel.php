@@ -27,7 +27,7 @@ class FileModel extends \Com\TaskVelocity\Core\BaseModel {
         }
 
         $directorioArchivo = $directorio . "$nombreArchivo-" . $id . ".jpg";
-        
+
         // Si la carpeta es usuarios
         if ($nombreDirectorio == "usuarios") {
             if (!empty($_FILES["imagen_avatar"]["name"])) {
@@ -39,6 +39,10 @@ class FileModel extends \Com\TaskVelocity\Core\BaseModel {
             }
         } else {
             move_uploaded_file($_FILES["imagen_$nombreArchivo"]["tmp_name"], $directorioArchivo);
+        }
+
+        if (empty($_FILES["imagen_$nombreArchivo"]["name"])) {
+            copy($directorio . "$nombreArchivo-default.jpg", $directorioArchivo);
         }
     }
 

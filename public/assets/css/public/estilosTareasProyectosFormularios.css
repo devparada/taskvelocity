@@ -12,10 +12,11 @@ input[type="file"] {
     color: white;
 }
 
-input[type="submit"] {
+.campo-formulario > input[type="submit"] {
     margin-top: 10px;
     border: none;
     color: white;
+    padding: 12px;
 }
 
 label {

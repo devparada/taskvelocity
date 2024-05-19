@@ -14,9 +14,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
             . "ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
             . "ON ta.id_tarea=ut.id_tareaTAsoc ";
+    private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     public function mostrarTareas(): array {
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $stmt = $this->pdo->query(self::baseConsulta . "GROUP BY ut.id_tareaTAsoc");
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta "
@@ -26,16 +27,16 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
 
-        $datos = $stmt->fetchAll();
+        $tareas = $stmt->fetchAll();
 
-        $datosFinal = $this->recogerNombresUsuarios($datos);
+        $tareasUsuarios = $this->recogerNombresUsuarios($tareas);
 
-        if ($_SESSION["usuario"]["id_rol"] == 1) {
-            return $datosFinal;
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+            return $tareasUsuarios;
         } else {
-            $grupos = $this->agruparPorTarea($datosFinal);
+            $tareasProyecto = $this->agruparTareaProyecto($tareasUsuarios);
 
-            return $grupos;
+            return $tareasProyecto;
         }
     }
 
@@ -54,15 +55,20 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $datos;
     }
 
-    public function agruparPorTarea(array $datos) {
-        $grupos = [];
+    /**
+     * Agrupa las tareas por proyecto
+     * @param array $tareas las tareas
+     * @return array Devuelve un array con arrays de cada proyecto y dentro las tareas
+     */
+    private function agruparTareaProyecto(array $tareas) {
+        $tareasGrupo = [];
 
-        foreach ($datos as $dato) {
-            $valor = $dato["nombre_proyecto"];
-            $grupos[$valor][] = $dato;
+        foreach ($tareas as $tarea) {
+            $nombreProyecto = $tarea["nombre_proyecto"];
+            $tareasGrupo[$nombreProyecto][] = $tarea;
         }
 
-        return $grupos;
+        return $tareasGrupo;
     }
 
     public function addTareasProyecto($idTareas, $idProyecto): bool {
@@ -87,15 +93,6 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $grupos = $this->agruparPorTarea($datosFinal);
 
         return $grupos;
-    }
-
-    public function contadorTareasPorEtiqueta(string $idEtiqueta): array {
-        $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
-                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
-
-        $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
-
-        return $stmt->fetchAll();
     }
 
     private function mostrarUsernamesTarea(array $usuariosTareas): array {
@@ -128,10 +125,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
             $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
         } else {
-            $tareaEncontrada["nombresUsuarios"] = null;
+            $tareaEncontrada = null;
         }
 
-        return ($tareaEncontrada) ? $tareaEncontrada : null;
+        return $tareaEncontrada;
     }
 
     /**
@@ -159,6 +156,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Añade la tarea a la base de datos
+     * @param string $nombreTarea el nombre de la tarea
+     * @param string|null $fechaLimite la fecha límite de la tarea
+     * @param string $idColorTarea el color de la tarea
+     * @param string $idProyecto el id del proyecto
+     * @param array|null $idUsuariosAsociados los usuarios asociados
+     * @param string $descripcionTarea la descripción de la tarea
+     * @param string $idEtiqueta la descripcion de la tarea
+     * @return bool Devuelve true si añade la tarea o false si no
+     */
     public function addTarea(string $nombreTarea, ?string $fechaLimite, string $idColorTarea, string $idProyecto, ?array $idUsuariosAsociados, string $descripcionTarea, string $idEtiqueta): bool {
         $stmt = $this->pdo->prepare("INSERT INTO tareas "
                 . "(nombre_tarea, id_color_tarea, descripcion_tarea, fecha_limite_tarea, id_usuario_tarea_prop,id_etiqueta, id_proyecto) "
@@ -172,15 +180,13 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $_SESSION["usuario"]["id_usuario"], $idEtiqueta, $idProyecto])) {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
-            $this->añadirPropietario((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
+            $this->añadirUsuarioTarea((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
             if (!empty($idUsuariosAsociados)) {
                 $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
             }
 
-            if (!empty($_FILES["imagen_tarea"]["name"])) {
-                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
-                $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
-            }
+            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
+            $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
 
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Creada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);
@@ -189,13 +195,15 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
-    private function añadirPropietario(int $idUsuario, int $idTarea): void {
+    /**
+     * Añade un usuario a la tarea
+     * @param int $idUsuario el id del usuario
+     * @param int $idTarea el id de la tarea
+     * @return void
+     */
+    public function añadirUsuarioTarea(int $idUsuario, int $idTarea): void {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                 . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
-
-        var_dump($stmt);
-        var_dump($idUsuario);
-        var_dump($idTarea);
 
         $stmt->execute([$idUsuario, $idTarea]);
     }
@@ -243,26 +251,19 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     private function editarUsuariosTareas(array $idUsuarios, int $idTarea) {
-        // Elimina todos los usuarios del proyecto
-        $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas "
-                . "WHERE id_tareaTAsoc=?");
-
+        // Elimina todos los usuarios de la tarea
+        $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
         $stmt->execute([$idTarea]);
 
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas"
-                . " WHERE id_tarea=?");
-
+        // Selecciona la tarea
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
         $stmt->execute([$idTarea]);
 
         $idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
-        $this->añadirPropietario($idUsuarioProp, $idTarea);
+        $this->añadirUsuarioTarea($idUsuarioProp, $idTarea);
 
         foreach ($idUsuarios as $idUsuario) {
-            $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
-                    . "(id_usuarioTAsoc, id_tareaTAsoc) "
-                    . "VALUES(?, ?)");
-
-            $stmt->execute([$idUsuario, $idTarea]);
+            $this->añadirUsuarioTarea((int) $idUsuario, $idTarea);
         }
     }
 
@@ -282,6 +283,15 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta WHERE ta.id_usuario_tarea_prop = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
+    }
+
+    public function contadorTareasPorEtiqueta(string $idEtiqueta): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
+                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
+
+        $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
+
+        return $stmt->fetchAll();
     }
 
     public function deleteTarea(int $idTarea): bool {

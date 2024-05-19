@@ -280,10 +280,10 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if (!is_null($miembrosTarea) || $this->comprobarUsuarioMiembros($miembrosTarea["nombresUsuarios"])) {
             if ($modeloTarea->deleteTarea($idTarea)) {
                 $data["informacion"]["estado"] = "success";
-                $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " ha sido eliminado correctamente";
+                $data["informacion"]["texto"] = "La tarea ha sido eliminada correctamente";
             } else {
                 $data["informacion"]["estado"] = "danger";
-                $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " no ha sido eliminado correctamente";
+                $data["informacion"]["texto"] = "La tarea con el id " . $idTarea . " no ha sido eliminada correctamente";
             }
 
             $data['titulo'] = 'Todas las tareas';

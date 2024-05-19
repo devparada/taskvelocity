@@ -52,7 +52,7 @@
             <div class="proyectos">
                 <?php
                 $idProyecto = $proyecto["id_proyecto"];
-                if (file_exists("./assets/img/proyectos/proyecto-$idProyecto")) {
+                if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
                     ?>
                     <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>

@@ -327,9 +327,11 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " no ha sido eliminado correctamente";
             }
 
-
             $data['titulo'] = 'Todos los proyectos';
             $data['seccion'] = '/admin/proyectos';
+
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
