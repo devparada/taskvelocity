@@ -50,15 +50,21 @@
                 <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
                 <div id="editar-avatar">
                     <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
-                        <p>Editar avatar</p>
-                        <input type="file" id="imagen_avatar" name="imagen_avatar">
-                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                        <div class="campo-formulario">
+                            <p>Editar avatar</p>
+                            <input type="file" id="imagen_avatar" name="imagen_avatar">
+                            <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                        </div>
                 </div>
                 <div id="informacion-adicional">
-                    <p><i class="fa-solid fa-cake-candles"></i>
-                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
-                        <?php
-                        ?></p>
+                    <div class="campo-formulario">
+                        <p><i class="fa-solid fa-cake-candles"></i>
+                            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
+                            <?php
+                            ?></p>
+                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                    </div>
+
                     <p class="texto-error"><?php echo isset($errores["fecha_nacimiento"]) ? $errores["fecha_nacimiento"] : "" ?></p>
                     <p><i class="fa-solid fa-user-plus"></i> <?php
                         setlocale(LC_TIME, 'es_ES.UTF-8');
