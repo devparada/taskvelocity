@@ -90,7 +90,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $datosFinal = $this->recogerNombresUsuarios($datos);
 
-        $grupos = $this->agruparPorTarea($datosFinal);
+        $grupos = $this->agruparTareaProyecto($datosFinal);
 
         return $grupos;
     }
@@ -185,8 +185,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
             }
 
-            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
-            $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
+            if (!empty($_FILES["imagen_tarea"]["name"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
+                $modeloFiles->guardarImagen("tareas", "tarea", (int) $idTarea);
+            }
 
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Creada la tarea con el id $idTarea", $_SESSION["usuario"]["id_usuario"]);

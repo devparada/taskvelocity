@@ -72,27 +72,27 @@
                     <?php } ?>
                     <div id="estadistica-usuario-apartado">
                         <h2 class="apartados-inicio">Estadísticas</h2>
-                        <div id="contenedor-estadisticas-usuario">
-                            <div class="estadistica-usuario">
+                        <div id="contenedor-estadisticas-usuario" class="<?php echo $idUsuario ?>">
+                            <div class="estadistica-usuario" id="propietario-proyectos">
                                 <p>Eres propietario de </p>
                                 <p> <?php echo $proyectoPropietario ?> proyectos</p>
                             </div>
-                            <div class="estadistica-usuario">
+                            <div class="estadistica-usuario" id="propietario-tareas">
                                 <p>Eres propietario de </p>
                                 <p> <?php echo $tareaPropietario ?> tareas</p>
                             </div>
 
-                            <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>">
+                            <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
                                 <p>Tienes </p>
                                 <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
                             </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>">
+                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
                                 <p>Tienes </p>
                                 <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
                             </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>">
+                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
                                 <p>Tienes </p>
                                 <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
                             </div>
@@ -111,4 +111,23 @@
                     </div>
                 </div>
             </div>
+            <script>
+                var idUsuario = document.getElementById("contenedor-estadisticas-usuario").className;
+
+                document.getElementById("propietario-proyectos").addEventListener("click", function () {
+                    window.location.href = "/proyectos?propietario=" + idUsuario;
+                });
+                document.getElementById("propietario-tareas").addEventListener("click", function () {
+                    window.location.href = "/tareas?propietario=" + idUsuario;
+                });
+                document.getElementById("etiqueta-pendiente").addEventListener("click", function () {
+                    window.location.href = "/tareas?etiqueta=1";
+                });
+                document.getElementById("etiqueta-progreso").addEventListener("click", function () {
+                    window.location.href = "/tareas?etiqueta=2";
+                });
+                document.getElementById("etiqueta-finalizada").addEventListener("click", function () {
+                    window.location.href = "/tareas?etiqueta=3";
+                });
+            </script>
         </main> <!-- Continua en plantillas/footer -->

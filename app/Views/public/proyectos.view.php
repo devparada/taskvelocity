@@ -26,7 +26,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/proyectos" class="apartado-activo">Proyectos</a></li>
                     <li><a href="/tareas">Tareas</a></li>
                     <li><a href="/contacto">Contacto</a></li>
                 </ul>
@@ -53,19 +53,20 @@
             <?php } ?>
             <div class="proyectos-grid">
                 <?php foreach ($proyectos as $p) { ?>
-                    <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">
                         <?php
                         $idProyecto = $p["id_proyecto"];
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
-                            ?>
-                            <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
-                        <?php } ?>
-                        <div class="informacion-proyecto">
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) { ?>
+                                    <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">        
+                <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
+                        <?php } else { ?>
+                <div class="proyectos proyectos-sin-imagen" id="<?php echo $p["id_proyecto"] ?>">
+                        <?php } ?>    
+                    <div class="informacion-proyecto">
                             <h3><?php echo $p["nombre_proyecto"] ?></h3>
                             <?php if ($p["editable"] == 1) { ?>
                                 <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
                                 <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
-                                <p><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
+                                <p class="miembros-tarea"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
                                         <?php foreach ($usuarios as $u) { ?>
                                             <?php if ($u["username"] == $nombreUsuario) { ?>
                                                 <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>

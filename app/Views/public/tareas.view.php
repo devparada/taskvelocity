@@ -27,7 +27,7 @@
             <nav>
                 <ul>
                     <li><a href="/proyectos">Proyectos</a></li>
-                    <li><a href="/tareas">Tareas</a></li>
+                    <li><a href="/tareas" class="apartado-activo">Tareas</a></li>
                     <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
@@ -82,7 +82,7 @@
                                     <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
                                     <p><span class="color-circulo" style="background-color: <?php echo $value[$i]["color_etiqueta"] ?>"></span> <?php echo $value[$i]["nombre_etiqueta"] ?></p>
                                     <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
-                                    <p><?php
+                                    <p class="miembros-tarea"><?php
                                         foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
                                             foreach ($usuarios as $u) {
                                                 if ($u["username"] == $nombreUsuario) {

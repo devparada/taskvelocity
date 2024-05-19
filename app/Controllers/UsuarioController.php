@@ -120,7 +120,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                 }
             } else {
                 // El 2 es el id de rol del usuario (cuando se registra el usuario se añade el id de rol 2 que es usuario)
-                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], self::ROL_USUARIO, $datos["fecha_nacimiento"], "", $datos["id_color"])) {
+                if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], self::ROL_USUARIO, null, "", $datos["id_color"])) {
                     $this->crearLogin($datos["email"]);
                     header("location: /proyectos");
                 }
@@ -297,7 +297,13 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
-        $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            session_destroy();
+            session_start();
+            header("location: /");
+        }
     }
 
     public function mostrarPerfil(int $idUsuario): void {

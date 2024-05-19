@@ -1,12 +1,4 @@
 /*Hoja de estilos utilizada en perfil */
-#introduccion {
-    justify-content: center;
-}
-
-#introduccion h1 {
-    width: unset;
-}
-
 input, textarea {
     border-radius: 20px;
     border: 1px var(--color-secundario-principal) solid;
@@ -15,6 +7,15 @@ input, textarea {
 
 label, input, textarea {
     text-align: center;
+}
+
+
+#introduccion {
+    justify-content: center;
+}
+
+#introduccion h1 {
+    width: unset;
 }
 
 .apartados-inicio {
@@ -98,6 +99,7 @@ label, input, textarea {
     background-color: var(--color-secundario-complementario);
     padding: 16px;
     border-radius: 20px;
+    cursor: pointer;
 }
 
 .estadistica-usuario-contraste > p {
@@ -129,7 +131,6 @@ label, input, textarea {
 }
 
 #informacion-pie-editar {
-    margin-top: 16px;
     display: flex;
     justify-content: center;
 }

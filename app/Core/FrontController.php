@@ -273,46 +273,53 @@ class FrontController {
                     , 'post');
 
             Route::add('/tareas/editar/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idTarea) {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
-                        $controlador->mostrarEdit($idProyecto);
+                        $controlador->mostrarEdit($idTarea);
                     }
                     , 'get');
 
             Route::add('/tareas/editar/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idTarea) {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
-                        $controlador->procesarEdit($idProyecto);
+                        $controlador->procesarEdit($idTarea);
                     }
                     , 'post');
 
             Route::add('/tareas/borrar/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idTarea) {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
-                        $controlador->procesarDelete($idProyecto);
+                        $controlador->procesarDelete($idTarea);
                     }
                     , 'get');
 
             Route::add('/perfil/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idUsuario) {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                        $controlador->mostrarPerfil($idProyecto);
+                        $controlador->mostrarPerfil($idUsuario);
                     }
                     , 'get');
 
             Route::add('/perfil/editar/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idUsuario) {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                        $controlador->mostrarEdit($idProyecto);
+                        $controlador->mostrarEdit($idUsuario);
                     }
                     , 'get');
 
             Route::add('/perfil/editar/([0-9]+)',
-                    function ($idProyecto) {
+                    function ($idUsuario) {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                        $controlador->procesarEdit($idProyecto);
+                        $controlador->procesarEdit($idUsuario);
                     }
                     , 'post');
+
+            Route::add('/perfil/borrar/([0-9]+)',
+                    function ($idUsuario) {
+                        $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                        $controlador->procesarDelete($idUsuario);
+                    }
+                    , 'get');
 
             Route::add('/logout',
                     function () {

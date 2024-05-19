@@ -27,7 +27,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
                     . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY fecha_limite_proyecto desc");
+                    . "ORDER BY pr.fecha_limite_proyecto desc");
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }
         $datos = $stmt->fetchAll();
@@ -118,8 +118,10 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 }
             }
 
-            $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
-            $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
+            if (!empty($_FILES["imagen_proyecto"]["name"])) {
+                $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
+                $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
+            }
 
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Creado el proyecto con el id $idProyecto", $_SESSION["usuario"]["id_usuario"]);
@@ -141,7 +143,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt->execute(["Personal $username", "Personal $username", null, $idUsuario, 0]);
 
         $idProyectoPersonal = $this->pdo->lastInsertId();
-        $this->añadirPropietario((int) $idUsuario, (int) $idProyectoPersonal);
+        $this->addProyectoUsuario((int) $idUsuario, (int) $idProyectoPersonal);
 
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
         $modeloLog->crearLog("Creado el proyecto personal con el id $idProyectoPersonal", (int) $idUsuario);
@@ -202,15 +204,17 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $stmt->execute([$idProyecto]);
 
-        $stmt = $this->pdo->prepare("SELECT * FROM proyectos "
+        $stmt2 = $this->pdo->prepare("SELECT * FROM proyectos "
                 . "WHERE id_proyecto=?");
 
-        $stmt->execute([$idProyecto]);
+        $stmt2->execute([$idProyecto]);
 
-        $idUsuarioProp = $stmt->fetch()["id_usuario_proyecto_prop"];
+        $idUsuarioProp = $stmt2->fetch()["id_usuario_proyecto_prop"];
         $this->addProyectoUsuario($idUsuarioProp, $idProyecto);
 
-        $this->addProyectoUsuario($idUsuarios, $idProyecto);
+        foreach ($idUsuarios as $idUsuario) {
+            $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
+        }
     }
 
     public function contador(): int {

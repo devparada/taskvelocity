@@ -28,9 +28,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos" class="botones">Proyectos</a></li>
-                    <li><a href="/tareas" class="botones">Tareas</a></li>
-                    <li><a href="/contacto" class="botones">Contacto</a></li>
+                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/tareas" class="apartado-activo">Tareas</a></li>
+                    <li><a href="/contacto">Contacto</a></li>
                 </ul>
             </nav>
             <div id="perfil-cerrar">

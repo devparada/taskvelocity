@@ -32,7 +32,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="/proyectos">Proyectos</a></li>
+                    <li><a href="/proyectos" class="apartado-activo">Proyectos</a></li>
                     <li><a href="/tareas">Tareas</a></li>
                     <li><a href="/contacto">Contacto</a></li>
                 </ul>

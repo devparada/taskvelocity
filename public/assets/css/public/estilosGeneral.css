@@ -68,6 +68,10 @@ nav ul li a {
     background-color: var(--color-secundario-principal);
 }
 
+.apartado-activo {
+    background-color: var(--color-secundario-complementario);
+}
+
 .botones:hover, nav ul li a:hover {
     background-color: var(--color-secundario-complementario);
 }
@@ -196,6 +200,7 @@ input, select, option, textarea {
 
 .alerta-success, .alerta-danger {
     padding: 16px;
+    margin: 16px;
     border-radius: 25px;
 }
 

@@ -125,6 +125,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si el usuario se edita correctamente
      */
     public function editUsuario(string $username, ?string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
+
+        if (empty($fechaNacimiento)) {
+            $fechaNacimiento = null;
+        }
+
         // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
         if (is_null($contrasena)) {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
@@ -165,10 +170,10 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function deleteUsuario(int $idUsuario): bool {
         if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
-            $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
-            $stmt->execute([$idUsuario]);
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
+            $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
+            $stmt->execute([$idUsuario]);
             $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
             if ($modeloFiles->eliminarImagen("usuarios", "avatar", $idUsuario)) {
                 return true;

@@ -29,8 +29,10 @@
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-        <!-- CSS propios -->
+        <!-- CSS propio -->
         <link rel="stylesheet" href="assets/css/admin/admin.css">
+        <!-- Favicon -->
+        <link rel="icon" href="assets/img/logo.png">
     </head>
     <body class="dark-mode hold-transition sidebar-mini layout-fixed <?php echo isset($_COOKIE['dark']) ? 'dark-mode' : ''; ?>">
         <div class="wrapper"> 
