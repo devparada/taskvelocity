@@ -13,10 +13,13 @@ class LogController extends \Com\TaskVelocity\Core\BaseController {
     public function mostrarLogs(): void {
         $data = [];
         $data['titulo'] = 'Todos los logs';
-        $data['seccion'] = '/admin/logs';
+        $data['seccion'] = '/admin/logs?pagina=1';
 
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-        $data['logs'] = $modeloLog->mostrarLogs();
+        $data['logs'] = $modeloLog->consultarPagina((int) $_GET["pagina"]++);
+        $data["paginaActual"] = $_GET["pagina"] - 1;
+
+        $data["maxPagina"] = floor($modeloLog->obtenerPáginas());
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/log.view.php', 'admin/templates/footer.view.php'), $data);
     }

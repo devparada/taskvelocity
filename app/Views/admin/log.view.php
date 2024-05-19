@@ -8,6 +8,9 @@
             </div>
             <!-- Card Body -->
             <div class="card-body table-responsive" id="card_table">
+                <div class="col-12">
+                    <input type="hidden" name="page" id="page" value="<?php echo isset($_GET["pagina"]) ? $_GET["pagina"] : "1"; ?>">
+                </div>
                 <?php
                 if (count($logs) > 0) {
                     ?>
@@ -36,14 +39,60 @@
                         <p>Total de logs: <?php echo count($logs); ?></p>
                         </tfoot>
                     </table>
-                    <?php
-                } else {
-                    ?>
-                    <p class="text-danger">No existen registros que cumplan los requisitos.</p>
-                    <?php
-                }
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Navegacion por paginas">
+                        <ul class="pagination justify-content-center">
+                            <?php
+                            if ($paginaActual >= 1) {
+                                ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/logs?pagina=0" aria-label="First">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Primero</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual - 1) ?>" aria-label="Previous">
+                                        <span aria-hidden="true">&lt;</span>
+                                        <span class="sr-only">Anterior</span>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                            ?>
+
+                            <li class="page-item active"><a class="page-link"><?php echo $paginaActual ?></a></li>
+                            <?php
+                            if ($maxPagina > $paginaActual) {
+                                ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual + 1) ?>" aria-label="Next">
+                                        <span aria-hidden="true">&gt;</span>
+                                        <span class="sr-only">Siguiente</span>
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo $maxPagina ?>" aria-label="Last">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Último</span>
+                                    </a>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php
+            } else {
                 ?>
-            </div>
+                <p class="text-danger">No existen registros que cumplan los requisitos.</p>
+                <?php
+            }
+            ?>
         </div>
-    </div>                        
+    </div>
+</div>
+</div>                        
 </div>

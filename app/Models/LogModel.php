@@ -40,4 +40,20 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
                 . " VALUES(?, ?)");
         $stmt->execute([$asunto, $idUsuario]);
     }
+
+    public function obtenerPáginas() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM logs l");
+
+        $numeroPaginas = floor($stmt->fetchColumn() / $_ENV["table.rowsPerPage"]);
+
+        return $numeroPaginas;
+    }
+
+    public function consultarPagina(int $numeroPagina) {
+        $stmt = $this->pdo->query("SELECT * FROM logs l"
+                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
+                . " ORDER BY fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+
+        return $stmt->fetchAll();
+    }
 }
