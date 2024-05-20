@@ -156,13 +156,6 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "VALUES(?, ?)");
 
         $stmt->execute([$idUsuario, $idProyecto]);
-
-        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
-
-        foreach ($tareas as $tarea) {
-            $modeloTarea->añadirUsuarioTarea((int) $idUsuario, $tarea["id_tarea"]);
-        }
     }
 
     /**
@@ -214,6 +207,18 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         foreach ($idUsuarios as $idUsuario) {
             $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
+
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+
+            foreach ($tareas as $tarea) {
+                $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
+                $stmt->execute([$tarea["id_tarea"]]);
+
+                $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+                        . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+                $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
+            }
         }
     }
 

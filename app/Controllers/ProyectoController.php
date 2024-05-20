@@ -194,7 +194,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $data["modoEdit"] = true;
 
-            if ($_SESSION["usuario"]["id_usuario"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $data['tituloDiv'] = 'Editar proyecto con el id ' . $idProyecto;
                 $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
                 $data['titulo'] = 'Editar proyecto ' . $idProyecto;

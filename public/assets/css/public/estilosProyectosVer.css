@@ -5,8 +5,9 @@
 }
 
 #titulo-tabla {
+    width: 80%;
     display: flex;
-    align-items: center;
+    justify-content: center;
     margin-bottom: 6px;
 }
 
@@ -20,4 +21,8 @@
 
 .enlace-ir-tarea:hover {
     color: var(--color-secundario-complementario);
+}
+
+.enlace-imagen-perfil {
+    color: white;
 }

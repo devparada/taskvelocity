@@ -85,12 +85,6 @@
     background-color: var(--color-secundario-complementario);
 }
 
-.miembros-tarea {
-    display: flex;
-    justify-content: center;
-    column-gap: 6px;
-}
-
 .enlace-imagen-perfil-tarea {
     display: flex;
     align-items: center;

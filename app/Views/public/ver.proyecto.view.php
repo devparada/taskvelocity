@@ -72,13 +72,9 @@
                             </div>
 
                             <div class="campo-formulario">
-                                <input type="submit" value="Enviar" name="enviar" class="botones">
+                                <input type="submit" value="Añadir tarea" name="enviar" class="botones">
                             </div>
                         </form>
-                        <script src="plugins/jquery/jquery.min.js"></script>
-                        <!-- Select2 -->
-                        <script src="plugins/select2/js/select2.full.min.js"></script>
-                        <script src="assets/js/admin/pages/main.js"></script>
                     </div>
                     <div id="titulo-tabla">
                         <p>Tareas del proyecto</p>
@@ -92,7 +88,7 @@
                             </thead>
                             <?php foreach ($tareas as $t) { ?>
                                 <tr>
-                                    <td><a href="/tareas/ver/<?php echo $t["id_tarea"] ?>" class="enlace-ir-tarea"><?php echo $t["nombre_tarea"] ?> <i class="fas fa-external-link-alt"></i></a></td>
+                                    <td><?php echo $t["nombre_tarea"] ?></a></td>
                                     <td><?php echo $t["fecha_limite_tarea"] ?? "No tiene" ?></td>
                                     <td><?php echo $t["nombre_etiqueta"] ?></td>
                                 </tr>
@@ -101,7 +97,7 @@
                     <?php } else { ?>
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
-                    <p>Miembros: <?php foreach ($usuarios as $u) { ?>
+                    <p class="enlace-imagen-perfil">Miembros: <?php foreach ($usuarios as $u) { ?>
                             <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
                         <?php }
                         ?></p>

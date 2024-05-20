@@ -67,7 +67,7 @@
                                 <?php if ($p["editable"] == 1) { ?>
                                     <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
                                     <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
-                                    <p class="miembros-tarea"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
+                                    <p class="miembros-tarea enlace-imagen-perfil"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
                                             <?php foreach ($usuarios as $u) { ?>
                                                 <?php if ($u["username"] == $nombreUsuario) { ?>
                                                     <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>

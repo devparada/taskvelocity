@@ -45,9 +45,9 @@
             <div id="introduccion">
                 <h1>Tus tareas</h1>
                 <div>
-                        <?php foreach ($etiquetas as $etiqueta) { ?>
+                    <?php foreach ($etiquetas as $etiqueta) { ?>
                         <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
-                        <?php } ?>
+                    <?php } ?>
                     <a class="botones botones-filtros" href="/tareas">Mostrar todas</a>
                 </div>
                 <a href="/tareas/crear" class="botones"><i class="fa-solid fa-circle-plus"></i> Crear una tarea</a>
@@ -87,7 +87,7 @@
                                             foreach ($usuarios as $u) {
                                                 if ($u["username"] == $nombreUsuario) {
                                                     ?>
-                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil-tarea"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
+                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
                                                     <?php
                                                 }
                                             }

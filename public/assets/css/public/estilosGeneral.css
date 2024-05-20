@@ -185,8 +185,17 @@ input, select, option, textarea {
     margin-left: 6px;
 }
 
+.miembros-tarea {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 6px;
+}
+
 .enlace-imagen-perfil {
-    color: white;
+    display: flex;
+    align-items: center;
+    color: black;
     font-weight: bold;
 }
 

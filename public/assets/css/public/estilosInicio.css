@@ -23,5 +23,11 @@
 }
 
 .imagen-caracteristicas img {
+    border: 1px var(--color-secundario-principal) solid;
+    border-radius: 20px;
+    width: 90%;
+}
+
+.caracteristicas-texto {
     width: 90%;
 }

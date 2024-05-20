@@ -6,6 +6,9 @@ namespace Com\TaskVelocity\Controllers;
 
 class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
+    /**
+     * Recoge el valor del id de rol de admin de UsuarioController
+     */
     private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     public function mostrarTareas(): void {

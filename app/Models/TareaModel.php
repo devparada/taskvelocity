@@ -14,6 +14,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
             . "ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
             . "ON ta.id_tarea=ut.id_tareaTAsoc ";
+    
+    /**
+     * Recoge el valor del id de rol de admin de UsuarioController
+     */
     private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     public function mostrarTareas(): array {
@@ -180,9 +184,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $_SESSION["usuario"]["id_usuario"], $idEtiqueta, $idProyecto])) {
             // Se consigue el id de la tarea debido a que es la última tarea insertada
             $idTarea = $this->pdo->lastInsertId();
-            $this->añadirUsuarioTarea((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
+            $this->addUsuarioTarea((int) $_SESSION["usuario"]["id_usuario"], (int) $idTarea);
             if (!empty($idUsuariosAsociados)) {
-                $this->addTareaUsuarios($idUsuariosAsociados, (int) $idTarea);
+                foreach ($idUsuariosAsociados as $idUsuario) {
+                    $this->addUsuarioTarea((int) $idUsuario, (int) $idTarea);
+                }
             }
 
             if (!empty($_FILES["imagen_tarea"]["name"])) {
@@ -203,20 +209,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @param int $idTarea el id de la tarea
      * @return void
      */
-    public function añadirUsuarioTarea(int $idUsuario, int $idTarea): void {
+    public function addUsuarioTarea(int $idUsuario, int $idTarea): void {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                 . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
-
         $stmt->execute([$idUsuario, $idTarea]);
-    }
-
-    private function addTareaUsuarios(array $idUsuarios, int $idTarea): void {
-        foreach ($idUsuarios as $idUsuario) {
-            $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
-                    . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
-
-            $stmt->execute([$idUsuario, $idTarea]);
-        }
     }
 
     /**
@@ -262,10 +258,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt->execute([$idTarea]);
 
         $idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
-        $this->añadirUsuarioTarea($idUsuarioProp, $idTarea);
+        $this->addUsuarioTarea($idUsuarioProp, $idTarea);
 
         foreach ($idUsuarios as $idUsuario) {
-            $this->añadirUsuarioTarea((int) $idUsuario, $idTarea);
+            $this->addUsuarioTarea((int) $idUsuario, $idTarea);
         }
     }
 
