@@ -154,8 +154,8 @@ input, select, option, textarea {
     border-radius: 20px;
     padding-top: 12px;
     padding-bottom: 10px;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     background-color: var(--color-secundario-principal);
     border: var(--color-secundario-complementario);
     text-align: center;
@@ -254,4 +254,75 @@ footer a > i {
 
 .logo-enlace h2 {
     margin-left: 10px;
+}
+
+@media only screen and (max-width: 1400px) {
+
+    #logo {
+        width: auto;
+        margin-right: 16px;
+    }
+    
+        #logo h2 {
+        display: none;
+    }
+    
+}
+
+@media only screen and (max-width: 900px) {
+
+    #perfil > a > p {
+        display: none;
+    }
+    
+    
+}
+
+@media only screen and (max-width: 600px) {
+    * {
+        font-size: 12px;
+    }
+    
+    #logo h2 {
+        display: none;
+    }
+    
+    #logo {
+        width: auto;
+        margin-right: 16px;
+    }
+    
+    nav ul li a {
+        padding-right: 4px;
+        padding-left: 4px;
+    }
+    
+    #perfil-cerrar {
+        width: auto;
+    }
+    
+    #perfil > a > p {
+        display: none;
+    }
+    
+    .proyectos-grid {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    footer > div > p {
+        display: none;
+    }
+    
+    .logo-enlace h2 {
+        display: none;
+    }
+    
+    footer {
+        justify-content: space-evenly;
+    }
+    
+    footer > a > i {
+        font-size: 4px;
+    }
 }
