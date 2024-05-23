@@ -97,6 +97,13 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         return ($proyectoEncontrado) ? $proyectoEncontrado : null;
     }
+    
+    public function esPropietario(int $idProyecto): bool {
+        $stmt = $this->pdo->prepare("SELECT * FROM proyectos p WHERE p.id_proyecto = ? AND p.id_usuario_proyecto_prop = ?");
+        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"]]);
+
+        return (!is_null($stmt->fetch()));
+    }
 
     public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, ?array $idUsuariosAsociados): bool {
         $stmt = $this->pdo->prepare("INSERT INTO proyectos "

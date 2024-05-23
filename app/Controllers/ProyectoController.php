@@ -13,7 +13,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function mostrarProyectos(): void {
-        $data = [];
+        $data = $this->mostrarProyectosComun();
+
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todos los proyectos';
             $data['seccion'] = '/admin/proyectos';
@@ -22,17 +23,28 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["seccion"] = "/proyectos";
         }
 
-        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data['proyectos'] = $modeloProyecto->mostrarProyectos();
-
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
-
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
         }
+    }
+
+    public function mostrarProyectosAsync(): void {
+        $data = $this->mostrarProyectosComun();
+        $this->view->showViews(array('public/proyectos-ajax.view.php'), $data);
+    }
+
+    public function mostrarProyectosComun(): array {
+        $data = [];
+
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $data["proyectos"] = $modeloProyecto->mostrarProyectos();
+
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
+
+        return $data;
     }
 
     /**
@@ -53,9 +65,10 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $miembrosProyectos = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
 
-        if ($this->comprobarUsuarioMiembros($miembrosProyectos)) {
+        $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
+        $esPropietario = $modeloProyecto->esPropietario($idProyecto);
+        if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
 
             $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
             $data["proyecto"] = $data["datos"];
@@ -164,10 +177,10 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      * @param array|null $miembros los miembros del proyecto
      * @return bool Retorna true si es miembro o es admin y false si no
      */
-    private function comprobarUsuarioMiembros(?array $miembros): bool {
+    private function comprobarUsuarioMiembros(?array $miembros, bool $esPropietario): bool {
         if (!is_null($miembros)) {
             foreach ($miembros as $persona) {
-                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS || $esPropietario) {
                     return true;
                 }
             }
@@ -184,8 +197,9 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $miembrosProyectos = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
-        if ($this->comprobarUsuarioMiembros($miembrosProyectos)) {
+        $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
+        $esPropietario = $modeloProyecto->esPropietario($idProyecto);
+        if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
 
             $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
@@ -231,7 +245,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
-        if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
+        $esPropietario = $modeloProyecto->esPropietario($idProyecto);
+        if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -271,19 +286,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    public function mostrarAddTareasProyecto(int $idProyecto): void {
-        $data = [];
-
-        $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
-        $data["seccion"] = "/proyectos/addTareasProyecto/$idProyecto";
-
-        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $data["tareas"] = $modeloTarea->mostrarTareas();
-        $data["idProyecto"] = $idProyecto;
-
-        $this->view->showViews(array('public/add.tareas.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
-    }
-
     public function procesarAddTareasProyecto(int $idProyecto): void {
         $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
         $data["seccion"] = "/proyectos/addTareasProyecto/$idProyecto";
@@ -317,8 +319,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $proyectoEncontrado = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
-
-        if ($this->comprobarUsuarioMiembros($miembrosProyecto)) {
+        $esPropietario = $modeloProyecto->esPropietario($idProyecto);
+        if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
             if ($modeloProyecto->deleteProyecto($idProyecto)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " ha sido eliminado correctamente";

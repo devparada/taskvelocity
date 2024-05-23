@@ -14,7 +14,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
             . "ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
             . "ON ta.id_tarea=ut.id_tareaTAsoc ";
-    
+
     /**
      * Recoge el valor del id de rol de admin de UsuarioController
      */
@@ -82,6 +82,13 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             return true;
         }
         return false;
+    }
+
+    public function esPropietario(int $idTarea): bool {
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas t WHERE t.id_tarea = ? AND t.id_usuario_tarea_prop = ?");
+        $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
+
+        return (!is_null($stmt->fetch()));
     }
 
     public function mostrarTareasPorEtiqueta(string $idEtiqueta): array {

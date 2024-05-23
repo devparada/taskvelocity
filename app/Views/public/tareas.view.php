@@ -67,62 +67,48 @@
                 </div>
             <?php } ?>
             <div id="tareas-grid">
-                <?php foreach ($tareas as $proyecto => $value) { ?>
-                    <div class="columnas">
-                        <h2><?php echo $proyecto ?></h2>
-                        <?php for ($i = 0; $i < count($value); $i++) { ?>
-                            <div class="tarjetas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
-                                <?php
-                                $idTarea = $value[$i]["id_tarea"];
-                                if (file_exists("./assets/img/tareas/tarea-$idTarea.jpg")) {
-                                    ?>
-                                    <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
-                                <?php } ?>
-                                <div class="informacion-tarea">
-                                    <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
-                                    <p><span class="color-circulo" style="background-color: <?php echo $value[$i]["color_etiqueta"] ?>"></span> <?php echo $value[$i]["nombre_etiqueta"] ?></p>
-                                    <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
-                                    <p class="miembros-tarea"><?php
-                                        foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
-                                            foreach ($usuarios as $u) {
-                                                if ($u["username"] == $nombreUsuario) {
-                                                    ?>
-                                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
-                                                    <?php
-                                                }
-                                            }
-                                        }
-                                        ?></p>
-                                    <p>Propietario: <?php echo isset($value[$i]["id_usuario_tarea_prop"]) && ($value[$i]["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $value[$i]["username"] ?></p>
-                                    <p class="descripcion-tarea"><?php echo ($value[$i]["descripcion_tarea"] == "") ? "No tiene descripción" : $value[$i]["descripcion_tarea"] ?></p>
-                                    <div class="botones-tareas">
-                                        <a href="/tareas/editar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
-                                        <a href="/tareas/borrar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                <?php } ?>
             </div>
+            <script>
+                function ajaxTareas() {
+                    const divTareas = document.getElementById('tareas-grid');
 
-            <script src="assets/js/public/fechasTareasProyectos.js"></script>
+                    // Realizar la solicitud AJAX
+                    let xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/async/tareas', true);
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Insertar el HTML obtenido en el contenedor
+                            divTareas.innerHTML = xhr.responseText;
+
+                            const script = document.createElement('script');
+                            script.src = 'assets/js/public/fechasTareasProyectos.js';
+                            document.body.appendChild(script);
+                        }
+                    };
+
+                    xhr.send();
+                }
+
+                ajaxTareas();
+                setInterval(ajaxTareas, 10000);
+            </script>
 
             <script>
-                const contenedorTarjetas = document.getElementById("tareas-grid");
+                const contenedorTareas = document.getElementById("tareas-grid");
 
                 var inicialX, offsetX;
 
-                contenedorTarjetas.addEventListener("mousedown", function (evento) {
+                contenedorTareas.addEventListener("mousedown", function (evento) {
                     // Guarda la posición inicial del ratón y la posición inicial del elemento
                     inicialX = evento.clientX;
                     offsetX = contenedorTarjetas.scrollLeft;
 
-                    contenedorTarjetas.addEventListener("mousemove", moverContenedor);
+                    contenedorTareas.addEventListener("mousemove", moverContenedor);
                 });
 
                 document.addEventListener("mouseup", function () {
-                    contenedorTarjetas.removeEventListener("mousemove", moverContenedor);
+                    contenedorTareas.removeEventListener("mousemove", moverContenedor);
                 });
 
                 function moverContenedor(evento) {
@@ -130,7 +116,7 @@
                     var nuevaPosicionX = offsetX - distanciaX;
 
                     // Establece la nueva posición del elemento
-                    contenedorTarjetas.scrollLeft = nuevaPosicionX;
+                    contenedorTareas.scrollLeft = nuevaPosicionX;
                 }
             </script>
 

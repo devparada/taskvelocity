@@ -27,11 +27,15 @@
 }
 
 .proyectos a {
-    margin-left: 16px;
+    margin-left: 0.5em;
 }
 
 .proyectos p {
     padding: 6px;
+}
+
+.imagen-contenedor {
+    width: 300px;
 }
 
 .informacion-proyecto {
@@ -60,8 +64,8 @@
 .botones-proyecto a {
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .enlace-imagen-perfil {

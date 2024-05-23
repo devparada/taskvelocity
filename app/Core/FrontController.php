@@ -321,6 +321,20 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/async/proyectos',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
+                        $controlador->mostrarProyectosAsync();
+                    }
+                    , 'get');
+
+            Route::add('/async/tareas',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\TareaController();
+                        $controlador->mostrarTareasAsync();
+                    }
+                    , 'get');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();

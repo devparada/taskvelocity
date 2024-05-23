@@ -12,7 +12,8 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     public function mostrarTareas(): void {
-        $data = [];
+        $data = $this->mostrarTareasComun();
+
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todas las tareas';
             $data['seccion'] = '/admin/tareas';
@@ -20,6 +21,22 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data['titulo'] = 'Tus tareas';
             $data['seccion'] = '/tareas';
         }
+
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+            $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
+        } else {
+            $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
+        }
+    }
+
+    public function mostrarTareasAsync(): void {
+        $data = $this->mostrarTareasComun();
+
+        $this->view->showViews(array('public/tareas-ajax.view.php'), $data);
+    }
+
+    public function mostrarTareasComun(): array {
+        $data = [];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
@@ -38,40 +55,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
-        } else {
-            $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
-        }
-    }
-
-    public function mostrarAdd() {
-        $data = [];
-        $data['titulo'] = 'Añadir tareas';
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $data['seccion'] = '/admin/tareas/add';
-            $data['tituloDiv'] = 'Añadir tarea';
-        } else {
-            $data['seccion'] = '/tareas/crear';
-        }
-
-        $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColor->mostrarColores();
-
-        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["proyectos"] = $modeloProyecto->mostrarProyectos();
-
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
-
-        $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
-        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
-
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
-        } else {
-            $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
-        }
+        return $data;
     }
 
     public function procesarAdd() {
@@ -167,9 +151,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
 
-        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
+        $esPropietario = $modeloTarea->esPropietario($idTarea);
+
+        if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
 
             $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
 
@@ -223,9 +209,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         unset($_POST["enviar"]);
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
 
-        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
+        $esPropietario = $modeloTarea->esPropietario($idTarea);
+
+        if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -278,9 +266,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
 
-        if (!is_null($miembrosTarea) || $this->comprobarUsuarioMiembros($miembrosTarea["nombresUsuarios"])) {
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
+        $esPropietario = $modeloTarea->esPropietario($idTarea);
+
+        if (!is_null($miembrosTarea) || comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
             if ($modeloTarea->deleteTarea($idTarea)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "La tarea ha sido eliminada correctamente";
@@ -323,13 +313,14 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data["tituloDiv"] = "Ver tarea $idTarea";
             $data["seccion"] = "/admin/tareas/view/$idTarea";
         }
-
-        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
-
         $data["modoVer"] = true;
 
-        if ($this->comprobarUsuarioMiembros($miembrosTarea)) {
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+
+        $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
+        $esPropietario = $modeloTarea->esPropietario($idTarea);
+
+        if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
             $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
             $data["tarea"] = $data["datos"];
             $data["usuarios"] = $modeloTarea->mostrarUsuariosPorTarea($idTarea);
