@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
+        
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosPerfil.css">
@@ -44,7 +45,7 @@
             </div>
             <div id="contenido-principal">
                 <div id="imagen-editar">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $usuario["username"] ?>" id="imagen-perfil">
                     <div id="informacion-adicional">
                         <?php if ($usuario["fecha_nacimiento"]) { ?>
                             <p><i class="fa-solid fa-cake-candles"></i> <?php

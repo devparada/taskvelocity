@@ -5,6 +5,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
+        <!-- BootStrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareas.css">
@@ -81,6 +84,28 @@
                             // Insertar el HTML obtenido en el contenedor
                             divTareas.innerHTML = xhr.responseText;
 
+                            var inicialX, offsetX;
+
+                            function moverContenedor(evento) {
+                                var distanciaX = evento.clientX - inicialX;
+                                var nuevaPosicionX = offsetX - distanciaX;
+
+                                // Establece la nueva posición del elemento
+                                divTareas.scrollLeft = nuevaPosicionX;
+                            }
+
+                            divTareas.addEventListener("mousedown", function (evento) {
+                                // Guarda la posición inicial del ratón y la posición inicial del elemento
+                                inicialX = evento.clientX;
+                                offsetX = divTareas.scrollLeft;
+
+                                divTareas.addEventListener("mousemove", moverContenedor);
+                            });
+
+                            document.addEventListener("mouseup", function () {
+                                divTareas.removeEventListener("mousemove", moverContenedor);
+                            });
+
                             const script = document.createElement('script');
                             script.src = 'assets/js/public/fechasTareasProyectos.js';
                             document.body.appendChild(script);
@@ -93,31 +118,4 @@
                 ajaxTareas();
                 setInterval(ajaxTareas, 10000);
             </script>
-
-            <script>
-                const contenedorTareas = document.getElementById("tareas-grid");
-
-                var inicialX, offsetX;
-
-                contenedorTareas.addEventListener("mousedown", function (evento) {
-                    // Guarda la posición inicial del ratón y la posición inicial del elemento
-                    inicialX = evento.clientX;
-                    offsetX = contenedorTarjetas.scrollLeft;
-
-                    contenedorTareas.addEventListener("mousemove", moverContenedor);
-                });
-
-                document.addEventListener("mouseup", function () {
-                    contenedorTareas.removeEventListener("mousemove", moverContenedor);
-                });
-
-                function moverContenedor(evento) {
-                    var distanciaX = evento.clientX - inicialX;
-                    var nuevaPosicionX = offsetX - distanciaX;
-
-                    // Establece la nueva posición del elemento
-                    contenedorTareas.scrollLeft = nuevaPosicionX;
-                }
-            </script>
-
         </main> <!-- Continua en plantillas/footer -->

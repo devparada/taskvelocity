@@ -98,7 +98,7 @@
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
                     <p class="enlace-imagen-perfil">Miembros: <?php foreach ($usuarios as $u) { ?>
-                            <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                            <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
                         <?php }
                         ?></p>
                     <p>Descripción del proyecto: </p>

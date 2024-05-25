@@ -102,7 +102,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $datosFinal = $this->recogerNombresUsuarios($datos);
 
         $grupos = $this->agruparTareaProyecto($datosFinal);
-
+        
         return $grupos;
     }
 

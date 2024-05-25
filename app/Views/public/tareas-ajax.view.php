@@ -19,7 +19,7 @@
                             foreach ($usuarios as $u) {
                                 if ($u["username"] == $nombreUsuario) {
                                     ?>
-                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
+                        <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
                                     <?php
                                 }
                             }

@@ -46,6 +46,20 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
         }
+        
+        return $datos;
+    }
+
+    public function mostrarProyectoTarea(int $idTarea): array {
+
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $tarea = $modeloTarea->buscarTareaPorId($idTarea);
+
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE pr.id_proyecto = ? "
+                . "GROUP BY up.id_proyectoPAsoc ");
+        $stmt->execute([$tarea["id_proyecto"]]);
+
+        $datos = $stmt->fetchAll();
 
         return $datos;
     }
@@ -97,7 +111,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         return ($proyectoEncontrado) ? $proyectoEncontrado : null;
     }
-    
+
     public function esPropietario(int $idProyecto): bool {
         $stmt = $this->pdo->prepare("SELECT * FROM proyectos p WHERE p.id_proyecto = ? AND p.id_usuario_proyecto_prop = ?");
         $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"]]);

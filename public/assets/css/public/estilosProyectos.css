@@ -6,14 +6,13 @@
 .proyectos-grid {
     width: 98%;
     display: grid;
-    margin: 16px;
     grid-template-columns: repeat(auto-fill, minmax(500px, 5fr));
     row-gap: 5px;
     column-gap: 5px;
 }
 
 .proyectos {
-    width: 98%;
+    width: 100%;
     display: flex;
     justify-content: center;
     border: 1px var(--color-secundario-principal) solid;
@@ -21,6 +20,7 @@
     border-radius: 20px;
     margin-top: 16px;
     margin-left: 16px;
+    margin-right: 16px;
     padding: 16px;
     cursor: pointer;
 }

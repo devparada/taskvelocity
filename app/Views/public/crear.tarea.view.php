@@ -112,7 +112,7 @@
                                         <?php } ?>
                             </select>
                         </div>
-
+                        
                         <div class="campo-formulario">
                             <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
                             <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26">
@@ -120,7 +120,7 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto"]) && $proyecto["editable"] == 0) {
+                                    if (!isset($datos["id_proyecto"]) && $proyecto["id_proyecto"] == $usuario["id_proyecto_personal"]) {
                                         echo "selected";
                                     } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";

@@ -47,7 +47,7 @@
         </div>
         <div id="contenido-principal">
             <div id="imagen-editar">
-                <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $idUsuario ?>" id="imagen-perfil">
+                <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $datos["username"] ?>" id="imagen-perfil">
                 <div id="editar-avatar">
                     <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
                         <div class="campo-formulario">

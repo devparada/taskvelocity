@@ -37,6 +37,7 @@ a {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: Calibri, Candara, Segoe, Segoe UI, Optima, Arial, sans-serif;
+    line-height: 1.2;
 }
 
 /* HEADER */
@@ -131,14 +132,6 @@ input, select, option, textarea {
     align-items: center;
     justify-content: space-between;
     margin: 16px;
-}
-
-#introduccion h1 {
-    width: 186px;
-}
-
-#introduccion a {
-    width: 186px;
 }
 
 .apartados {
@@ -256,72 +249,106 @@ footer a > i {
     margin-left: 10px;
 }
 
+/* BootStrap */
+
+p {
+    margin-bottom: 0;
+}
+
+body {
+    font-family: unset;
+    font-size: unset;
+    font-weight: unset;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-top: unset;
+    margin-bottom: unset;
+    font-weight: unset;
+}
+
+.h2, h2 {
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+dl, ol, ul {
+    margin-bottom: 0;
+}
+
 @media only screen and (max-width: 1400px) {
 
     #logo {
-        width: auto;
+        width: 190px;
         margin-right: 16px;
     }
-    
-        #logo h2 {
-        display: none;
-    }
-    
+
 }
 
 @media only screen and (max-width: 900px) {
 
+    nav ul li a {
+        padding-right: 4px;
+        padding-left: 4px;
+    }
+
     #perfil > a > p {
         display: none;
     }
-    
-    
+
+    #perfil > a > img {
+        margin-right: 16px;
+    }
+
+    #perfil-cerrar {
+        width: auto;
+    }
 }
 
 @media only screen and (max-width: 600px) {
     * {
         font-size: 12px;
     }
-    
+
     #logo h2 {
         display: none;
     }
-    
+
     #logo {
         width: auto;
         margin-right: 16px;
     }
-    
+
     nav ul li a {
         padding-right: 4px;
         padding-left: 4px;
     }
-    
+
     #perfil-cerrar {
         width: auto;
     }
-    
+
     #perfil > a > p {
         display: none;
     }
-    
+
     .proyectos-grid {
         display: flex;
         flex-direction: column;
     }
-    
+
     footer > div > p {
         display: none;
     }
-    
+
     .logo-enlace h2 {
         display: none;
     }
-    
+
     footer {
         justify-content: space-evenly;
     }
-    
+
     footer > a > i {
         font-size: 4px;
     }
