@@ -18,7 +18,6 @@ class UsuarioModelTest extends TestCase {
     }
 
     public function testprocesarLogin() {
-
         $model = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $this->assertTrue($model->procesarLogin("admin", "TaskVelocity1"));

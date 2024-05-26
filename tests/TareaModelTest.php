@@ -17,15 +17,17 @@ class TareaModelTest extends TestCase {
         $_ENV["db.host"] = "localhost:33006";
     }
 
-    public function testcontadorTareasPorEtiqueta() {
+    public function testmostrarUsuariosPorTarea() {
         $model = new \Com\TaskVelocity\Models\TareaModel();
 
-        $this->assertNull($model->buscarTareaPorId(1));
+        $this->assertIsArray($model->mostrarUsuariosPorTarea(1));
+        $this->assertIsArray($model->mostrarUsuariosPorTarea(-1));
     }
 
-    public function testcontadorPorUsuarioPropietario() {
+    public function testbuscarTareaPorId() {
         $model = new \Com\TaskVelocity\Models\TareaModel();
 
-        $this->assertNull($model->buscarTareaPorId(122));
+        $this->assertNull($model->buscarTareaPorId(-1));
+        $this->assertIsArray($model->buscarTareaPorId(1));
     }
 }
