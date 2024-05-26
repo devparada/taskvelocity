@@ -3,7 +3,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <div class="col-6">
-                    <h6 class="m-0 installfont-weight-bold text-primary">Logs</h6>
+                    <p class="m-0 font-weight-bold">Logs</p>
                 </div>
             </div>
             <!-- Card Body -->
@@ -47,13 +47,13 @@
                             if ($paginaActual >= 1) {
                                 ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=0" aria-label="First">
+                                    <a class="page-link" href="/admin/logs?pagina=0" aria-label="Primero">
                                         <span aria-hidden="true">&laquo;</span>
                                         <span class="sr-only">Primero</span>
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual - 1) ?>" aria-label="Previous">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual - 1) ?>" aria-label="Anterior">
                                         <span aria-hidden="true">&lt;</span>
                                         <span class="sr-only">Anterior</span>
                                     </a>
@@ -67,13 +67,13 @@
                             if ($maxPagina > $paginaActual) {
                                 ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual + 1) ?>" aria-label="Next">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual + 1) ?>" aria-label="Siguiente">
                                         <span aria-hidden="true">&gt;</span>
                                         <span class="sr-only">Siguiente</span>
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=<?php echo $maxPagina ?>" aria-label="Last">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo $maxPagina ?>" aria-label="Último">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Último</span>
                                     </a>

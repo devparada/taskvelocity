@@ -8,18 +8,28 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">         
+                <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data" novalidate="novalidate">         
                     <div class="row">
                         <div class="mb-3 col-sm-4">
                             <label for="username">Nombre de usuario <span class="campo-obligatorio">*</span></label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduzca un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduce un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['username']) ? $errores['username'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-5">
                             <label for="imagen_avatar">Avatar</label>
-                            <input type="file" class="form-control-file" id="imagen_avatar" name="imagen_avatar" <?php echo isset($modoVer) ? "disabled" : "" ?>>
-                            <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                            <?php if (!isset($modoVer)) { ?>
+                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
+                            <?php } else { ?>
+                                <?php
+                                if (file_exists("assets/img/usuarios/avatar-$idUsuario.jpg")) {
+                                    ?>
+                                    <img src="assets/img/usuarios/avatar-<?php echo $idUsuario . ".jpg" ?>" class="imagen-mostrar">
+                                <?php } else { ?>
+                                    <p>Esta tarea no tiene imagen</p>
+                                <?php } ?>
+                            <?php } ?>
+                                    <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">
@@ -35,13 +45,13 @@
 
                         <div class="mb-3 col-sm-4">
                             <label for="email">Email <span class="campo-obligatorio">*</span></label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Introduzca un email" autocomplete="email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?>>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Introduce un email" autocomplete="email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['email']) ? $errores['email'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-4">
                             <label for="contrasena">Contraseña <span class="campo-obligatorio">*</span></label>
-                            <input type="password" class="form-control" id="contrasena" name="contrasena" <?php echo isset($modoVer) ? "readonly" : "" ?>>
+                            <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Introduce una contraseña" <?php echo isset($modoVer) ? "readonly" : "" ?>>
                             <p class="text-danger"><?php echo isset($errores['contrasena']) ? $errores['contrasena'] : ''; ?></p>
                         </div>
 
@@ -61,7 +71,7 @@
                             <label for="id_color">Color favorito</label>
                             <select class="form-control" id="id_color" name="id_color"  <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <?php foreach ($colores as $color) { ?>
-                                    <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color"]) && $color["id_color"] == $datos["id_color"] ? "selected" : "" ?>><?php echo $color["nombre_color"]; ?></option>
+                                    <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color"]) && $color["id_color"] == $datos["id_color"] ? "selected" : "" ?>><?php echo $color["simbolo_color"] . " " . $color["nombre_color"]; ?></option>
                                 <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_color']) ? $errores['id_color'] : ''; ?></p>

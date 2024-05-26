@@ -106,6 +106,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data['seccion'] = '/proyectos/crear';
         }
 
+        $data["enviar"] = "Crear proyecto";
+
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
@@ -163,6 +165,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
             $data["errores"] = $errores;
+            $data["enviar"] = "Crear proyecto";
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -175,6 +178,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     /**
      * Comprueba si el usuario logeado es miembro del proyecto o es admin
      * @param array|null $miembros los miembros del proyecto
+     * @param bool $esPropietario si el miembro es propietario del proyecto
      * @return bool Retorna true si es miembro o es admin y false si no
      */
     private function comprobarUsuarioMiembros(?array $miembros, bool $esPropietario): bool {
@@ -194,19 +198,20 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function mostrarEdit(int $idProyecto): void {
-        $data = [];
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         $esPropietario = $modeloProyecto->esPropietario($idProyecto);
         if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
 
-            $data["datos"] = $modeloProyecto->buscarProyectoPorId($idProyecto);
-
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
 
-            $data["modoEdit"] = true;
+            $data = [
+                "enviar" => "Editar proyecto",
+                "datos" => $modeloProyecto->buscarProyectoPorId($idProyecto),
+                "usuarios" => $modeloUsuario->mostrarUsuariosFormulario(),
+                "modoEdit" => true
+            ];
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $data['tituloDiv'] = 'Editar proyecto con el id ' . $idProyecto;
@@ -274,6 +279,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 }
             } else {
                 $data["errores"] = $errores;
+                $data["enviar"] = "Editar proyecto";
 
                 if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);

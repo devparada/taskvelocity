@@ -5,6 +5,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
@@ -38,7 +41,7 @@
                     <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                 </a>
             </div>
-            <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+            <a href="/logout" class="botones botones-header"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
         </div>
     </header>
     <main>
@@ -53,8 +56,9 @@
                         <div class="campo-formulario">
                             <p>Editar avatar</p>
                             <input type="file" id="imagen_avatar" name="imagen_avatar">
-                            <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
-                        </div>
+                        </div> 
+                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+
                 </div>
                 <div id="informacion-adicional">
                     <div class="campo-formulario">
@@ -62,15 +66,15 @@
                             <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
                             <?php
                             ?></p>
-                        <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
                     </div>
+                    <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
 
-                    <p class="texto-error"><?php echo isset($errores["fecha_nacimiento"]) ? $errores["fecha_nacimiento"] : "" ?></p>
                     <p><i class="fa-solid fa-user-plus"></i> <?php
                         setlocale(LC_TIME, 'es_ES.UTF-8');
                         $fechaUsuario = new DateTimeImmutable($datos["fecha_usuario_creado"]);
                         echo strftime("%e de %B", $fechaUsuario->getTimestamp())
                         ?></p>
+                    <p class="texto-error"><?php echo isset($errores["fecha_nacimiento"]) ? $errores["fecha_nacimiento"] : "" ?></p>
                 </div>
             </div>
             <div id="informacion-usuario-editar">

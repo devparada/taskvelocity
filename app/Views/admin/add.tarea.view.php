@@ -22,10 +22,9 @@
                                 <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
                             <?php } else { ?>
                                 <?php
-                                (file_exists("assets/img/tareas/tarea-$idTarea.png")) ? $extension = "png" : $extension = "jpg";
-                                if (file_exists("assets/img/tareas/tarea-$idTarea.$extension")) {
+                                if (file_exists("assets/img/tareas/tarea-$idTarea.jpg")) {
                                     ?>
-                                    <img src="assets/img/tareas/tarea-<?php echo $idTarea . "." . $extension ?>" class="imagen-mostrar">
+                                    <img src="assets/img/tareas/tarea-<?php echo $idTarea . ".jpg" ?>" class="imagen-mostrar">
                                 <?php } else { ?>
                                     <p>Esta tarea no tiene imagen</p>
                                 <?php } ?>

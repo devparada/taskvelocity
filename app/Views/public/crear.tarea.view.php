@@ -5,6 +5,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
@@ -40,7 +43,7 @@
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
-                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                <a href="/logout" class="botones botones-header"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
             </div>
         </header>
         <main>
@@ -112,7 +115,7 @@
                                         <?php } ?>
                             </select>
                         </div>
-                        
+
                         <div class="campo-formulario">
                             <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
                             <select id="id_proyecto_asociado" class="select2" name="id_proyecto_asociado" data-placeholder="Selecciona un proyecto" size="26">
@@ -120,7 +123,7 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto"]) && $proyecto["id_proyecto"] == $usuario["id_proyecto_personal"]) {
+                                    if (!isset($datos["id_proyecto"]) || $proyecto["id_proyecto"] == $usuario["id_proyecto_personal"]) {
                                         echo "selected";
                                     } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";
@@ -140,7 +143,7 @@
                     </div>
 
                     <div class="campo-formulario">
-                        <input type="submit" value="Enviar" name="enviar" class="botones">
+                        <input type="submit" value="<?php echo $enviar ?>" name="enviar" class="botones">
                     </div>
                 </form>
                 <script src="plugins/jquery/jquery.min.js"></script>

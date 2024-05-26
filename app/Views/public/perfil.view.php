@@ -5,7 +5,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
-        
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosPerfil.css">
@@ -36,7 +38,7 @@
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
-                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                <a href="/logout" class="botones botones-header"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
             </div>
         </header>
         <main>
@@ -47,26 +49,28 @@
                 <div id="imagen-editar">
                     <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $usuario["username"] ?>" id="imagen-perfil">
                     <div id="informacion-adicional">
-                        <?php if ($usuario["fecha_nacimiento"]) { ?>
-                            <p><i class="fa-solid fa-cake-candles"></i> <?php
+                        <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                            <?php if ($usuario["fecha_nacimiento"]) { ?>
+                                <p><i class="fa-solid fa-cake-candles"></i> <?php
+                                    setlocale(LC_TIME, 'es_ES.UTF-8');
+                                    $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
+                                    echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
+                                    ?></p>
+                            <?php } ?>
+                            <p><i class="fa-solid fa-user-plus"></i> <?php
                                 setlocale(LC_TIME, 'es_ES.UTF-8');
-                                $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
-                                echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
+                                $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
+                                echo strftime("%e de %B", $fechaUsuario->getTimestamp())
                                 ?></p>
                         <?php } ?>
-                        <p><i class="fa-solid fa-user-plus"></i> <?php
-                            setlocale(LC_TIME, 'es_ES.UTF-8');
-                            $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
-                            echo strftime("%e de %B", $fechaUsuario->getTimestamp())
-                            ?></p>
                         <p>Color favorito: <span style="background-color: <?php echo $usuario["valor_color"] ?>" class="color-circulo"></span> <?php echo $usuario["nombre_color"] ?></p>
                     </div>
                 </div>
                 <div id="informacion-usuario">
-                    <h2 class="apartados-inicio">Hola, <?php echo $usuario["username"] ?></h2>
-                    <p>Tu correo electrónico es: <?php echo $usuario["email"] ?></p>                   
+                    <h2 class="apartados-inicio">Hola, <?php echo ($_SESSION["usuario"]["id_usuario"] != $usuario["id_usuario"]) ? "este es el perfl de" : "" ?> <?php echo $usuario["username"] ?></h2>
+                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> correo electrónico es: <?php echo $usuario["email"] ?></p>                   
                     <?php if ($usuario["descripcion_usuario"] != "") { ?>
-                        <p>Tu descripción es:</p> 
+                        <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> descripción es:</p> 
                         <p><?php echo $usuario["descripcion_usuario"]; ?></p>
                     <?php } else { ?>
                         <p>No tienes una descripción</p>
@@ -75,26 +79,26 @@
                         <h2 class="apartados-inicio">Estadísticas</h2>
                         <div id="contenedor-estadisticas-usuario" class="<?php echo $idUsuario ?>">
                             <div class="estadistica-usuario" id="propietario-proyectos">
-                                <p>Eres propietario de </p>
+                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
                                 <p> <?php echo $proyectoPropietario ?> proyectos</p>
                             </div>
                             <div class="estadistica-usuario" id="propietario-tareas">
-                                <p>Eres propietario de </p>
+                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
                                 <p> <?php echo $tareaPropietario ?> tareas</p>
                             </div>
 
                             <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
-                                <p>Tienes </p>
+                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
                             </div>
 
                             <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
-                                <p>Tienes </p>
+                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
                             </div>
 
                             <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
-                                <p>Tienes </p>
+                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
                             </div>
                         </div>
@@ -103,10 +107,10 @@
                         <h2>Opciones</h2>
                         <div id="informacion-pie">
                             <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
-                                <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
-                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+                                <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones botones-perfil" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
+                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
                             <?php } else { ?>
-                                <a id="boton-editar" href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+                                <a id="boton-editar" href="/proyectos" class="botones botones-perfil"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                             <?php } ?>
                         </div>
                     </div>

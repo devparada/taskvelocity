@@ -5,11 +5,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title><?php echo $titulo ?> | TaskVelocity</title>
+        <!-- BootStrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectosVer.css">
-        <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosVer.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosFormularios.css">
         <!-- Select 2 -->
         <link rel="stylesheet" href="plugins/select2/css/select2.min.css">
@@ -44,7 +47,7 @@
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
-                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                <a href="/logout" class="botones botones-header"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
             </div>
         </header>
         <main>
@@ -97,7 +100,7 @@
                     <?php } else { ?>
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
-                    <p class="enlace-imagen-perfil">Miembros: <?php foreach ($usuarios as $u) { ?>
+                    <p class="enlace-imagen-perfil"><?php foreach ($usuarios as $u) { ?>
                             <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
                         <?php }
                         ?></p>

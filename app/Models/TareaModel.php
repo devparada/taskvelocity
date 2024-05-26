@@ -220,7 +220,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
                 . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
         $stmt->execute([$idUsuario, $idTarea]);
-    }
+        }
 
     /**
      * Edita la tarea en la base de datos a partir de los datos pasados

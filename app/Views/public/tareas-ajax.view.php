@@ -11,7 +11,7 @@
                     <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
                 <?php } ?>
                 <div class="informacion-tarea">
-                    <h3 class="tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></h3>
+                    <p class="titulo-tarjeta tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></p>
                     <p><span class="color-circulo" style="background-color: <?php echo $value[$i]["color_etiqueta"] ?>"></span> <?php echo $value[$i]["nombre_etiqueta"] ?></p>
                     <p class="fecha-limite"><?php echo $value[$i]["fecha_limite_tarea"] ?></p>
                     <p class="miembros-tarea"><?php
@@ -19,7 +19,7 @@
                             foreach ($usuarios as $u) {
                                 if ($u["username"] == $nombreUsuario) {
                                     ?>
-                        <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
+                                    <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $nombreUsuario ?></a>
                                     <?php
                                 }
                             }
@@ -35,5 +35,5 @@
             </div>
         <?php } ?>
     </div>
-<?php
+    <?php
 }

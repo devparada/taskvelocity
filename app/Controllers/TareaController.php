@@ -81,6 +81,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
+        $data["enviar"] = "Crear tarea";
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
@@ -133,6 +134,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $data["datos"] = $datos;
+        $data["enviar"] = "Crear tarea";
 
         $errores = $this->comprobarAddTareas($datos);
 
@@ -160,12 +162,13 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     /**
      * Comprueba si el usuario logeado es miembro de la tarea o es admin
      * @param array|null $miembros los miembros de la tarea
+     * @param bool $esPropietario si el miembro es propietario de la tarea
      * @return bool Retorna true si es miembro o es admin y false si no
      */
-    private function comprobarUsuarioMiembros(?array $miembros): bool {
+    private function comprobarUsuarioMiembros(?array $miembros, bool $esPropietario): bool {
         if (!is_null($miembros)) {
             foreach ($miembros as $persona) {
-                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                if ($persona == $_SESSION["usuario"]["username"] || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS || $esPropietario) {
                     return true;
                 }
             }
@@ -205,6 +208,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
             $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
             $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
+            $data["enviar"] = "Editar tarea";
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
@@ -270,6 +274,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             }
 
             $data["datos"] = $datos;
+            $data["enviar"] = "Editar tarea";
 
             $data["modoEdit"] = true;
 

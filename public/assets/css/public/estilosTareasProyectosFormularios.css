@@ -46,7 +46,8 @@ label {
     width: 100%;
 }
 
-.campo-formulario > :not(.select2), .campo-formulario > .select2 , .campo-formulario > textarea, select2-selection select2-selection--multiple {
+.campo-formulario > :not(.select2, .dropzone-custom, .selection),
+.campo-formulario > textarea, select2-selection select2-selection--multiple {
     padding: 8px;
 }
 
@@ -67,6 +68,24 @@ label {
 }
 
 /* Estilos para el select2 */
+
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow b {
+    margin-top: -2px;
+    margin-left: -12px;
+    border-color: var(--color-secundario-principal) transparent transparent transparent;
+    border-style: solid;
+    border-width: 5px 4px 0;
+}
+
+.select2-container--bootstrap4 .select2-results__option--highlighted, .select2-container--bootstrap4
+.select2-results__option--highlighted.select2-results__option[aria-selected="true"] {
+    background-color: var(--color-secundario-principal);
+}
+
+.select2-container--bootstrap4 .select2-dropdown .select2-results__option[aria-selected="true"] {
+    color: white;
+    background-color: var(--color-secundario-complementario);
+}
 
 .select2-container {
     border-radius: 50px;
@@ -96,4 +115,13 @@ label {
     margin: -4px;
     margin-top: 1px;
     margin-bottom: 1px;
+}
+
+.select2-container--bootstrap4 .select2-selection__clear {
+    padding-left: unset;
+}
+
+.select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {
+    display: flex;
+    align-items: center;
 }

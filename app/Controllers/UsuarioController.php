@@ -257,7 +257,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
         $data['titulo'] = 'Ver usuario ' . $idUsuario;
         $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;
-        $data['tituloDiv'] = 'Mostrando datos del usuario ' . $idUsuario;
+        $data['tituloDiv'] = 'Mostrando los datos del usuario ' . $idUsuario;
 
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $data["roles"] = $modeloRol->mostrarRoles();
@@ -267,6 +267,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+        $data["idUsuario"] = $idUsuario;
         $data["modoVer"] = true;
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -309,15 +310,15 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     public function mostrarPerfil(int $idUsuario): void {
         $data = [];
         $data['seccion'] = '/perfil/' . $idUsuario;
-        if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
-            $data["titulo"] = "Tu perfil";
-        } else {
-            $data["titulo"] = "Perfil $idUsuario";
-        }
-
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+
+        if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+            $data["titulo"] = "Tu perfil";
+        } else {
+            $data["titulo"] = "Perfil de " . $data["usuario"]["username"];
+        }
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $data["proyectoPropietario"] = $modeloProyecto->contadorPorUsuarioPropietario($idUsuario);

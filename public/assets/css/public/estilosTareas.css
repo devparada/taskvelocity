@@ -6,8 +6,6 @@
 #tareas-grid {
     display: flex;
     text-align: center;
-    column-gap: 20px;
-    row-gap: 20px;
     line-height: 1em;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -43,6 +41,7 @@
 }
 
 .informacion {
+    margin: 16px;
     padding: 16px;
     background: var(--color-secundario-principal);
     border-radius: 20px;
@@ -54,18 +53,8 @@
 }
 
 /* El icono cambia de color cuando se usa la clase .informacion-warning */
-.informacion-warning ::before {
+.informacion-warning > p, .informacion-warning > i, .informacion-warning ::before {
     color: black;
-}
-
-.informacion-warning > p, .informacion-warning > i {
-    color: black;
-}
-
-.tarea-titulo {
-    color: black;
-    margin-top: 2px;
-    margin-bottom: 10px;
 }
 
 .informacion-tarea {
@@ -119,4 +108,10 @@
 
 .descripcion-tarea {
     word-wrap: break-word;
+}
+
+@media only screen and (max-width: 900px) {
+    #tareas-grid {
+        flex-direction: column;
+    }
 }

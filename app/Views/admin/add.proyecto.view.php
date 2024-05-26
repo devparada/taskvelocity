@@ -22,10 +22,9 @@
                                 <input type="file" class="form-control-file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                             <?php } else { ?>
                                 <?php
-                                (file_exists("assets/img/proyectos/proyecto-$idProyecto.png")) ? $extension = "png" : $extension = "jpg";
-                                if (file_exists("assets/img/proyectos/proyecto-$idProyecto.$extension")) {
+                                if (file_exists("assets/img/proyectos/proyecto-$idProyecto.jpg")) {
                                     ?>
-                                    <img src="assets/img/proyectos/proyecto-<?php echo $idProyecto . "." . $extension ?>" class="imagen-mostrar" id="imagen_proyecto">
+                                    <img src="assets/img/proyectos/proyecto-<?php echo $idProyecto . ".jpg" ?>" class="imagen-mostrar" id="imagen_proyecto">
                                 <?php } else { ?>
                                     <p>Este proyecto no tiene imagen</p>
                                 <?php } ?>

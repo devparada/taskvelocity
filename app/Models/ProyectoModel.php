@@ -138,7 +138,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                     $this->addProyectoUsuario((int) $idUsuario, (int) $idProyecto);
                 }
             }
-
+            
             if (!empty($_FILES["imagen_proyecto"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);

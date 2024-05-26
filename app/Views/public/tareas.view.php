@@ -41,7 +41,7 @@
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
-                <a href="/logout" class="botones"><i class="fa-solid fa-arrow-right-from-bracket"></i> Cerrar sesión</a>
+                <a href="/logout" class="botones botones-header"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</a>
             </div>
         </header>
         <main>
@@ -84,31 +84,13 @@
                             // Insertar el HTML obtenido en el contenedor
                             divTareas.innerHTML = xhr.responseText;
 
-                            var inicialX, offsetX;
+                            const scriptMover = document.createElement('script');
+                            scriptMover.src = 'assets/js/public/moverTareas.js';
+                            document.body.appendChild(scriptMover);
 
-                            function moverContenedor(evento) {
-                                var distanciaX = evento.clientX - inicialX;
-                                var nuevaPosicionX = offsetX - distanciaX;
-
-                                // Establece la nueva posición del elemento
-                                divTareas.scrollLeft = nuevaPosicionX;
-                            }
-
-                            divTareas.addEventListener("mousedown", function (evento) {
-                                // Guarda la posición inicial del ratón y la posición inicial del elemento
-                                inicialX = evento.clientX;
-                                offsetX = divTareas.scrollLeft;
-
-                                divTareas.addEventListener("mousemove", moverContenedor);
-                            });
-
-                            document.addEventListener("mouseup", function () {
-                                divTareas.removeEventListener("mousemove", moverContenedor);
-                            });
-
-                            const script = document.createElement('script');
-                            script.src = 'assets/js/public/fechasTareasProyectos.js';
-                            document.body.appendChild(script);
+                            const scriptFecha = document.createElement('script');
+                            scriptFecha.src = 'assets/js/public/fechasTareasProyectos.js';
+                            document.body.appendChild(scriptFecha);
                         }
                     };
 
@@ -116,6 +98,6 @@
                 }
 
                 ajaxTareas();
-                setInterval(ajaxTareas, 10000);
+                setInterval(ajaxTareas, 1000000);
             </script>
         </main> <!-- Continua en plantillas/footer -->

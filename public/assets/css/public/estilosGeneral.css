@@ -160,6 +160,11 @@ input, select, option, textarea {
     background-color: var(--color-secundario-complementario);
 }
 
+.botones-header {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
 .imagenes-pequenas {
     width: 36px;
 }
@@ -196,6 +201,10 @@ input, select, option, textarea {
     width: 20px;
     border-radius: 25px;
     margin-right: 6px;
+}
+
+.titulo-tarjeta {
+    font-size: 18px;
 }
 
 /* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */
@@ -249,7 +258,7 @@ footer a > i {
     margin-left: 10px;
 }
 
-/* BootStrap */
+/* Bootstrap */
 
 p {
     margin-bottom: 0;
@@ -258,7 +267,6 @@ p {
 body {
     font-family: unset;
     font-size: unset;
-    font-weight: unset;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
@@ -267,19 +275,24 @@ body {
     font-weight: unset;
 }
 
-.h2, h2 {
-    font-size: 1.5em;
-    font-weight: 400;
-}
-
 dl, ol, ul {
     margin-bottom: 0;
+    padding-left: 0;
+}
+
+body {
+    line-height: unset;
+}
+
+button, input, optgroup, select, textarea {
+    font-size: unset;
+    line-height: unset;
 }
 
 @media only screen and (max-width: 1400px) {
 
     #logo {
-        width: 190px;
+        width: auto;
         margin-right: 16px;
     }
 
@@ -287,9 +300,15 @@ dl, ol, ul {
 
 @media only screen and (max-width: 900px) {
 
+    /* HEADER 900px */
+
     nav ul li a {
         padding-right: 4px;
         padding-left: 4px;
+    }
+
+    #logo h2 {
+        display: none;
     }
 
     #perfil > a > p {
@@ -297,18 +316,28 @@ dl, ol, ul {
     }
 
     #perfil > a > img {
-        margin-right: 16px;
+        margin-right: 6px;
     }
 
     #perfil-cerrar {
         width: auto;
     }
+
+    /* MAIN 900px */
+
+    #introduccion {
+        flex-direction: column;
+        row-gap: 20px;
+        margin: 0;
+    }
 }
 
 @media only screen and (max-width: 600px) {
-    * {
+    p, a, table {
         font-size: 12px;
     }
+
+    /* HEADER 600px */
 
     #logo h2 {
         display: none;
@@ -332,10 +361,20 @@ dl, ol, ul {
         display: none;
     }
 
+    /* MAIN 600px */
+
+    #introduccion {
+        flex-direction: column;
+        row-gap: 20px;
+        margin: 0;
+    }
+
     .proyectos-grid {
         display: flex;
         flex-direction: column;
     }
+
+    /* FOOTER 600px */
 
     footer > div > p {
         display: none;
@@ -351,5 +390,30 @@ dl, ol, ul {
 
     footer > a > i {
         font-size: 4px;
+    }
+}
+
+@media only screen and (max-width: 370px) {
+
+    /* HEADER 370px */
+
+    header {
+        padding: 0;
+    }
+
+    #logo {
+        width: auto;
+        margin-right: 0;
+    }
+
+    nav ul li a {
+        padding-left: 0.15em;
+        padding-right: 0.15em;
+    }
+
+    .botones-header {
+        padding-left: 0.25em;
+        padding-right: 0.25em;
+        border-radius: 10px;
     }
 }

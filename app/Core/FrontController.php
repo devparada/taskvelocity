@@ -194,7 +194,7 @@ class FrontController {
                         , 'get');
             }
 
-            // Rutas de usuarios
+            // Rutas de proyectos
             Route::add('/proyectos',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\ProyectoController();
@@ -251,6 +251,7 @@ class FrontController {
                     }
                     , 'get');
 
+            // Rutas de tareas
             Route::add('/tareas',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\TareaController();
@@ -293,6 +294,7 @@ class FrontController {
                     }
                     , 'get');
 
+            // Rutas de perfil
             Route::add('/perfil/([0-9]+)',
                     function ($idUsuario) {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();

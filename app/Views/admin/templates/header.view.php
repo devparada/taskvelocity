@@ -34,14 +34,14 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
     </head>
-    <body class="dark-mode hold-transition sidebar-mini layout-fixed <?php echo isset($_COOKIE['dark']) ? 'dark-mode' : ''; ?>">
+    <body class="dark-mode hold-transition sidebar-mini layout-fixed">
         <div class="wrapper"> 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-dark">
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button" title="Menú"><i class="fas fa-bars"></i></a>
                     </li>      
                 </ul>
 
@@ -50,16 +50,15 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel user-panel-personalizado">
                         <div>
-                            <img src="assets/img/usuarios/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . "."; ?><?php echo file_exists("assets/img/usuarios/avatar-" . $_SESSION['usuario']["id_usuario"] . ".png") ? "png" : "jpg" ?>"" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
+                            <img src="assets/img/usuarios/avatar-<?php echo $_SESSION['usuario']['id_usuario'] . ".jpg" ?>" class="img-circle" alt="Avatar Usuario <?php echo $_SESSION['usuario']['username'] ?>">
                         </div>
                         <div class="info">
                             <p><?php echo isset($_SESSION['usuario']['username']) ? $_SESSION['usuario']['username'] : '<i>Sin establecer</i>'; ?></p>
                         </div>
-
                     </div>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/logout' : ''; ?>" role="button">
+                        <a class="nav-link" title="Cerrar sesión" href="<?php echo isset($_SESSION['usuario']['id_usuario']) ? '/logout' : ''; ?>" role="button">
                             <?php if (isset($_SESSION['usuario']['id_usuario'])) { ?>
                                 <i class="text-danger fas fa-sign-out-alt"></i> 
                                 <?php
@@ -80,7 +79,7 @@
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
                 <a href="/" class="brand-link">
-                    <img src="assets/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                    <img src="assets/img/logo.png" alt="Logo TaskVelocity" class="brand-image img-circle elevation-3" style="opacity: .8">
                     <span class="brand-text font-weight-light">TaskVelocity</span>
                 </a>
 

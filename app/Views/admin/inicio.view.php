@@ -4,7 +4,7 @@
         <!-- small box -->
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><?php echo $numProyectos; ?></h3>
+                <h2><?php echo $numProyectos; ?></h2>
                 <p>Proyectos</p>
             </div>
             <div class="icon">
@@ -18,7 +18,7 @@
         <!-- small box -->
         <div class="small-box bg-green">
             <div class="inner">
-                <h3><?php echo $numTareas; ?></h3>
+                <h2><?php echo $numTareas; ?></h2>
                 <p>Tareas</p>
             </div>
             <div class="icon">
@@ -32,7 +32,7 @@
         <!-- small box -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3><?php echo $numUsuarios; ?></h3>
+                <h2><?php echo $numUsuarios; ?></h2>
                 <p>Usuarios</p>
             </div>
             <div class="icon">
