@@ -18,11 +18,6 @@ label, input, textarea {
     width: unset;
 }
 
-.apartados-inicio {
-    font-size: 32px;
-    margin-bottom: 16px;
-}
-
 #contenido-principal {
     display: flex;
     width: 100%;
@@ -36,8 +31,13 @@ label, input, textarea {
     justify-content: center;
 }
 
+.apartados-inicio {
+    font-size: 32px;
+    margin-bottom: 16px;
+}
+
 #imagen-perfil {
-    width: 50%;
+    width: 70%;
     border-radius: 50px;
 }
 
@@ -60,7 +60,7 @@ label, input, textarea {
 
 #informacion-usuario, #informacion-usuario-editar {
     display: flex;
-    width: 20%;
+    width: 80%;
     flex-direction: column;
 }
 
@@ -71,7 +71,7 @@ label, input, textarea {
 }
 
 #informacion-usuario-formulario > form {
-    width: 20%;
+    width: 80%;
 }
 
 #informacion-usuario > p, #informacion-usuario-editar > p {
@@ -111,8 +111,8 @@ label, input, textarea {
 }
 
 .botones-perfil {
-    padding-left: 26px;
-    padding-right: 26px;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
 #boton-borrar {
@@ -124,9 +124,11 @@ label, input, textarea {
 }
 
 #informacion-pie {
+    width: 80%;
     margin-top: 16px;
     display: flex;
     justify-content: space-between;
+    column-gap: 1px;
 }
 
 #informacion-pie-editar {
@@ -141,4 +143,36 @@ label, input, textarea {
 
 #informacion-usuario-editar {
     text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    #contenido-principal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #imagen-editar {
+        width: 80%;
+    }
+
+    #informacion-usuario, #informacion-usuario-editar {
+        align-items: center;
+    }
+
+    #informacion-usuario > p, #informacion-usuario-editar > p {
+        text-align: center;
+    }
+
+    .apartados-inicio {
+        text-align: center;
+    }
+
+    .botones-perfil {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    #informacion-pie {
+        width: 100%;
+    }
 }

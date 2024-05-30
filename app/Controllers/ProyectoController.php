@@ -300,16 +300,22 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
-        $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (isset($_POST)) {
+            $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+        }
 
-        if ($modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto)) {
-            header("location: /proyectos/ver/$idProyecto");
+        $_SESSION["error_addTareasProyecto"] = "";
+
+        if (!empty($datos["id_tareas_asociadas"])) {
+            if ($modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto)) {
+                header("location: /proyectos/ver/$idProyecto");
+            } else {
+                $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar una tarea válida";
+                $this->verProyecto($idProyecto);
+            }
         } else {
-            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-            $data["tareas"] = $modeloTarea->mostrarTareas();
-            $data["idProyecto"] = $idProyecto;
-
-            $this->view->showViews(array('public/add.tareas.proyecto.view.php', 'public/plantillas/footer.view.php'), $data);
+            $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar una tarea";
+            $this->verProyecto($idProyecto);
         }
     }
 

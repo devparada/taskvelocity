@@ -60,20 +60,11 @@
                     <p><?php echo $informacion["texto"] ?></p>
                 </div>
             <?php } ?>
-            <?php if (empty($tareas) && $_SERVER["REQUEST_URI"] == "/tareas") { ?>
-                <div class="informacion">
-                    <p><i class="fa-solid fa-circle-info"></i> Crea tu primera tarea pulsando en el botón Crear una tarea</p>
-                </div>
-            <?php } else if ((empty($tareas)) && $_SERVER["REQUEST_URI"] != "/tareas") { ?>
-                <div class="informacion informacion-warning">
-                    <p><i class="fa-solid fa-circle-info"></i> No se han encontrado tareas con esta etiqueta</p>
-                </div>
-            <?php } ?>
-            <div id="tareas-grid">
+            <div id="contenedor-principal">
             </div>
             <script>
                 function ajaxTareas() {
-                    const divTareas = document.getElementById('tareas-grid');
+                    const divContenedor = document.getElementById('contenedor-principal');
 
                     // Realizar la solicitud AJAX
                     let xhr = new XMLHttpRequest();
@@ -82,7 +73,7 @@
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4 && xhr.status === 200) {
                             // Insertar el HTML obtenido en el contenedor
-                            divTareas.innerHTML = xhr.responseText;
+                            divContenedor.innerHTML = xhr.responseText;
 
                             const scriptMover = document.createElement('script');
                             scriptMover.src = 'assets/js/public/moverTareas.js';

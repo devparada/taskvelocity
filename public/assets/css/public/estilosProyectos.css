@@ -49,6 +49,10 @@
     row-gap: 1.5px;
 }
 
+.fecha-limite i {
+    color: white;
+}
+
 .imagen-proyecto {
     width: 100%;
     border-radius: 50px;

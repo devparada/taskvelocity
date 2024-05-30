@@ -20,7 +20,7 @@
                         <p class="miembros-tarea enlace-imagen-perfil"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
                                 <?php foreach ($usuarios as $u) { ?>
                                     <?php if ($u["username"] == $nombreUsuario) { ?>
-                                        <a href="/perfil/<?php echo $u["id_usuario"] ?>" class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>.jpg" alt="Avatar <?php echo $u["username"] ?>" class="imagen-perfil-pequena"><?php echo $u["username"] ?></a>
+                                        <a href="/perfil/<?php echo $u["id_usuario"] ?>" class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>.jpg" alt="Avatar <?php echo ($u["username"] == $_SESSION["usuario"]["username"]) ? "Tú" : $u["username"] ?>" class="imagen-perfil-pequena"><?php echo ($u["username"] == $_SESSION["usuario"]["username"]) ? "Tú" : $u["username"] ?></a>
                                     <?php } ?>
                                 <?php } ?>
                                 <?php } ?></p>

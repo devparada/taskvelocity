@@ -63,21 +63,28 @@
                     <p id="fecha-limite">Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
                     <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <div id="anadirTareaProyecto">
-                        <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
-                            <div class="campo-formulario">
+                        <div class="campo-formulario">
+                            <div id="titulo-anadir">
                                 <label for="id_tareas_asociadas[]">Añade una tarea al proyecto</label>
-                                <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas[]" data-placeholder="Selecciona una tarea" multiple>
-                                    <option value=""></option>
-                                    <?php foreach ($todasTareas as $tarea) { ?>
-                                        <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
-                                    <?php } ?>
-                                </select>
+                                <button id="anadir-tarea" class="botones">Añadir tarea</button>
                             </div>
+                        </div>
+                        <form id="formulario-anadir" action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
+                            <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas[]" data-placeholder="Selecciona una tarea" multiple>
+                                <option value=""></option>
+                                <?php foreach ($todasTareas as $tarea) { ?>
+                                    <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
+                                <?php } ?>
+                            </select>
 
                             <div class="campo-formulario">
                                 <input type="submit" value="Añadir tarea" name="enviar" class="botones">
                             </div>
                         </form>
+                        <?php if (!empty($_SESSION["error_addTareasProyecto"])) { ?>
+                            <p class="texto-error"><?php echo $_SESSION["error_addTareasProyecto"] ?></p>
+                            <?php } ?>
+
                     </div>
                     <div id="titulo-tabla">
                         <p>Tareas del proyecto</p>
@@ -125,4 +132,10 @@
             <script src="assets/js/admin/pages/main.js"></script>
 
             <script src="assets/js/public/fechasTareasProyectosVer.js"></script>
+
+            <script>
+                document.getElementById("anadir-tarea").addEventListener("click", function () {
+                    document.getElementById("formulario-anadir").style.display = "block";
+                });
+                            </script>
         </main> <!-- Continua en plantillas/footer -->

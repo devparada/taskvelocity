@@ -102,7 +102,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $datosFinal = $this->recogerNombresUsuarios($datos);
 
         $grupos = $this->agruparTareaProyecto($datosFinal);
-        
+
         return $grupos;
     }
 
@@ -218,9 +218,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function addUsuarioTarea(int $idUsuario, int $idTarea): void {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
-                . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+                . "(id_usuarioTAsoc, id_tareaTAsoc) "
+                . "VALUES(?, ?)");
         $stmt->execute([$idUsuario, $idTarea]);
-        }
+    }
 
     /**
      * Edita la tarea en la base de datos a partir de los datos pasados
@@ -239,8 +240,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 . " WHERE id_tarea=?");
 
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $idEtiqueta, $idProyecto, $idTarea])) {
+
+            $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
+            $stmt->execute([$idTarea]);
+
+            $idUsuarioTareaProp = (int) $stmt->fetch()["id_usuario_tarea_prop"];
+
             if (!empty($idUsuariosAsociados)) {
+                array_push($idUsuariosAsociados, $idUsuarioTareaProp);
                 $this->editarUsuariosTareas($idUsuariosAsociados, $idTarea);
+            } else {
+                $this->editarUsuariosTareas([$idUsuarioTareaProp], $idTarea);
             }
 
             if (!empty($_FILES["imagen_tarea"]["name"])) {
@@ -261,11 +271,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt->execute([$idTarea]);
 
         // Selecciona la tarea
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
-        $stmt->execute([$idTarea]);
-
-        $idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
-        $this->addUsuarioTarea($idUsuarioProp, $idTarea);
+        // $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
+        // $stmt->execute([$idTarea]);
+        //$idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
+        //$this->addUsuarioTarea($idUsuarioProp, $idTarea);
 
         foreach ($idUsuarios as $idUsuario) {
             $this->addUsuarioTarea((int) $idUsuario, $idTarea);

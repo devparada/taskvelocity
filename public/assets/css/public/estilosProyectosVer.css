@@ -69,6 +69,14 @@
     margin-left: 42px;
 }
 
+#formulario-anadir {
+    display: none;
+}
+
+#titulo-anadir {
+    margin-bottom: 6px;
+}
+
 #anadirTareaProyecto {
     width: 70%;
     margin-bottom: 10px;

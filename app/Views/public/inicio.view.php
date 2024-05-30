@@ -49,12 +49,12 @@
     <main>
         <div id="main-introduccion">
             <h1 class="apartados apartados-inicio">TaskVelocity</h1>
-            <p>Organiza tu trabajo con este gestor de tareas y proyectos.</p>
-            <p>Naciendo click a uno de los de los botones puedes empezar hoy a usarlo:</p>
+            <p>Organiza tu trabajo con este gestor de tareas y proyectos veloz.</p>
+            <p>Haciendo click a uno los botones puedes empezar hoy a usarlo:</p>
             <div id="contenedor-botones-inicio">
-                <a href="#" class="botones botones-inicio">Crea cuenta ahora</a>
+                <a href="/register" class="botones botones-inicio">Crea cuenta ahora</a>
                 <p>o</p>
-                <a href="#" class="botones botones-inicio">Inicia sesión</a>
+                <a href="/login" class="botones botones-inicio">Inicia sesión</a>
             </div>
         </div>
 

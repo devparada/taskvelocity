@@ -80,7 +80,7 @@ nav ul li a {
 #logo {
     display: flex;
     align-items: center;
-    width: 310px;
+    width: 200px;
 }
 
 #logo h2 {
@@ -91,7 +91,7 @@ nav ul li a {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 310px;
+    width: 200px;
 }
 
 #perfil {
@@ -106,13 +106,13 @@ nav ul li a {
 
 #perfil img {
     margin-left: 10px;
-    width: 50px;
+    width: 40px;
     border-radius: 50px;
 }
 
 #perfil p {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 /* MAIN */
@@ -182,6 +182,8 @@ input, select, option, textarea {
     margin-right: 6px;
     margin-left: 6px;
 }
+
+
 
 .miembros-tarea {
     display: flex;
@@ -390,6 +392,10 @@ button, input, optgroup, select, textarea {
 
     footer > a > i {
         font-size: 4px;
+    }
+    
+    .color-circulo {
+        padding-left: 5px;
     }
 }
 

@@ -310,7 +310,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
         $esPropietario = $modeloTarea->esPropietario($idTarea);
 
-        if (!is_null($miembrosTarea) && comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
+        if (!is_null($miembrosTarea) && $this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
             if ($modeloTarea->deleteTarea($idTarea)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "La tarea ha sido eliminada correctamente";

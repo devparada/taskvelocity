@@ -46,7 +46,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
         }
-        
+
         return $datos;
     }
 
@@ -138,7 +138,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                     $this->addProyectoUsuario((int) $idUsuario, (int) $idProyecto);
                 }
             }
-            
+
             if (!empty($_FILES["imagen_proyecto"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->guardarImagen("proyectos", "proyecto", (int) $idProyecto);
@@ -175,7 +175,6 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                 . "(id_usuarioPAsoc, id_proyectoPAsoc) "
                 . "VALUES(?, ?)");
-
         $stmt->execute([$idUsuario, $idProyecto]);
     }
 
@@ -194,9 +193,18 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "WHERE id_proyecto=?");
 
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idProyecto])) {
-            // Se consigue el id del proyecto debido a que es la última tarea insertada
+
+            $stmt = $this->pdo->prepare("SELECT * FROM proyectos WHERE id_proyecto=?");
+            $stmt->execute([$idProyecto]);
+
+            $idUsuarioProyectoProp = (int) $stmt->fetch()["id_usuario_proyecto_prop"];
+
             if (!empty($idUsuariosAsociados)) {
+                array_push($idUsuariosAsociados, $idUsuarioProyectoProp);
                 $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
+            // Si en edición de la tarea se queda solo el usuario propietario, se almacena
+            } else {
+                $this->editarUsuariosProyectos([$idUsuarioProyectoProp], $idProyecto);
             }
 
             if (!empty($_FILES["imagen_proyecto"]["name"])) {
@@ -212,34 +220,27 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     private function editarUsuariosProyectos(array $idUsuarios, int $idProyecto) {
+
         // Elimina todos los usuarios del proyecto
         $stmt = $this->pdo->prepare("DELETE FROM usuarios_proyectos "
                 . "WHERE id_proyectoPAsoc=?");
-
         $stmt->execute([$idProyecto]);
-
-        $stmt2 = $this->pdo->prepare("SELECT * FROM proyectos "
-                . "WHERE id_proyecto=?");
-
-        $stmt2->execute([$idProyecto]);
-
-        $idUsuarioProp = $stmt2->fetch()["id_usuario_proyecto_prop"];
-        $this->addProyectoUsuario($idUsuarioProp, $idProyecto);
 
         foreach ($idUsuarios as $idUsuario) {
             $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
 
-            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-            $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+            /*
+              $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+              $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
 
-            foreach ($tareas as $tarea) {
-                $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
-                $stmt->execute([$tarea["id_tarea"]]);
+              foreach ($tareas as $tarea) {
+              $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
+              $stmt->execute([$tarea["id_tarea"]]);
 
-                $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
-                        . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
-                $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
-            }
+              $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+              . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+              $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
+              } */
         }
     }
 

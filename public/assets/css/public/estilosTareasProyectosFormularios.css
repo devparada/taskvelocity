@@ -46,7 +46,7 @@ label {
     width: 100%;
 }
 
-.campo-formulario > :not(.select2, .dropzone-custom, .selection),
+.campo-formulario > :not(.select2, .selection, #titulo-anadir),
 .campo-formulario > textarea, select2-selection select2-selection--multiple {
     padding: 8px;
 }
@@ -82,7 +82,11 @@ label {
     background-color: var(--color-secundario-principal);
 }
 
-.select2-container--bootstrap4 .select2-dropdown .select2-results__option[aria-selected="true"] {
+.select2-container--bootstrap4 .select2-selection {
+    border-radius: 25px;
+}
+
+.select2-container--bootstrap4 .select2-results__option[aria-selected="true"] {
     color: white;
     background-color: var(--color-secundario-complementario);
 }
@@ -93,6 +97,10 @@ label {
 
 .select2-results__options > li {
     color: black;
+}
+
+.select2-selection--multiple, .select2-search select2-search--inline, .select2-search__field {
+    width: 100%;
 }
 
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__clear {
@@ -124,4 +132,5 @@ label {
 .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
