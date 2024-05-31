@@ -20,6 +20,11 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
+    public function buscarUsuariosAsync() {
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        echo json_encode($modeloUsuario->buscarUsuariosAsync());
+    }
+
     public function mostrarLogin() {
         $data = [];
         $data["titulo"] = "Login";
@@ -50,6 +55,9 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorUsername($emailUsername);
         }
+
+        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+        $modeloLog->crearLog("El usuario " . $usuarioEncontrado["username"] . "ha iniciado sesión", self::ROL_ADMIN);
 
         $_SESSION["usuario"] = $usuarioEncontrado;
         $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
@@ -114,17 +122,22 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($errores)) {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+            $modeloLog = new \Com\TaskVelocity\Models\LogModel();
             if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] = self::ROL_ADMIN) {
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"])) {
+                    $modeloLog->crearLog("Se ha creado el usuario " . $datos["username"], self::ROL_ADMIN);
                     header("location: /admin/usuarios");
                 }
             } else {
                 // El 2 es el id de rol del usuario (cuando se registra el usuario se añade el id de rol 2 que es usuario)
                 if ($modeloUsuario->addUsuario($datos["username"], $datos["contrasena"], $datos["email"], self::ROL_USUARIO, null, "", $datos["id_color"])) {
                     $this->crearLogin($datos["email"]);
+                    $modeloLog->crearLog("Se ha registrado el usuario " . $datos["username"], self::ROL_ADMIN);
                     header("location: /proyectos");
                 }
             }
+
+            $modeloLog->crearLog($_POST, $_SESSION);
         } else {
             $data["errores"] = $errores;
 

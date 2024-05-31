@@ -69,20 +69,8 @@
 
                         <div class="campo-formulario">
                             <label for="id_usuarios_asociados[]">Usuarios asociados</label>
-                            <select id="id_usuarios_asociados[]" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
+                            <select id="id_usuarios_asociados" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
                                 <option value=""></option>
-                                <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
-                                    <?php
-                                    if (isset($datos["nombresUsuarios"])) {
-                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
-                                            if (trim($nombreUsuario) == $usuario["username"]) {
-                                                echo "selected";
-                                            }
-                                        }
-                                    }
-                                    ?>><?php echo $usuario["username"]; ?></option>
-                                        <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -102,5 +90,8 @@
                 <script src="plugins/jquery/jquery.min.js"></script>
                 <!-- Select2 -->
                 <script src="plugins/select2/js/select2.full.min.js"></script>
+                <script src="plugins/select2/js/i18n/es.js"></script>
                 <script src="assets/js/admin/pages/main.js"></script>
+
+                <script src="assets/js/public/mostrarUsuariosAsync.js"></script>
         </main> <!-- Continua en plantillas/footer -->

@@ -52,3 +52,14 @@
 .dark-mode .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
     color: black;
 }
+
+/* Estilos para el select2 */
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered
+li:first-child.select2-search.select2-search--inline .select2-search__field {
+    color: black;
+}
+
+.select2-container--default .select2-results__option {
+    color: white;
+}

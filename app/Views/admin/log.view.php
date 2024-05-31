@@ -36,7 +36,7 @@
                             ?>
                         </tbody>
                         <tfoot>
-                        <p>Total de logs: <?php echo count($logs); ?></p>
+                        <p>Total de logs: <?php echo $contarLogs ?></p>
                         </tfoot>
                     </table>
                 </div>
@@ -62,12 +62,12 @@
                             }
                             ?>
 
-                            <li class="page-item active"><a class="page-link"><?php echo $paginaActual ?></a></li>
+                            <li class="page-item active"><a class="page-link"><?php echo ++$paginaActual ?></a></li>
                             <?php
                             if ($maxPagina > $paginaActual) {
                                 ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual + 1) ?>" aria-label="Siguiente">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo ($paginaActual) ?>" aria-label="Siguiente">
                                         <span aria-hidden="true">&gt;</span>
                                         <span class="sr-only">Siguiente</span>
                                     </a>

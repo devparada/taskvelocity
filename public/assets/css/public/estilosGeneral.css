@@ -80,7 +80,7 @@ nav ul li a {
 #logo {
     display: flex;
     align-items: center;
-    width: 200px;
+    width: 213px;
 }
 
 #logo h2 {
@@ -91,7 +91,6 @@ nav ul li a {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 200px;
 }
 
 #perfil {
@@ -297,6 +296,10 @@ button, input, optgroup, select, textarea {
         width: auto;
         margin-right: 16px;
     }
+    
+    #perfil-cerrar {
+        width: auto;
+    }
 
 }
 
@@ -309,6 +312,10 @@ button, input, optgroup, select, textarea {
         padding-left: 4px;
     }
 
+    #logo {
+        width: 148px;
+    }
+    
     #logo h2 {
         display: none;
     }

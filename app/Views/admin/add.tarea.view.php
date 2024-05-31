@@ -17,6 +17,16 @@
                         </div>
 
                         <div class="mb-3 col-sm-3">
+                            <label for="id_etiqueta">Etiqueta <span class="campo-obligatorio">*</span></label>
+                            <select class="form-control" id="id_etiqueta" name="id_etiqueta" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                                <?php foreach ($etiquetas as $etiqueta) { ?>
+                                    <option value="<?php echo $etiqueta["id_etiqueta"] ?>" <?php echo isset($datos["etiqueta"]) && $etiqueta["id_etiqueta"] == $datos["etiqueta"] ? "selected" : "" ?>><?php echo $etiqueta["nombre_etiqueta"]; ?></option>
+                                <?php } ?>
+                            </select>
+                            <p class="text-danger"><?php echo isset($errores['nombre_tarea']) ? $errores['nombre_tarea'] : ''; ?></p>
+                        </div>
+
+                        <div class="mb-3 col-sm-3">
                             <label for="imagen_tarea">Imagen</label>
                             <?php if (!isset($modoVer)) { ?>
                                 <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
@@ -42,13 +52,13 @@
                             <label for="id_color_tarea">Color de la tarea <span class="campo-obligatorio">*</span></label>
                             <select class="form-control" id="id_color_tarea" name="id_color_tarea" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <?php foreach ($colores as $color) { ?>
-                                    <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color_tarea"]) && $color["id_color"] == $datos["id_color_tarea"] ? "selected" : "" ?>><?php echo $color["nombre_color"]; ?></option>
+                                    <option value="<?php echo $color["id_color"] ?>" <?php echo isset($datos["id_color_tarea"]) && $color["id_color"] == $datos["id_color_tarea"] ? "selected" : "" ?>><?php echo $color["simbolo_color"] . " " . $color["nombre_color"]; ?></option>
                                 <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_color_tarea']) ? $errores['id_color_tarea'] : ''; ?></p>
                         </div>
 
-                        <div class="mb-3 col-sm-3">
+                        <div class="mb-3 col-sm-5">
                             <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
                             <select class="form-control" id="id_proyecto_asociado" required name="id_proyecto_asociado" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value="">Selecciona un proyecto</option>
@@ -59,27 +69,15 @@
                             <p class="text-danger"><?php echo isset($errores['id_proyecto_asociado']) ? $errores['id_proyecto_asociado'] : ''; ?></p>
                         </div>
 
-                        <div class="mb-3 col-sm-3">
-                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
-                            <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                        <div class="mb-3 col-sm-4">
+                            <label for="id_usuarios_asociados">Usuarios asociados</label>
+                            <select class="form-control select2" id="id_usuarios_asociados" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
-                                <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
-                                    <?php
-                                    if (isset($datos["nombresUsuarios"])) {
-                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
-                                            if (trim($nombreUsuario) == $usuario["username"]) {
-                                                echo "selected";
-                                            }
-                                        }
-                                    }
-                                    ?>><?php echo $usuario["username"]; ?></option>                               
-                                        <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>
                         </div>
 
-                        <div class="mb-3 col-sm-6">
+                        <div class="mb-3 col-sm-12">
                             <label for="descripcion_tarea">Descripción de la tarea</label>
                             <textarea class="form-control" id="descripcion_tarea" name="descripcion_tarea" placeholder="Introduzca una descripción de la tarea (opcional)" rows="3" <?php echo isset($modoVer) ? "readonly" : "" ?>><?php echo isset($datos["descripcion_tarea"]) ? $datos["descripcion_tarea"] : "" ?></textarea>
                             <p class="text-danger"><?php echo isset($errores['descripcion_tarea']) ? $errores['descripcion_tarea'] : ''; ?></p>

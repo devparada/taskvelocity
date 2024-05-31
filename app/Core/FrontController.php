@@ -337,6 +337,13 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/async/buscarUsuarios',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
+                        $controlador->buscarUsuariosAsync();
+                    }
+                    , 'get');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();

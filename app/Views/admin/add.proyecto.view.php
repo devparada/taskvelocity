@@ -40,20 +40,8 @@
 
                         <div class="mb-3 col-sm-5">
                             <label for="id_usuarios_asociados[]">Usuarios asociados</label>
-                            <select class="form-control select2" id="id_usuarios_asociados[]" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                            <select class="form-control select2" id="id_usuarios_asociados" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" multiple <?php echo isset($modoVer) ? "disabled" : "" ?>>
                                 <option value=""></option>
-                                <?php foreach ($usuarios as $usuario) { ?>
-                                    <option value="<?php echo $usuario["id_usuario"] ?>" 
-                                    <?php
-                                    if (isset($datos["nombresUsuarios"])) {
-                                        foreach ($datos["nombresUsuarios"] as $nombreUsuario) {
-                                            if (trim($nombreUsuario) == $usuario["username"]) {
-                                                echo "selected";
-                                            }
-                                        }
-                                    }
-                                    ?>><?php echo $usuario["username"]; ?></option>                               
-                                        <?php } ?>
                             </select>
                             <p class="text-danger"><?php echo isset($errores['id_usuarios_asociados']) ? $errores['id_usuarios_asociados'] : ''; ?></p>
                         </div>

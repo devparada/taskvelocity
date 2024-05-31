@@ -20,7 +20,8 @@ class LogController extends \Com\TaskVelocity\Core\BaseController {
         $data["paginaActual"] = $_GET["pagina"] - 1;
 
         $data["maxPagina"] = floor($modeloLog->obtenerPáginas());
-
+        $data["contarLogs"] = count($modeloLog->mostrarLogs());
+        
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/log.view.php', 'admin/templates/footer.view.php'), $data);
     }
 }

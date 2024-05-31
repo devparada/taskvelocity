@@ -16,6 +16,30 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Muestra los nombres de los usuarios de forma asincrona cuando se busca en el select2
+     * @return array los nombres de los usuarios en un array
+     */
+    public function buscarUsuariosAsync(): array {
+        $resultado = "";
+
+        if (!empty($_GET['q'])) {
+            $search = $_GET['q'];
+            $stmt = $this->pdo->prepare("SELECT id_usuario, username FROM usuarios us WHERE us.username LIKE :search "
+                    . "AND NOT us.id_rol = 1 XOR us.id_usuario =" . $_SESSION["usuario"]["id_usuario"]);
+            $stmt->execute(['search' => "$search%"]);
+
+            $usuarios = array();
+            while ($row = $stmt->fetch($this->pdo::FETCH_ASSOC)) {
+                $usuarios[] = ['id' => $row['id_usuario'], 'text' => $row['username']];
+            }
+
+            $resultado = ['results' => $usuarios];
+        }
+        
+        return $resultado;
+    }
+
     public function mostrarUsuariosFormulario(): array {
         $stmt = $this->pdo->query(self::baseConsulta . "WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
         return $stmt->fetchAll();
