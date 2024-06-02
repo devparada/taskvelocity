@@ -65,7 +65,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         if ($usuarioEncontrado["id_rol"] == self::ROL_ADMIN) {
             header("location: /admin");
         } else {
-            header("location: /proyectos");
+            // $_SESSION["historial] almacena la URL visitada anterior
+            if (!empty($_SESSION["historial"])) {
+                header("location: " . $_SESSION["historial"]);
+            } else {
+                header("location: /proyectos");
+            }
         }
     }
 
@@ -368,8 +373,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         if (!empty($_FILES["imagen_avatar"]["name"])) {
             if ($_FILES["imagen_avatar"]["type"] != "image/jpeg" && $_FILES["imagen_avatar"]["type"] != "image/png") {
                 $errores["imagen_avatar"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["imagen_avatar"]["tmp_name"])[0] > $dimensionesAvatar || getimagesize($_FILES["imagen_avatar"]["tmp_name"])[1] > $dimensionesAvatar) {
-                $errores["imagen_avatar"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 256 x 256";
             } else if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }

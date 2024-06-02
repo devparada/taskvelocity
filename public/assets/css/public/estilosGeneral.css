@@ -107,6 +107,8 @@ nav ul li a {
     margin-left: 10px;
     width: 40px;
     border-radius: 50px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 #perfil p {
@@ -119,6 +121,7 @@ nav ul li a {
 main {
     position: relative;
     min-height: 80vh;
+    width: 100%;
 }
 
 input, select, option, textarea {
@@ -136,6 +139,10 @@ input, select, option, textarea {
 .apartados {
     margin-top: 16px;
     text-align: center;
+}
+
+#introduccion {
+    margin-top: 10px;
 }
 
 .titulos {
@@ -182,8 +189,6 @@ input, select, option, textarea {
     margin-left: 6px;
 }
 
-
-
 .miembros-tarea {
     display: flex;
     flex-wrap: wrap;
@@ -198,6 +203,11 @@ input, select, option, textarea {
     font-weight: bold;
 }
 
+.enlace-imagen-perfil > img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
 .imagen-perfil-pequena {
     width: 20px;
     border-radius: 25px;
@@ -208,9 +218,17 @@ input, select, option, textarea {
     font-size: 18px;
 }
 
+.proyectos > img, .imagen-proyecto-tarea {
+        aspect-ratio: 16 / 9;
+}
+
+.imagen-proyecto-tarea {
+    border-radius: 20px;
+}
+
 /* Divs cuando hay alguna alerta como por ejemplo al borrar un proyecto o tarea */
 
-.alerta-success, .alerta-danger {
+.alerta-div {
     padding: 16px;
     margin: 16px;
     border-radius: 25px;
@@ -221,6 +239,10 @@ input, select, option, textarea {
 }
 
 .alerta-danger {
+    background-color: #CB4335;
+}
+
+.alerta-danger:hover {
     background-color: #CB4335;
 }
 
@@ -242,12 +264,12 @@ footer {
 
 }
 
-footer a > i {
+footer a > svg {
     font-size: 26px;
 }
 
-#iconos-footer i {
-    margin-left: 8px;
+#iconos-footer svg {
+    margin-left: 4px;
 }
 
 .logo-enlace {
@@ -296,7 +318,7 @@ button, input, optgroup, select, textarea {
         width: auto;
         margin-right: 16px;
     }
-    
+
     #perfil-cerrar {
         width: auto;
     }
@@ -315,7 +337,7 @@ button, input, optgroup, select, textarea {
     #logo {
         width: 148px;
     }
-    
+
     #logo h2 {
         display: none;
     }
@@ -347,6 +369,10 @@ button, input, optgroup, select, textarea {
     }
 
     /* HEADER 600px */
+
+    header {
+        padding: 8px;
+    }
 
     #logo h2 {
         display: none;
@@ -400,18 +426,19 @@ button, input, optgroup, select, textarea {
     footer > a > i {
         font-size: 4px;
     }
-    
+
     .color-circulo {
         padding-left: 5px;
     }
 }
 
-@media only screen and (max-width: 370px) {
+@media only screen and (max-width: 380px) {
 
     /* HEADER 370px */
 
     header {
         padding: 0;
+        justify-content: center
     }
 
     #logo {
@@ -420,13 +447,13 @@ button, input, optgroup, select, textarea {
     }
 
     nav ul li a {
-        padding-left: 0.15em;
-        padding-right: 0.15em;
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
     }
 
     .botones-header {
-        padding-left: 0.25em;
-        padding-right: 0.25em;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
         border-radius: 10px;
     }
 }

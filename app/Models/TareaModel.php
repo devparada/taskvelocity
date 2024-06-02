@@ -148,9 +148,9 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna un array con los usuarios de la tarea asociada
      */
     public function mostrarUsuariosPorTarea(int $idTarea): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_tareas ut "
+        $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
                 . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                . "WHERE ut.id_tareaTAsoc  = ?");
+                . "WHERE ut.id_tareaTAsoc  = ? GROUP BY id_usuarioTAsoc");
         $stmt->execute([$idTarea]);
         return $stmt->fetchAll();
     }
@@ -253,6 +253,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $this->editarUsuariosTareas([$idUsuarioTareaProp], $idTarea);
             }
 
+            $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas WHERE id_tareaTAsoc=" . $idTarea);
+            var_dump($stmt->fetchAll());
+            //           die();
+
             if (!empty($_FILES["imagen_tarea"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
                 $modeloFiles->actualizarImagen("tareas", "tarea", $idTarea);
@@ -267,9 +271,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
     private function editarUsuariosTareas(array $idUsuarios, int $idTarea) {
         // Elimina todos los usuarios de la tarea
-        $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
-        $stmt->execute([$idTarea]);
-
+        // $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
+        // $stmt->execute([$idTarea]);
         // Selecciona la tarea
         // $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
         // $stmt->execute([$idTarea]);
@@ -277,6 +280,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         //$this->addUsuarioTarea($idUsuarioProp, $idTarea);
 
         foreach ($idUsuarios as $idUsuario) {
+            $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=? AND id_usuarioTAsoc=?");
+            $stmt->execute([$idTarea, $idUsuario]);
             $this->addUsuarioTarea((int) $idUsuario, $idTarea);
         }
     }

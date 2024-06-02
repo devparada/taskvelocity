@@ -14,7 +14,8 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Moment -->
         <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
@@ -57,6 +58,27 @@
             <?php } ?>
             <div class="proyectos-grid" id="proyectos-grid"></div>
 
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fs-5">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Modal body text goes here.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="botones alerta-danger" data-bs-dismiss="modal">Close</button>
+                                <a id="boton-borrar" href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones">Save chantggges</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="plugins/jquery/jquery.min.js"></script>
             <script>
                 function cargarProyectos() {
                     const divProyecto = document.getElementById('proyectos-grid');
@@ -80,9 +102,12 @@
                                 });
                             }
 
-                            const script = document.createElement('script');
-                            script.src = 'assets/js/public/fechasTareasProyectos.js';
-                            document.body.appendChild(script);
+                            if (document.getElementById("scriptFechas") === null) {
+                                const script = document.createElement('script');
+                                script.src = 'assets/js/public/fechasTareasProyectos.js';
+                                script.id = "scriptFechas";
+                                document.body.appendChild(script);
+                            }
                         }
                     };
 
@@ -90,6 +115,6 @@
                 }
 
                 cargarProyectos();
-                setInterval(cargarProyectos, 10000);
+                setInterval(cargarProyectos, 1000000);
             </script>
         </main> <!-- Continua en plantillas/footer -->

@@ -55,6 +55,7 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function restingidoRedireccion(): void {
+        $_SESSION["historial"] = $_SERVER["REQUEST_URI"];
         header("location: /login");
     }
 }

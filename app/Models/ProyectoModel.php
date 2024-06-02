@@ -172,6 +172,10 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     private function addProyectoUsuario(int $idUsuario, int $idProyecto): void {
+        $stmt = $this->pdo->prepare("DELETE FROM usuarios_proyectos "
+                . "WHERE id_usuarioPAsoc = ? AND id_proyectoPAsoc = ?");
+        $stmt->execute([$idUsuario, $idProyecto]);
+
         $stmt = $this->pdo->prepare("INSERT INTO usuarios_proyectos "
                 . "(id_usuarioPAsoc, id_proyectoPAsoc) "
                 . "VALUES(?, ?)");
@@ -202,7 +206,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             if (!empty($idUsuariosAsociados)) {
                 array_push($idUsuariosAsociados, $idUsuarioProyectoProp);
                 $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
-            // Si en edición de la tarea se queda solo el usuario propietario, se almacena
+                // Si en edición de la tarea se queda solo el usuario propietario, se almacena
             } else {
                 $this->editarUsuariosProyectos([$idUsuarioProyectoProp], $idProyecto);
             }

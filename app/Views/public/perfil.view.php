@@ -14,7 +14,8 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
         <header>
@@ -87,17 +88,17 @@
                                 <p> <?php echo $tareaPropietario ?> tareas</p>
                             </div>
 
-                            <div class="estadistica-usuario" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
+                            <div class="estadistica-usuario estadistica-usuario-clickable" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
                                 <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
                             </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
+                            <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
                                 <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
                             </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
+                            <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
                                 <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
                                 <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
                             </div>
@@ -119,12 +120,6 @@
             <script>
                 var idUsuario = document.getElementById("contenedor-estadisticas-usuario").className;
 
-                document.getElementById("propietario-proyectos").addEventListener("click", function () {
-                    window.location.href = "/proyectos?propietario=" + idUsuario;
-                });
-                document.getElementById("propietario-tareas").addEventListener("click", function () {
-                    window.location.href = "/tareas?propietario=" + idUsuario;
-                });
                 document.getElementById("etiqueta-pendiente").addEventListener("click", function () {
                     window.location.href = "/tareas?etiqueta=1";
                 });

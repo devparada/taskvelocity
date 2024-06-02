@@ -203,13 +203,11 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         $esPropietario = $modeloProyecto->esPropietario($idProyecto);
         if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
-
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-
             $data = [
                 "enviar" => "Editar proyecto",
                 "datos" => $modeloProyecto->buscarProyectoPorId($idProyecto),
-                "usuarios" => $modeloUsuario->mostrarUsuariosFormulario(),
+                "usuarios" => json_encode($modeloProyecto->mostrarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                "idProyecto" => $idProyecto,
                 "modoEdit" => true
             ];
 

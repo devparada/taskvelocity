@@ -36,6 +36,10 @@ label, input, textarea {
     margin-bottom: 16px;
 }
 
+.apartados-inicio-editar {
+    font-size: 32px;
+}
+
 #imagen-perfil {
     width: 70%;
     border-radius: 50px;
@@ -48,10 +52,16 @@ label, input, textarea {
     flex-direction: column;
 }
 
+#imagen-editar img {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
 #informacion-adicional {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 70%;
 }
 
 #informacion-adicional > p {
@@ -64,6 +74,10 @@ label, input, textarea {
     flex-direction: column;
 }
 
+#informacion-usuario-editar {
+    align-items: center;
+}
+
 #informacion-usuario-formulario {
     display: flex;
     flex-direction: column;
@@ -71,7 +85,7 @@ label, input, textarea {
 }
 
 #informacion-usuario-formulario > form {
-    width: 80%;
+    width: 70%;
 }
 
 #informacion-usuario > p, #informacion-usuario-editar > p {
@@ -90,6 +104,19 @@ label, input, textarea {
     column-gap: 20px;
 }
 
+#fecha-nacimiento {
+    display: flex;
+    align-items: center;
+}
+
+#fecha-nacimiento > input {
+    width: 100%;
+}
+
+.campo-formulario {
+    width: 80% !important;
+}
+
 .estadistica-usuario {
     margin-top: 16px;
     display: flex;
@@ -98,6 +125,9 @@ label, input, textarea {
     background-color: var(--color-secundario-complementario);
     padding: 16px;
     border-radius: 20px;
+}
+
+.estadistica-usuario-clickable {
     cursor: pointer;
 }
 
@@ -124,11 +154,11 @@ label, input, textarea {
 }
 
 #informacion-pie {
-    width: 80%;
+    width: 82%;
     margin-top: 16px;
     display: flex;
     justify-content: space-between;
-    column-gap: 1px;
+    column-gap: 10px;
 }
 
 #informacion-pie-editar {
@@ -145,6 +175,16 @@ label, input, textarea {
     text-align: center;
 }
 
+@media only screen and (max-width: 1600px) {
+    #imagen-editar {
+        width: 40%;
+    }
+    
+    #informacion-usuario-editar {
+        width: 60%;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     #contenido-principal {
         flex-direction: column;
@@ -152,7 +192,7 @@ label, input, textarea {
     }
 
     #imagen-editar {
-        width: 80%;
+        width: 60%;
     }
 
     #informacion-usuario, #informacion-usuario-editar {

@@ -19,8 +19,9 @@
         <link rel="stylesheet" href="plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
-        <!-- Iconos -->  
-        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
+        <!-- Iconos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Moment -->
         <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/locale/es.js"></script>
@@ -59,7 +60,7 @@
                     ?>
                     <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>
-                <div class="informacion-proyecto">
+                <div class="informacion-proyecto informacion-proyecto-ver">
                     <p id="fecha-limite">Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
                     <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <div id="anadirTareaProyecto">
@@ -83,7 +84,7 @@
                         </form>
                         <?php if (!empty($_SESSION["error_addTareasProyecto"])) { ?>
                             <p class="texto-error"><?php echo $_SESSION["error_addTareasProyecto"] ?></p>
-                            <?php } ?>
+                        <?php } ?>
 
                     </div>
                     <div id="titulo-tabla">
@@ -95,12 +96,15 @@
                             <th>Nombre</th>
                             <th>Fecha límite</th>
                             <th>Etiqueta</th>
+                            <th>Opciones</th>
                             </thead>
                             <?php foreach ($tareas as $t) { ?>
                                 <tr>
                                     <td><?php echo $t["nombre_tarea"] ?></a></td>
                                     <td><?php echo $t["fecha_limite_tarea"] ?? "No tiene" ?></td>
                                     <td><?php echo $t["nombre_etiqueta"] ?></td>
+                                    <td><a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones boton-anadir"><i class="fa-solid fa-pen"></i></a>
+                                        <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones boton-anadir"><i class="fa-solid fa-trash"></i></a></td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -136,6 +140,8 @@
             <script>
                 document.getElementById("anadir-tarea").addEventListener("click", function () {
                     document.getElementById("formulario-anadir").style.display = "block";
+                    document.getElementById("anadir-tarea").style.display = "none";
+                    document.getElementById("id_tareas_asociadas").style.textAlign = "center";
                 });
-                            </script>
+            </script>
         </main> <!-- Continua en plantillas/footer -->

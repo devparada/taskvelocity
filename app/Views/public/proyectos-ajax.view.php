@@ -4,9 +4,8 @@
     $idProyecto = $p["id_proyecto"];
     if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
         ?>
-        <div class="proyectos" id="<?php echo $p["id_proyecto"] ?>">
+<div class="proyectos" id="<?php echo $p["id_proyecto"] ?>" style="background-image: url(./assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>.jpg)">
             <div class="imagen-contenedor">
-                <img src="/assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>.jpg" alt="Imagen Proyecto <?php echo $p["nombre_proyecto"] ?>" class="imagen-proyecto">        
             <?php } else { ?>
                 <div class="proyectos proyectos-sin-imagen" id="<?php echo $p["id_proyecto"] ?>">           
                     <div class="imagen-contenedor">
@@ -15,7 +14,9 @@
                 <div class="informacion-proyecto">
                     <p class="titulo-tarjeta"><?php echo $p["nombre_proyecto"] ?></p>
                     <?php if ($p["editable"] == 1) { ?>
+                    <?php if(!empty($p["fecha_limite_proyecto"])) { ?>
                         <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
+                        <?php } ?>
                         <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
                         <p class="miembros-tarea enlace-imagen-perfil"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
                                 <?php foreach ($usuarios as $u) { ?>

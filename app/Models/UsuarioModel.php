@@ -26,7 +26,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!empty($_GET['q'])) {
             $search = $_GET['q'];
             $stmt = $this->pdo->prepare("SELECT id_usuario, username FROM usuarios us WHERE us.username LIKE :search "
-                    . "AND NOT us.id_rol = 1 XOR us.id_usuario =" . $_SESSION["usuario"]["id_usuario"]);
+                    . "AND (us.id_rol != 1 OR us.id_usuario =" . $_SESSION["usuario"]["id_usuario"] . ")");
             $stmt->execute(['search' => "$search%"]);
 
             $usuarios = array();

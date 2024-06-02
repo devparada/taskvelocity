@@ -199,15 +199,16 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
             $data["proyectos"] = $modeloProyecto->mostrarProyectos();
 
-            $a = $modeloProyecto->mostrarProyectoTarea($idTarea);
+            $proyecto = $modeloProyecto->mostrarProyectoTarea($idTarea)[0];
 
-            array_push($data["proyectos"], $a[0]);
+            array_push($data["proyectos"], $proyecto);
 
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
             $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
             $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
+
             $data["enviar"] = "Editar tarea";
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
@@ -220,8 +221,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['seccion'] = '/tareas/editar/' . $idTarea;
                 $data['titulo'] = 'Editar tarea';
 
-                $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-                $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
+                $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+                
+                $data["usuarios"] = json_encode($modeloTarea->mostrarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
             }

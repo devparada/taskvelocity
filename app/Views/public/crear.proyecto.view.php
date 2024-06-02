@@ -18,7 +18,8 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
         <header>
@@ -57,6 +58,11 @@
 
                     <div class="campo-formulario">
                         <label for="imagen_proyecto">Imagen</label>
+                        <?php
+                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
+                            ?>
+                            <img src="/assets/img/proyectos/proyecto-<?php echo $idProyecto ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $idProyecto ?>">
+                        <?php } ?>
                         <input type="file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png">
                     </div>
                     <p class="texto-error"><?php echo isset($errores["imagen_proyecto"]) ? $errores["imagen_proyecto"] : "" ?></p>
@@ -76,6 +82,10 @@
                     </div>
                     <p class="texto-error"><?php echo isset($errores["fecha_limite_proyecto"]) ? $errores["fecha_limite_proyecto"] : "" ?></p>
                     <p class="texto-error"><?php echo isset($errores["id_usuarios_asociados"]) ? $errores["id_usuarios_asociados"] : "" ?></p>
+
+                    <?php if (isset($modoEdit)) { ?>
+                        <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
+                    <?php } ?>
 
                     <div class="campo-formulario">
                         <label for="descripcion_proyecto">Descripción del proyecto</label>

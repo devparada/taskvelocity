@@ -18,8 +18,8 @@
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
-        <script src="https://kit.fontawesome.com/e260e3cde1.js" crossorigin="anonymous"></script>
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/js/all.min.js" integrity="sha512-u3fPA7V8qQmhBPNT5quvaXVa1mnnLSXUep5PS1qo5NRzHwG19aHmNJnj1Q8hpA/nBWZtZD4r4AX6YOt5ynLN2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
         <header>
@@ -110,7 +110,7 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto"]) || $proyecto["id_proyecto"] == $usuario["id_proyecto_personal"]) {
+                                    if (!isset($datos["id_proyecto"]) || $proyecto["id_proyecto"] == $_SESSION["usuario"]["id_proyecto_personal"]) {
                                         echo "selected";
                                     } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";
@@ -128,6 +128,10 @@
                         <textarea id="descripcion_tarea" name="descripcion_tarea" placeholder="Introduzca una descripción de la tarea (opcional)" rows="3"><?php echo isset($datos["descripcion_tarea"]) ? $datos["descripcion_tarea"] : "" ?></textarea>
                         <p class="texto-error"><?php echo isset($errores["descripcion_tarea"]) ? $errores["descripcion_tarea"] : "" ?></p>
                     </div>
+
+                    <?php if(isset($modoEdit)) { ?>
+                    <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
+                    <?php } ?>
 
                     <div class="campo-formulario">
                         <input type="submit" value="<?php echo $enviar ?>" name="enviar" class="botones">

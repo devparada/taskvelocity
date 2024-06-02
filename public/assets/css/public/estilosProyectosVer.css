@@ -6,11 +6,16 @@
     margin-top: 16px;
     padding: 16px;
     cursor: unset;
+    aspect-ratio: unset;
     column-gap: 20px;
 }
 
 .informacion-proyecto {
     width: 30%;
+}
+
+.informacion-proyecto-ver {
+    background-color: unset !important;
 }
 
 #tabla-tareas {
@@ -78,8 +83,15 @@
 }
 
 #anadirTareaProyecto {
-    width: 70%;
+    width: 50%;
     margin-bottom: 10px;
+}
+
+.boton-anadir {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-right: 12px;
+    padding-left: 12px;
 }
 
 @media only screen and (max-width: 1400px) {
