@@ -11,6 +11,7 @@
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
+        <link rel="stylesheet" href="assets/css/public/estilosProyectosTareas.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->
@@ -54,7 +55,7 @@
             <?php if (isset($informacion)) { ?>
                 <div class="alerta-div alert alert-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?> alert-dismissible fade show">
                     <p><?php echo $informacion["texto"] ?></p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
                 </div>
             <?php } ?>
             <div class="proyectos-grid" id="proyectos-grid"></div>

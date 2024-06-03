@@ -11,6 +11,7 @@
         <!-- Estilos propios -->
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareas.css">
+        <link rel="stylesheet" href="assets/css/public/estilosProyectosTareas.css">
         <!-- Favicon -->
         <link rel="icon" href="assets/img/logo.png">
         <!-- Iconos -->

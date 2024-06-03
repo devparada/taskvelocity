@@ -108,10 +108,8 @@
                         <h2>Opciones</h2>
                         <div id="informacion-pie">
                             <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
-                                                    <!--<a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones botones-perfil" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
-                                -->
                                 <button type="button" class="botones botones-perfil" data-bs-toggle="modal" data-bs-target="#modalBorrarUsuario"id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</button>
-                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>        
+                                <button id="boton-editar" onclick="window.location.href='/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>'" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</button>        
                             <?php } else { ?>
                                 <a id="boton-editar" href="/proyectos" class="botones botones-perfil"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                             <?php } ?>

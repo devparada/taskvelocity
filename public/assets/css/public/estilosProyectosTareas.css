@@ -1,0 +1,36 @@
+/* Hoja de estilos que es usada en proyectos y tareas */
+.botones-proyecto-tarea {
+    display: flex;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    justify-content: center;
+    column-gap: 16px;
+}
+
+.botones-proyecto-tarea>a:hover, .botones-proyecto-tarea>svg:hover {
+    background-color: var(--color-secundario-principal);
+}
+
+.botones-proyecto-tarea a {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.imagen-perfil-pequena {
+    width: 20px;
+    border-radius: 25px;
+    margin-right: 6px;
+}
+
+.miembros-proyecto-tarea {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 6px;
+}
+
+.descripcion-proyecto-tarea {
+    word-wrap: break-word;
+}

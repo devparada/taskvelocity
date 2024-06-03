@@ -14,12 +14,12 @@
         <div class="columnas">
             <h2><?php echo $proyecto ?></h2>
             <?php for ($i = 0; $i < count($value); $i++) { ?>
-                <div class="tarjetas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
+                <div class="tareas" id="<?php echo $value[$i]["id_tarea"] ?>" style="background-color: <?php echo $value[$i]["valor_color"] ?>">
                     <?php
                     $idTarea = $value[$i]["id_tarea"];
                     if (file_exists("./assets/img/tareas/tarea-$idTarea.jpg")) {
                         ?>
-                        <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-proyecto">        
+                        <img src="/assets/img/tareas/tarea-<?php echo $value[$i]["id_tarea"] ?>" alt="Imagen Tarea <?php echo $value[$i]["nombre_tarea"] ?>" class="imagen-tarea">        
                     <?php } ?>
                     <div class="informacion-tarea">
                         <p class="titulo-tarjeta tarea-titulo"><?php echo $value[$i]["nombre_tarea"] ?></p>
@@ -27,7 +27,7 @@
                         <?php if (!empty($value[$i]["fecha_limite_tarea"])) { ?>
                             <p class="fecha-limite"><i class="fa-regular fa-clock"></i> <?php echo $value[$i]["fecha_limite_tarea"] ?></p>
                         <?php } ?>
-                        <p class="miembros-tarea"><?php
+                        <p class="miembros-proyecto-tarea"><?php
                             foreach ($value[$i]["nombresUsuarios"] as $nombreUsuario) {
                                 foreach ($usuarios as $u) {
                                     if ($u["username"] == $nombreUsuario) {
@@ -39,8 +39,8 @@
                             }
                             ?></p>
                         <p>Propietario: <?php echo isset($value[$i]["id_usuario_tarea_prop"]) && ($value[$i]["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $value[$i]["username"] ?></p>
-                        <p class="descripcion-tarea"><?php echo ($value[$i]["descripcion_tarea"] == "") ? "No tiene descripción" : $value[$i]["descripcion_tarea"] ?></p>
-                        <div class="botones-tareas">
+                        <p class="descripcion-proyecto-tarea"><?php echo ($value[$i]["descripcion_tarea"] == "") ? "No tiene descripción" : $value[$i]["descripcion_tarea"] ?></p>
+                        <div class="botones-proyecto-tarea">
                             <a href="/tareas/editar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                             <a href="/tareas/borrar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
                         </div>

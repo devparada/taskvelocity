@@ -54,23 +54,6 @@
     color: white;
 }
 
-.botones-proyecto {
-    display: flex;
-    margin-top: 16px;
-    margin-bottom: 16px;
-}
-
-.botones-proyecto>a:hover, .botones-proyecto>svg:hover {
-    background-color: var(--color-secundario-principal);
-}
-
-.botones-proyecto a {
-    padding-top: 0.55rem;
-    padding-bottom: 0.55rem;
-    padding-left: 0.55rem;
-    padding-right: 0.55rem;
-}
-
 .enlace-imagen-perfil {
     color: white;
 }

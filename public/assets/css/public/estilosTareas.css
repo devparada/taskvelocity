@@ -20,7 +20,7 @@
     flex-direction: column;
 }
 
-.tarjetas {
+.tareas {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -28,36 +28,18 @@
     border-radius: 20px;
     text-align: center;
     padding-top: 1em;
-    padding-bottom: 1em;
     padding-left: 3em;
     padding-right: 3em;
     align-content: center;
     align-items: center;
 }
 
-.imagen-proyecto {
-    width: 300px;
+.imagen-tarea {
+    width: 260px;
     border-radius: 20px;
 }
 
 .fecha-limite i {
-    color: black;
-}
-
-.informacion {
-    margin: 16px;
-    padding: 16px;
-    background: var(--color-secundario-principal);
-    border-radius: 20px;
-    margin-bottom: 16px;
-}
-
-.informacion-warning {
-    background-color: #F9E79F;
-}
-
-/* El icono cambia de color cuando se usa la clase .informacion-warning */
-.informacion-warning > p, .informacion-warning > i, .informacion-warning ::before {
     color: black;
 }
 
@@ -96,22 +78,8 @@
     margin-right: 10px;
 }
 
-.botones-tareas a {
-    display: flex;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 18px;
-    padding-right: 18px;
-}
-
-.imagen-perfil-pequena {
-    width: 20px;
-    border-radius: 25px;
+.botones-tareas a svg {
     margin-right: 6px;
-}
-
-.descripcion-tarea {
-    word-wrap: break-word;
 }
 
 @media only screen and (max-width: 900px) {

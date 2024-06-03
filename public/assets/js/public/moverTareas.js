@@ -1,4 +1,4 @@
-const divTareas = document.getElementById("tareas-grid");
+const divTareas = document.querySelector("#tareas-grid");
 
 var inicialX, offsetX;
 

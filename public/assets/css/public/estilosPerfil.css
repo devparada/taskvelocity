@@ -10,7 +10,7 @@ label, input, textarea {
 }
 
 main {
-    height: 82vh;
+    min-height: 82vh;
 }
 
 #introduccion {
@@ -203,11 +203,12 @@ main {
     }
 
     #imagen-editar {
-        width: 60%;
+        width: 100%;
     }
 
     #informacion-usuario, #informacion-usuario-editar {
         align-items: center;
+        width: 100%;
     }
 
     #informacion-usuario > p, #informacion-usuario-editar > p {

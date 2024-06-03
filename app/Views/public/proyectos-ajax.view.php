@@ -15,7 +15,7 @@
                         <p class="fecha-limite"><?php echo $p["fecha_limite_proyecto"] ?></p>
                     <?php } ?>
                     <p>Tareas: <?php echo (!empty($p["tareas"])) ? count($p["tareas"]) : "No tiene" ?></p>
-                    <p class="miembros-tarea enlace-imagen-perfil"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
+                    <p class="miembros-proyecto-tarea enlace-imagen-perfil"><?php foreach ($p["nombresUsuarios"] as $nombreUsuario) { ?>
                             <?php foreach ($usuarios as $u) { ?>
                                 <?php if ($u["username"] == $nombreUsuario) { ?>
                                     <a href="/perfil/<?php echo $u["id_usuario"] ?>" class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>.jpg" alt="Avatar <?php echo ($u["username"] == $_SESSION["usuario"]["username"]) ? "Tú" : $u["username"] ?>" class="imagen-perfil-pequena"><?php echo ($u["username"] == $_SESSION["usuario"]["username"]) ? "Tú" : $u["username"] ?></a>
@@ -23,7 +23,10 @@
                             <?php } ?>
                             <?php } ?></p>
                     <p>Propietario: <?php echo isset($p["id_usuario_proyecto_prop"]) && ($p["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $p["username"] ?></p>
-                    <div class="botones-proyecto">
+                    <?php if(!empty($p["descripcion_proyecto"])) { ?>
+                    <p class="descripcion-proyecto-tarea"><?php echo $p["descripcion_proyecto"] ?></p>
+                    <?php } ?>
+                    <div class="botones-proyecto-tarea">
                         <a href="/proyectos/editar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                         <a href="/proyectos/borrar/<?php echo $p["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
                     </div>

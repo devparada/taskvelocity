@@ -103,6 +103,9 @@ label {
 
 .select2-container--bootstrap4 .select2-selection__clear, .select2-container--bootstrap4 .select2-selection__clear:hover {
     background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .select2-results__options > li, .select2-container--default .select2-selection--multiple .select2-selection__choice {
