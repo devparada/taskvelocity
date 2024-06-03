@@ -358,6 +358,13 @@ class FrontController {
                     }
                     , 'get');
 
+            Route::add('/eliminar/imagen/([0-9]+)',
+                    function ($idImagen) {
+                        $controlador = new \Com\TaskVelocity\Controllers\FileController();
+                        $controlador->procesarBorrarImagen($idImagen);
+                    }
+                    , 'get');
+
             Route::add('/logout',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\InicioController();

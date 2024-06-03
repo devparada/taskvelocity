@@ -12,6 +12,7 @@
         <!-- Estilos propios -->  
         <link rel="stylesheet" href="assets/css/public/estilosGeneral.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectos.css">
+        <link rel="stylesheet"href="assets/css/public/estilosProyectosTareas.css">
         <link rel="stylesheet" href="assets/css/public/estilosProyectosVer.css">
         <link rel="stylesheet" href="assets/css/public/estilosTareasProyectosFormularios.css">
         <!-- Select 2 -->
@@ -118,13 +119,13 @@
                     <p>Descripción del proyecto: </p>
                     <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <?php if ($proyecto["editable"] == 1) { ?>
-                        <div class="botones-proyecto">
+                        <div class="botones-proyecto-tarea">
                             <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                             <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
                             <a href="/proyectos/editar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                         </div>
                     <?php } else { ?>
-                        <div class="botones-proyecto">
+                        <div class="botones-proyecto-tarea">
                             <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                         </div>
                     <?php } ?>

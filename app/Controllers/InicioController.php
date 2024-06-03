@@ -66,4 +66,12 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
     public function restingidoRedireccionUsuario(): void {
         header("location: /proyectos");
     }
+
+    public function mostrarContacto(): void {
+        $data = [
+            "titulo" => "Contacto"
+        ];
+
+        $this->view->showViews(array('public/contacto.view.php', 'public/plantillas/footer.view.php'), $data);
+    }
 }

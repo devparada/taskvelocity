@@ -109,4 +109,17 @@ class FileModel extends \Com\TaskVelocity\Core\BaseModel {
 
         return false;
     }
+
+    public function eliminarImagenProyectoTarea(int $idImagen): void {
+        switch ($_SESSION["historial"]) {
+            case strpos(ltrim($_SESSION["historial"]), "/proyectos"):
+                $this->eliminarImagen("proyectos", "proyecto", $idImagen);
+                header("location: /proyectos/editar/$idImagen");
+                break;
+            case strpos(ltrim($_SESSION["historial"]), "/tareas"):
+                $this->eliminarImagen("tareas", "tarea", $idImagen);
+                header("location: /tareas/editar/$idImagen");
+                break;
+        }
+    }
 }

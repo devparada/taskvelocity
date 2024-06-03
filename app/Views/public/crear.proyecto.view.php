@@ -64,6 +64,12 @@
                             <img src="/assets/img/proyectos/proyecto-<?php echo $idProyecto ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $idProyecto ?>">
                         <?php } ?>
                         <input type="file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png">
+                        <?php
+                        if (isset($idProyecto) && file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
+                            ?>
+                            <?php $_SESSION["historial"] = $_SERVER["REQUEST_URI"] ?>
+                            <a href="/eliminar/imagen/<?php echo $idProyecto ?>" class="botones">Eliminar imagen</a>
+                        <?php } ?>
                     </div>
                     <p class="texto-error"><?php echo isset($errores["imagen_proyecto"]) ? $errores["imagen_proyecto"] : "" ?></p>
 
