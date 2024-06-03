@@ -108,11 +108,32 @@
                         <h2>Opciones</h2>
                         <div id="informacion-pie">
                             <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
-                                <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones botones-perfil" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
-                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>
+                                                    <!--<a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones botones-perfil" id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
+                                -->
+                                <button type="button" class="botones botones-perfil" data-bs-toggle="modal" data-bs-target="#modalBorrarUsuario"id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</button>
+                                <a id="boton-editar" href="/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</a>        
                             <?php } else { ?>
                                 <a id="boton-editar" href="/proyectos" class="botones botones-perfil"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                             <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="modalBorrarUsuario" tabindex="-1" aria-labelledby="modalBorrarUsuario" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fs-5">Borrar cuenta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de borrar tu cuenta?</p>
+                            <p>Ten en cuenta que se borran también tus proyectos y tareas</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a id="boton-borrar" href="perfil/borrar/<?php echo $idUsuario ?>" class="botones alerta-danger"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</a>
+                            <a class="botones" data-bs-dismiss="modal">Cerrar</a>
                         </div>
                     </div>
                 </div>

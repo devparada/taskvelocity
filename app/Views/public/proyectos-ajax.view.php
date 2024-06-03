@@ -4,7 +4,7 @@
     $idProyecto = $p["id_proyecto"];
     if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
         ?>
-<div class="proyectos" id="<?php echo $p["id_proyecto"] ?>" style="background-image: url(./assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>.jpg)">
+<div class="proyectos proyectos-con-imagen" id="<?php echo $p["id_proyecto"] ?>" style="background-image: url(./assets/img/proyectos/proyecto-<?php echo $p["id_proyecto"] ?>.jpg)">
             <div class="imagen-contenedor">
             <?php } else { ?>
                 <div class="proyectos proyectos-sin-imagen" id="<?php echo $p["id_proyecto"] ?>">           

@@ -210,6 +210,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
             $data["enviar"] = "Editar tarea";
+            $data["idTarea"] = $idTarea;
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;

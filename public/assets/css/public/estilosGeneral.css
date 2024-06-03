@@ -234,16 +234,8 @@ input, select, option, textarea {
     border-radius: 25px;
 }
 
-.alerta-success {
-    background-color: #229954;
-}
-
-.alerta-danger {
-    background-color: #CB4335;
-}
-
-.alerta-danger:hover {
-    background-color: #CB4335;
+.alerta-div p {
+    color: black;
 }
 
 /* FOOTER */

@@ -58,4 +58,12 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
         $_SESSION["historial"] = $_SERVER["REQUEST_URI"];
         header("location: /login");
     }
+
+    /**
+     * Redirige a la última URL visitada por el usuario cuando está logeado
+     * @return void
+     */
+    public function restingidoRedireccionUsuario(): void {
+        header("location: /proyectos");
+    }
 }

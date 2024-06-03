@@ -105,7 +105,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      * Cuando el usuario se registra, inicia sesión automáticamente.
      * @return void No devuelve nada
      */
-    public function procesarAddUsuario(): void {
+    public function procesarRegister(): void {
         $data = [];
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
             $data['titulo'] = 'Añadir usuario';
@@ -121,6 +121,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
         $data["datos"] = $datos;
 
         $errores = $this->comprobarAdd($datos);
@@ -141,9 +142,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                     header("location: /proyectos");
                 }
             }
-
-            $modeloLog->crearLog($_POST, $_SESSION);
         } else {
+            $data["titulo"] = "Register";
             $data["errores"] = $errores;
 
             $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
@@ -184,6 +184,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
         $data["idUsuario"] = $idUsuario;
+        $data["enviar"] = "Guardar cambios";
         $data["modoEdit"] = true;
 
         if (!empty($_SESSION["usuario"]) && ($_SESSION["usuario"]["id_usuario"] == $idUsuario || $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN)) {
@@ -262,6 +263,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $data["colores"] = $modeloColor->mostrarColores();
 
             $data["errores"] = $errores;
+            $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+            $data["enviar"] = "Confirmar cambios";
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -362,8 +365,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
 
-        $dimensionesAvatar = 256;
-
         if (empty($data["username"])) {
             $errores["username"] = "El nombre de usuario no debe estar vacío";
         } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
@@ -456,7 +457,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no debe estar vacía";
-        } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,15}$/", $data["contrasena"])) {
+            // Expresión regular que obliga a que haya 1 mayúscula, 1 minúscula, 1 número, 1 caracter espacial y 8 caracteres como mínimo. Máximo 15 caracteres.
+        } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)_\-+=\[\]\{\};':\"\\\\|,.<>\/?`~])[A-Za-z0-9!@#\$%\^&\*\(\)_\-+=\[\]\{\};':\"\\\\|,.<>\/?`~]{8,15}$/", $data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no cumple los mínimos. Tiene que contener 1 letra mayúscula, 1 minúscula y 1 número. Mínimo 8 caracteres";
         }
 

@@ -72,6 +72,11 @@
 
                     <div class="campo-formulario">
                         <label for="imagen_tarea">Imagen</label>
+                        <?php
+                        if (isset($idTarea) && file_exists("./assets/img/tareas/tarea-$idTarea.jpg")) {
+                            ?>
+                            <img src="/assets/img/tareas/tarea-<?php echo $idTarea ?>" class="imagen-proyecto-tarea" alt="Imagen Tarea <?php echo $idTarea ?>">
+                        <?php } ?>
                         <input type="file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
                         <p class="texto-error"><?php echo isset($errores["imagen_tarea"]) ? $errores["imagen_tarea"] : "" ?></p>
                     </div>
@@ -129,8 +134,8 @@
                         <p class="texto-error"><?php echo isset($errores["descripcion_tarea"]) ? $errores["descripcion_tarea"] : "" ?></p>
                     </div>
 
-                    <?php if(isset($modoEdit)) { ?>
-                    <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
+                    <?php if (isset($modoEdit)) { ?>
+                        <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
                     <?php } ?>
 
                     <div class="campo-formulario">

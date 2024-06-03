@@ -26,7 +26,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!empty($_GET['q'])) {
             $search = $_GET['q'];
             $stmt = $this->pdo->prepare("SELECT id_usuario, username FROM usuarios us WHERE us.username LIKE :search "
-                    . "AND (us.id_rol != 1 OR us.id_usuario =" . $_SESSION["usuario"]["id_usuario"] . ")");
+                    . "AND (us.id_rol != 1 AND us.id_usuario !=" . $_SESSION["usuario"]["id_usuario"] . ")");
             $stmt->execute(['search' => "$search%"]);
 
             $usuarios = array();
@@ -36,7 +36,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
 
             $resultado = ['results' => $usuarios];
         }
-        
+
         return $resultado;
     }
 
@@ -45,6 +45,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Busca un usuario en la base de datos por su id
+     * @param int $idUsuario el id del usuario
+     * @return array|null Retorna al usuario si existe si no retorna null
+     */
     public function buscarUsuarioPorId(int $idUsuario): ?array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
@@ -54,6 +59,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return ($usuarioEncontrado) ? $usuarioEncontrado : null;
     }
 
+    /**
+     * Busca un usuario en la base de datos por su username
+     * @param string $username el nombre del usuario
+     * @return array|null Retorna al usuario si existe si no retorna null
+     */
     public function buscarUsuarioPorUsername(string $username): ?array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE username = ?");
         $stmt->execute([$username]);
@@ -63,6 +73,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return ($usuarioEncontrado) ? $usuarioEncontrado : null;
     }
 
+    /**
+     * Busca un usuario en la base de datos por su email
+     * @param string $email el email del usuario
+     * @return array|null Retorna al usuario si existe si no retorna null
+     */
     public function buscarUsuarioPorEmail(string $email): ?array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE email = ?");
         $stmt->execute([$email]);

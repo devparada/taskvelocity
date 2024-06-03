@@ -175,11 +175,20 @@ label, input, textarea {
     text-align: center;
 }
 
+.confirmar-editar {
+    width: 60%;
+}
+
+/* MODAL BOOTSTRAP */
+.modal, .modal p, .modal h1, .modal h2, .modal h3, .modal h4, .modal h5, .modal h6 {
+    color: black;
+}
+
 @media only screen and (max-width: 1600px) {
     #imagen-editar {
         width: 40%;
     }
-    
+
     #informacion-usuario-editar {
         width: 60%;
     }

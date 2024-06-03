@@ -59,7 +59,7 @@
                     <div class="campo-formulario">
                         <label for="imagen_proyecto">Imagen</label>
                         <?php
-                        if (file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
+                        if (isset($idProyecto) && file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
                             ?>
                             <img src="/assets/img/proyectos/proyecto-<?php echo $idProyecto ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $idProyecto ?>">
                         <?php } ?>

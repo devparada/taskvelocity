@@ -82,9 +82,9 @@
             <div id="informacion-usuario-editar">
                 <div class="campo-formulario">
                     <h2 class="apartados-inicio-editar">Hola, <?php echo $datos["username"] ?></h2>
-                    <p>Username</p>
+                    <p>Nombre de usuario  <span class="campo-obligatorio">*</span></p>
                     <input type="text" id="username" name="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>">
-                    <p class="texto-error"><?php echo isset($errores["email"]) ? $errores["email"] : "" ?></p>
+                    <p class="texto-error"><?php echo isset($errores["username"]) ? $errores["username"] : "" ?></p>
                 </div>
 
                 <div class="campo-formulario">
@@ -125,7 +125,7 @@
 
                 <div class="campo-formulario">
                     <div id="informacion-pie-editar">
-                        <input type="submit" id="boton-editar" href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="botones" value="Confirmar"></input>
+                        <input type="submit" id="boton-editar" class="botones confirmar-editar" href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" value="<?php echo $enviar ?>"></input>
                     </div>
                 </div>
             </div>

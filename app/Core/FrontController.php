@@ -46,7 +46,7 @@ class FrontController {
                 Route::add('/admin/usuarios/add',
                         function () {
                             $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                            $controlador->procesarAddUsuario();
+                            $controlador->procesarRegister();
                         }
                         , 'post');
 
@@ -193,6 +193,20 @@ class FrontController {
                         }
                         , 'get');
             }
+
+            Route::add('/register',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccionUsuario();
+                    }
+                    , 'get');
+
+            Route::add('/login',
+                    function () {
+                        $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                        $controlador->restingidoRedireccionUsuario();
+                    }
+                    , 'get');
 
             // Rutas de proyectos
             Route::add('/proyectos',
@@ -377,7 +391,7 @@ class FrontController {
             Route::add('/register',
                     function () {
                         $controlador = new \Com\TaskVelocity\Controllers\UsuarioController();
-                        $controlador->procesarAddUsuario();
+                        $controlador->procesarRegister();
                     }
                     , 'post');
 
