@@ -9,11 +9,13 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
     /**
-     * Muestra la información de los proyectos
+     * Muestra la base de la información de los proyectos
      * @return void
      */
     public function mostrarProyectos(): void {
         $data = $this->mostrarProyectosComun();
+        // Elimina el error al añadir una tarea a un proyecto
+        $_SESSION["error_addTareasProyecto"] = "";
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todos los proyectos';
@@ -30,11 +32,19 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
+    /**
+     * Muestra los proyectos de forma async cada 20 segundos
+     * @return void
+     */
     public function mostrarProyectosAsync(): void {
         $data = $this->mostrarProyectosComun();
         $this->view->showViews(array('public/proyectos-ajax.view.php'), $data);
     }
 
+    /**
+     * Retorna los proyectos que se usa de forma común en mostrarProyectos() y mostrarProyectosAsync()
+     * @return array Retorna variables que se pasan a las vistas y son comunes
+     */
     public function mostrarProyectosComun(): array {
         $data = [];
 

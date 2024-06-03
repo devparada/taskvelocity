@@ -47,6 +47,7 @@
             </div>
         </header>
         <main>
+            <h1>Error</h1>
             <div id="mensaje-error">
                 <p><i class="fa-solid fa-circle-exclamation"></i> <?php echo $texto ?></p>
             </div>

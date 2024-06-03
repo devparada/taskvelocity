@@ -91,6 +91,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return (!is_null($stmt->fetch()));
     }
 
+    /**
+     * Muestra las tareas filtradas por etiquetas
+     * @param string $idEtiqueta el id de la etiqueta
+     * @return array Retorna un array con las tareas filtradas
+     */
     public function mostrarTareasPorEtiqueta(string $idEtiqueta): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
                 . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
@@ -148,10 +153,12 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna un array con los usuarios de la tarea asociada
      */
     public function mostrarUsuariosPorTarea(int $idTarea): array {
+        $tarea = $this->buscarTareaPorId($idTarea);
+
         $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
                 . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                . "WHERE ut.id_tareaTAsoc  = ? GROUP BY id_usuarioTAsoc");
-        $stmt->execute([$idTarea]);
+                . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc = ? GROUP BY id_usuarioTAsoc");
+        $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"], $tarea["id_usuario_tarea_prop"]]);
         return $stmt->fetchAll();
     }
 
@@ -240,11 +247,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 . " WHERE id_tarea=?");
 
         if ($stmt->execute([$nombreTarea, $idColorTarea, $descripcionTarea, $fechaLimite, $idEtiqueta, $idProyecto, $idTarea])) {
-
-            $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
-            $stmt->execute([$idTarea]);
-
-            $idUsuarioTareaProp = (int) $stmt->fetch()["id_usuario_tarea_prop"];
+            $tarea = $this->buscarTareaPorId($idTarea);
+            $idUsuarioTareaProp = (int) $tarea["id_usuario_tarea_prop"];
 
             if (!empty($idUsuariosAsociados)) {
                 array_push($idUsuariosAsociados, $idUsuarioTareaProp);
@@ -270,15 +274,6 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     private function editarUsuariosTareas(array $idUsuarios, int $idTarea) {
-        // Elimina todos los usuarios de la tarea
-        // $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
-        // $stmt->execute([$idTarea]);
-        // Selecciona la tarea
-        // $stmt = $this->pdo->prepare("SELECT * FROM tareas WHERE id_tarea=?");
-        // $stmt->execute([$idTarea]);
-        //$idUsuarioProp = $stmt->fetch()["id_usuario_tarea_prop"];
-        //$this->addUsuarioTarea($idUsuarioProp, $idTarea);
-
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=? AND id_usuarioTAsoc=?");
             $stmt->execute([$idTarea, $idUsuario]);

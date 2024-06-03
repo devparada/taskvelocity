@@ -55,16 +55,15 @@
                 <div id="editar-avatar">
                     <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
                         <div class="campo-formulario">
-                            <p>Editar avatar</p>
+                            <label for="imagen_avatar">Editar avatar</label>
                             <input type="file" id="imagen_avatar" name="imagen_avatar">
                         </div> 
                         <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
-
                 </div>
                 <div id="informacion-adicional">
                     <div class="campo-formulario">
                         <div id="fecha-nacimiento">
-                            <i class="fa-solid fa-cake-candles"></i>
+                            <label for="fecha_nacimiento"><i class="fa-solid fa-cake-candles"></i> Fecha nacimiento</label>
                                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="<?php echo isset($datos["fecha_nacimiento"]) ? $datos["fecha_nacimiento"] : "" ?>">
                                 <?php
                                 ?>
@@ -82,19 +81,19 @@
             <div id="informacion-usuario-editar">
                 <div class="campo-formulario">
                     <h2 class="apartados-inicio-editar">Hola, <?php echo $datos["username"] ?></h2>
-                    <p>Nombre de usuario  <span class="campo-obligatorio">*</span></p>
+                    <label for="username">Nombre de usuario  <span class="campo-obligatorio">*</span></label>
                     <input type="text" id="username" name="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>">
                     <p class="texto-error"><?php echo isset($errores["username"]) ? $errores["username"] : "" ?></p>
                 </div>
 
                 <div class="campo-formulario">
-                    <p>Correo electrónico <span class="campo-obligatorio">*</span></p>
+                    <label for="email">Correo electrónico <span class="campo-obligatorio">*</span></label>
                     <input type="email" id="email" name="email" placeholder="Introduce un nuevo email" value="<?php echo isset($datos["email"]) ? $datos["email"] : "" ?>" autocomplete="email">
                     <p class="texto-error"><?php echo isset($errores["email"]) ? $errores["email"] : "" ?></p>
                 </div>
 
                 <div class="campo-formulario">
-                    <p>Color favorito <span class="campo-obligatorio">*</span></p>
+                    <label for="id_color">Color favorito <span class="campo-obligatorio">*</span></label>
                     <select id="id_color" class="select2" name="id_color" data-placeholder="Selecciona un color">
                         <option value=""></option>
                         <?php foreach ($colores as $color) { ?>
@@ -118,7 +117,7 @@
                 </div>
 
                 <div class="campo-formulario">
-                    <p>Tu descripción es:</p> 
+                    <label for="descripcion_usuario">Tu descripción es:</label> 
                     <textarea name="descripcion_usuario" id="descripcion_usuario" rows="4" placeholder="Introduce una nueva descripción (opcional)"> <?php echo isset($datos["descripcion_usuario"]) ? $datos["descripcion_usuario"] : "" ?></textarea>
                     <p class="texto-error"><?php echo isset($errores["descripcion_usuario"]) ? $errores["descripcion_usuario"] : "" ?></p>
                 </div>

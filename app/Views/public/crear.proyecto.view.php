@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="id_usuarios_asociados[]">Usuarios asociados</label>
+                            <label for="id_usuarios_asociados">Usuarios asociados</label>
                             <select id="id_usuarios_asociados" class="select2" name="id_usuarios_asociados[]" data-placeholder="Selecciona un usuario" size="26" multiple>
                                 <option value=""></option>
                             </select>

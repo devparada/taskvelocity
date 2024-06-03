@@ -101,7 +101,12 @@ label {
     border-radius: 50px;
 }
 
+.select2-container--bootstrap4 .select2-selection__clear, .select2-container--bootstrap4 .select2-selection__clear:hover {
+    background-color: black;
+}
+
 .select2-results__options > li, .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    text-align: center;
     color: black;
 }
 

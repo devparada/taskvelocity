@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <form id="formulario-anadir" action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
-                            <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas[]" data-placeholder="Selecciona una tarea" multiple>
+                            <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas" data-placeholder="Selecciona una tarea" multiple>
                                 <option value=""></option>
                                 <?php foreach ($todasTareas as $tarea) { ?>
                                     <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>

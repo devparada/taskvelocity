@@ -9,6 +9,9 @@ label, input, textarea {
     text-align: center;
 }
 
+main {
+    height: 82vh;
+}
 
 #introduccion {
     justify-content: center;
@@ -70,7 +73,7 @@ label, input, textarea {
 
 #informacion-usuario, #informacion-usuario-editar {
     display: flex;
-    width: 80%;
+    width: 30%;
     flex-direction: column;
 }
 
@@ -114,7 +117,7 @@ label, input, textarea {
 }
 
 .campo-formulario {
-    width: 80% !important;
+    width: 96% !important;
 }
 
 .estadistica-usuario {
@@ -154,7 +157,6 @@ label, input, textarea {
 }
 
 #informacion-pie {
-    width: 82%;
     margin-top: 16px;
     display: flex;
     justify-content: space-between;

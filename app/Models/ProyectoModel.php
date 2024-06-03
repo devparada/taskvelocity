@@ -80,9 +80,11 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna un array con los usuarios del proyecto asociado
      */
     public function mostrarUsuariosPorProyecto(int $idProyecto): array {
+        $proyecto = $this->buscarProyectoPorId($idProyecto);
+        
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
-                . "WHERE up.id_proyectoPAsoc  = ?");
-        $stmt->execute([$idProyecto]);
+                . "WHERE up.id_proyectoPAsoc  = ? AND up.id_usuarioPAsoc != ? AND up.id_usuarioPAsoc != ?");
+        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"], $proyecto["id_usuario_proyecto_prop"]]);
         return $stmt->fetchAll();
     }
 
@@ -197,11 +199,8 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                 . "WHERE id_proyecto=?");
 
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idProyecto])) {
-
-            $stmt = $this->pdo->prepare("SELECT * FROM proyectos WHERE id_proyecto=?");
-            $stmt->execute([$idProyecto]);
-
-            $idUsuarioProyectoProp = (int) $stmt->fetch()["id_usuario_proyecto_prop"];
+            $proyecto = $this->buscarProyectoPorId($idProyecto);
+            $idUsuarioProyectoProp = (int) $proyecto["id_usuario_proyecto_prop"];
 
             if (!empty($idUsuariosAsociados)) {
                 array_push($idUsuariosAsociados, $idUsuarioProyectoProp);
@@ -233,18 +232,17 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         foreach ($idUsuarios as $idUsuario) {
             $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
 
-            /*
               $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
               $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
 
               foreach ($tareas as $tarea) {
-              $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=?");
-              $stmt->execute([$tarea["id_tarea"]]);
+              $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc = ? AND id_usuarioTAsoc = ?");
+              $stmt->execute([$tarea["id_tarea"], $idUsuario]);
 
               $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
               . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
               $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
-              } */
+              }
         }
     }
 

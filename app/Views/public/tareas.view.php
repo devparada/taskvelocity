@@ -50,46 +50,48 @@
                 <h1>Tus tareas</h1>
                 <div>
                     <?php foreach ($etiquetas as $etiqueta) { ?>
-                        <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>" style="background-color:<?php echo $etiqueta["color_etiqueta"] ?>;color:black"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
+                        <a class="botones botones-filtros" href="/tareas?etiqueta=<?php echo $etiqueta["id_etiqueta"] ?>" style="background-color:<?php echo $etiqueta["color_etiqueta"] ?>;color:<?php echo $etiqueta["color_letra"] ?>"><?php echo $etiqueta["nombre_etiqueta"] ?></a>
                     <?php } ?>
                     <a class="botones botones-filtros" href="/tareas">Mostrar todas</a>
                 </div>
                 <a href="/tareas/crear" class="botones"><i class="fa-solid fa-circle-plus"></i> Crear una tarea</a>
             </div>
             <?php if (isset($informacion)) { ?>
-                <div class="alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
-                    <p><?php echo $informacion["texto"] ?></p>
-                </div>
-            <?php } ?>
-            <div id="contenedor-principal">
             </div>
-            <script>
-                function ajaxTareas() {
-                    const divContenedor = document.getElementById('contenedor-principal');
+            <div class="alerta-div alert alert-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?> alert-dismissible fade show">
+                <p><?php echo $informacion["texto"] ?></p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php } ?>
+        <div id="contenedor-principal">
+        </div>
+        <script>
+            function ajaxTareas() {
+                const divContenedor = document.getElementById('contenedor-principal');
 
-                    // Realizar la solicitud AJAX
-                    let xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/async/tareas', true);
+                // Realizar la solicitud AJAX
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/async/tareas', true);
 
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            // Insertar el HTML obtenido en el contenedor
-                            divContenedor.innerHTML = xhr.responseText;
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Insertar el HTML obtenido en el contenedor
+                        divContenedor.innerHTML = xhr.responseText;
 
-                            const scriptMover = document.createElement('script');
-                            scriptMover.src = 'assets/js/public/moverTareas.js';
-                            document.body.appendChild(scriptMover);
+                        const scriptMover = document.createElement('script');
+                        scriptMover.src = 'assets/js/public/moverTareas.js';
+                        document.body.appendChild(scriptMover);
 
-                            const scriptFecha = document.createElement('script');
-                            scriptFecha.src = 'assets/js/public/fechasTareasProyectos.js';
-                            document.body.appendChild(scriptFecha);
-                        }
-                    };
+                        const scriptFecha = document.createElement('script');
+                        scriptFecha.src = 'assets/js/public/fechasTareasProyectos.js';
+                        document.body.appendChild(scriptFecha);
+                    }
+                };
 
-                    xhr.send();
-                }
+                xhr.send();
+            }
 
-                ajaxTareas();
-                setInterval(ajaxTareas, 1000000);
-            </script>
-        </main> <!-- Continua en plantillas/footer -->
+            ajaxTareas();
+            setInterval(ajaxTareas, 1000000);
+        </script>
+    </main> <!-- Continua en plantillas/footer -->
