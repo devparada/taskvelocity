@@ -457,8 +457,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no debe estar vacía";
-            // Expresión regular que obliga a que haya 1 mayúscula, 1 minúscula, 1 número, 1 caracter espacial y 8 caracteres como mínimo. Máximo 15 caracteres.
-        } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)_\-+=\[\]\{\};':\"\\\\|,.<>\/?`~])[A-Za-z0-9!@#\$%\^&\*\(\)_\-+=\[\]\{\};':\"\\\\|,.<>\/?`~]{8,15}$/", $data["contrasena"])) {
+            // Expresión regular que obliga a que haya 1 mayúscula, 1 minúscula, 1 número, y 8 caracteres como mínimo. Máximo 15 caracteres.
+        } else if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9!@#\$%\^&\*\(\)_\-+=\[\]\{\};':\"\\\\|,.<>\/?`~]{8,15}$/", $data["contrasena"])) {
             $errores["contrasena"] = "La contraseña no cumple los mínimos. Tiene que contener 1 letra mayúscula, 1 minúscula y 1 número. Mínimo 8 caracteres";
         }
 

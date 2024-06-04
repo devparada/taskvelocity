@@ -39,7 +39,24 @@
     border-radius: 20px;
 }
 
-.fecha-limite i {
+.fecha-limite svg path {
+    color: black;
+}
+
+.informacion {
+    margin: 16px;
+    padding: 16px;
+    background: var(--color-secundario-principal);
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.informacion-warning {
+    background-color: #F9E79F;
+}
+
+/* El icono cambia de color cuando se usa la clase .informacion-warning */
+.informacion-warning > p, .informacion-warning svg path, .informacion-warning ::before {
     color: black;
 }
 
@@ -65,21 +82,6 @@
     align-items: center;
     color:black;
     font-weight: bold;
-}
-
-.botones-tareas {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    column-gap: 10px;
-}
-
-.botones-tareas i {
-    margin-right: 10px;
-}
-
-.botones-tareas a svg {
-    margin-right: 6px;
 }
 
 @media only screen and (max-width: 900px) {

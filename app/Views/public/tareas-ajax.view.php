@@ -39,7 +39,9 @@
                             }
                             ?></p>
                         <p>Propietario: <?php echo isset($value[$i]["id_usuario_tarea_prop"]) && ($value[$i]["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $value[$i]["username"] ?></p>
-                        <p class="descripcion-proyecto-tarea"><?php echo ($value[$i]["descripcion_tarea"] == "") ? "No tiene descripción" : $value[$i]["descripcion_tarea"] ?></p>
+                        <?php if(!empty($value[$i]["descripcion_tarea"])) { ?>
+                        <p class="descripcion-proyecto-tarea"><?php echo $value[$i]["descripcion_tarea"] ?></p>
+                        <?php } ?>
                         <div class="botones-proyecto-tarea">
                             <a href="/tareas/editar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                             <a href="/tareas/borrar/<?php echo $value[$i]["id_tarea"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>

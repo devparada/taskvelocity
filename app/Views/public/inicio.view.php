@@ -93,10 +93,10 @@
         <div class="reseñas">
             <h2 class="apartados apartados-inicio">Reseñas y opiniones</h2>
             <div id="resenas-grid">
-                <div class="resena"><img src="assets/img/usuarios/avatar-10" class="imagenes-pequenas imagenes-resenas"></img><p>Esta herramienta es fácil de usar y es útil para gestionar el día a día - Pablo</p></div>
-                <div class="resena"><img src="assets/img/usuarios/avatar-1" class="imagenes-pequenas imagenes-resenas"></img><p>Esta herramienta es minimalista y simple que ayuda a gestionar los proyectos y tareas facilmente - Anabel</p></div>
-                <div class="resena"><img src="assets/img/usuarios/avatar-11" class="imagenes-pequenas imagenes-resenas"></img><p>Esta aplicación me ayuda a gestionar mi día a día en el trabajo - Pepita</p></div>
-                <div class="resena"><img src="assets/img/usuarios/avatar-23" class="imagenes-pequenas imagenes-resenas"></img><p>Esta aplicación ayuda en el trabajo a gestionar nuestros futuros proyectos - Antonio<p></div>
+                <div class="resena"><img src="assets/img/usuarios/avatar-10" class="imagenes-pequenas imagenes-resenas"></img><p>Esta herramienta es fácil de usar y es útil para gestionar el día a día</p></div>
+                <div class="resena"><img src="assets/img/usuarios/avatar-1" class="imagenes-pequenas imagenes-resenas"></img><p>Esta herramienta es minimalista y simple que ayuda a gestionar los proyectos y tareas facilmente</p></div>
+                <div class="resena"><img src="assets/img/usuarios/avatar-11" class="imagenes-pequenas imagenes-resenas"></img><p>Esta aplicación me ayuda a gestionar mi día a día en el trabajo</p></div>
+                <div class="resena"><img src="assets/img/usuarios/avatar-23" class="imagenes-pequenas imagenes-resenas"></img><p>Esta aplicación ayuda en el trabajo a gestionar nuestros futuros proyectos<p></div>
             </div>
         </div>
     </main> <!-- Continua en plantillas/footer -->

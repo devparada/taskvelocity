@@ -26,7 +26,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta "
                     . "WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc "
-                    . "ORDER BY ta.id_etiqueta, fecha_limite_tarea ASC");
+                    . "ORDER BY ta.id_etiqueta ASC, ta.nombre_tarea DESC");
 
             $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
         }

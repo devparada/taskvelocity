@@ -121,7 +121,7 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto"]) || $proyecto["id_proyecto"] == $_SESSION["usuario"]["id_proyecto_personal"]) {
+                                    if (!isset($datos["id_proyecto"]) && $proyecto["id_proyecto"] == $_SESSION["usuario"]["id_proyecto_personal"]) {
                                         echo "selected";
                                     } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";

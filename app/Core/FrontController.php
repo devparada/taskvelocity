@@ -453,6 +453,13 @@ class FrontController {
                 }
                 , 'get');
 
+        Route::add('/contacto',
+                function () {
+                    $controlador = new \Com\TaskVelocity\Controllers\InicioController();
+                    $controlador->mostrarContacto();
+                }
+                , 'get');
+
         Route::pathNotFound(
                 function () {
                     $controller = new \Com\TaskVelocity\Controllers\ErroresController();
