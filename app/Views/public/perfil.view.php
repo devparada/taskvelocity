@@ -74,42 +74,46 @@
                     </div>
                 </div>
                 <div id="informacion-usuario">
-                    <h2 class="apartados-inicio">Hola, <?php echo ($_SESSION["usuario"]["id_usuario"] != $usuario["id_usuario"]) ? "este es el perfil de" : "" ?> <?php echo $usuario["username"] ?></h2>
-                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> correo electrónico es: <?php echo $usuario["email"] ?></p>                   
+                    <h2 class="apartados-inicio">Hola, <?php echo ($_SESSION["usuario"]["id_usuario"] != $usuario["id_usuario"]) ? "estás viendo el perfil de " : "" ?> <?php echo $usuario["username"] ?></h2>
+                    <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                        <p>Tú correo electrónico es: <?php echo $usuario["email"] ?></p>
+                    <?php } ?>
                     <?php if ($usuario["descripcion_usuario"] != "") { ?>
                         <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> descripción es:</p> 
                         <p><?php echo $usuario["descripcion_usuario"]; ?></p>
                     <?php } else { ?>
                         <p>No tienes una descripción</p>
                     <?php } ?>
-                    <div id="estadistica-usuario-apartado">
-                        <h2 class="apartados-inicio">Estadísticas</h2>
-                        <div id="contenedor-estadisticas-usuario" class="<?php echo $idUsuario ?>">
-                            <div class="estadistica-usuario" id="propietario-proyectos">
-                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
-                                <p> <?php echo $proyectoPropietario ?> proyectos</p>
-                            </div>
-                            <div class="estadistica-usuario" id="propietario-tareas">
-                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
-                                <p> <?php echo $tareaPropietario ?> tareas</p>
-                            </div>
+                    <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                        <div id="estadistica-usuario-apartado">
+                            <h2 class="apartados-inicio">Estadísticas</h2>
+                            <div id="contenedor-estadisticas-usuario" class="<?php echo $idUsuario ?>">
+                                <div class="estadistica-usuario" id="propietario-proyectos">
+                                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
+                                    <p> <?php echo $proyectoPropietario ?> proyectos</p>
+                                </div>
+                                <div class="estadistica-usuario" id="propietario-tareas">
+                                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Eres" : "Es" ?> propietario de </p>
+                                    <p> <?php echo $tareaPropietario ?> tareas</p>
+                                </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-clickable" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
-                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
-                                <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
-                            </div>
+                                <div class="estadistica-usuario estadistica-usuario-clickable" style="background-color: <?php echo $etiquetas[0]["color_etiqueta"] ?>" id="etiqueta-pendiente">
+                                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
+                                    <p> <?php echo count($tareasPendientes) ?> tareas pendientes</p>
+                                </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
-                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
-                                <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
-                            </div>
+                                <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[1]["color_etiqueta"] ?>" id="etiqueta-progreso">
+                                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
+                                    <p> <?php echo count($tareasProgresos) ?> tareas en progreso</p>
+                                </div>
 
-                            <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
-                                <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
-                                <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
+                                <div class="estadistica-usuario estadistica-usuario-clickable estadistica-usuario-contraste" style="background-color: <?php echo $etiquetas[2]["color_etiqueta"] ?>" id="etiqueta-finalizada">
+                                    <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tienes" : "Tiene" ?></p>
+                                    <p> <?php echo count($tareasFinalizadas) ?> tareas finalizadas</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
                     <div id="informacion-pie-contenedor">
                         <h2>Opciones</h2>
                         <div id="informacion-pie">
