@@ -86,7 +86,8 @@ label {
     border-radius: 25px;
 }
 
-.select2-container--bootstrap4 .select2-selection, .select2-container--default .select2-selection--multiple {
+.select2-container--bootstrap4 .select2-selection, .select2-container--default .select2-selection--multiple,
+.select2-container--default.select2-container--focus .select2-selection--multiple {
     border-radius: 25px;
     border: 1px solid var(--color-secundario-principal);
     outline: var(--color-secundario-complementario);
@@ -147,4 +148,8 @@ label {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+}
+
+.select2-container--default .select2-selection--multiple .select2-search--inline .select2-search__field {
+    width: 110% !important;
 }

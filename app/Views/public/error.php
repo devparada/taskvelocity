@@ -48,7 +48,7 @@
         </header>
         <main>
             <h1>Error</h1>
-            <div id="mensaje-error">
+            <div class="alerta-div alerta-danger" id="mensaje-error">
                 <p><i class="fa-solid fa-circle-exclamation"></i> <?php echo $texto ?></p>
             </div>
             <div id="boton-volver">

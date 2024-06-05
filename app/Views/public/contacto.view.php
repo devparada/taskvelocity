@@ -54,8 +54,8 @@
             <div id="contenedor-preguntas">
                 <ul>
                     <div class="pregunta">
-                        <li>¿Porqué no puedo eliminar el proyecto personal por defecto?</li>
-                        <li>El proyecto personal por defecto se utiliza cuando no hay ningún proyecto creado y es a dónde va por defecto todas las tareas</li>
+                        <li>¿Porqué existe el proyecto personal con tu nombre de usuario?</li>
+                        <li>El proyecto personal por defecto existe debido a que cuando se crea una tarea puede que no haya algún proyecto creado así que se utiliza este por defecto</li>
                     </div>
                     <div class="pregunta">
                         <li>¿Porqué al crear una tarea es necesario selecionar un color?</li>
@@ -68,9 +68,9 @@
                 </ul>
             </div>
         </div>
+        <h2 id="formas-contacto-titulo">Formas de contacto</h2>
         <div id="formas-contacto-mapa-contenedor">
             <div id="formas-contacto">
-                <h2>Formas de contacto</h2>
                 <p><i class="fa-solid fa-envelope"></i><a href="mailto:email@personal.com">email@personal.com</a></p>
                 <p><i class="fa-solid fa-phone"></i><a href="tel:+34123456789">+34 123 45 67 89</a></p>
             </div>

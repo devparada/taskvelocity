@@ -57,6 +57,8 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
+        $_SESSION["historial"] = "/tareas";
+        
         return $data;
     }
 
@@ -74,7 +76,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data["colores"] = $modeloColor->mostrarColores();
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["proyectos"] = $modeloProyecto->mostrarProyectos();
+
+        $proyectos = $modeloProyecto->mostrarProyectos();
+        $proyectos[] = $modeloProyecto->buscarProyectoPorId($_SESSION["usuario"]["id_proyecto_personal"]);
+
+        $data["proyectos"] = $proyectos;
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
@@ -91,26 +97,14 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function procesarAdd() {
-        $data = [];
-        $data['titulo'] = 'Añadir tareas';
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $data['seccion'] = '/admin/tareas/add';
-            $data['tituloDiv'] = 'Añadir tarea';
-        } else {
-            $data['seccion'] = '/tareas/crear';
-        }
-
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColor->mostrarColores();
-
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["proyectos"] = $modeloProyecto->mostrarProyectos();
+
+        $proyectos = $modeloProyecto->mostrarProyectos();
+        $proyectos[] = $modeloProyecto->buscarProyectoPorId($_SESSION["usuario"]["id_proyecto_personal"]);
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["usuarios"] = $modeloUsuario->mostrarUsuariosFormulario();
-
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
-        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
         unset($_POST["enviar"]);
 
@@ -133,8 +127,21 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $datos["descripcion_tarea"] = null;
         }
 
-        $data["datos"] = $datos;
-        $data["enviar"] = "Crear tarea";
+        $data = [
+            "titulo" => "Añadir tareas",
+            "colores" => $modeloColor->mostrarColores(),
+            "proyectos" => $proyectos,
+            "usuarios" => $modeloUsuario->mostrarUsuariosFormulario(),
+            "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+            "datos" => $datos,
+            "enviar" => "Crear tarea",
+            "seccion" => '/tareas/crear'
+        ];
+
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+            $data['seccion'] = '/admin/tareas/add';
+            $data['tituloDiv'] = 'Añadir tarea';
+        }
 
         $errores = $this->comprobarAddTareas($datos);
 
@@ -182,36 +189,30 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function mostrarEdit(int $idTarea): void {
-        $data = [];
-
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
         $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea)["nombresUsuarios"];
         $esPropietario = $modeloTarea->esPropietario($idTarea);
 
         if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
-
-            $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
-
             $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-            $data["colores"] = $modeloColor->mostrarColores();
-
             $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-            $data["proyectos"] = $modeloProyecto->mostrarProyectos();
-
-            $proyecto = $modeloProyecto->mostrarProyectoTarea($idTarea)[0];
-
-            array_push($data["proyectos"], $proyecto);
-
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
-
             $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
-            $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
-            $data["enviar"] = "Editar tarea";
-            $data["modoEdit"] = true;
-            $data["idTarea"] = $idTarea;
+            $proyectos = $modeloProyecto->mostrarProyectos();
+            $proyectos[] = $modeloProyecto->buscarProyectoPorId($_SESSION["usuario"]["id_proyecto_personal"]);
+
+            $data = [
+                "datos" => $modeloTarea->buscarTareaPorId($idTarea),
+                "colores" => $modeloColor->mostrarColores(),
+                "proyectos" => $proyectos,
+                "usuarios" => $modeloUsuario->mostrarUsuarios(),
+                "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+                "enviar" => "Guardar cambios",
+                "modoEdit" => true,
+                "idTarea" => $idTarea
+            ];
 
             if ($_SESSION["usuario"]["id_usuario"] == 1) {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
@@ -224,7 +225,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['titulo'] = 'Editar tarea';
 
                 $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-                
+
                 $data["usuarios"] = json_encode($modeloTarea->mostrarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
@@ -240,15 +241,6 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function procesarEdit(int $idTarea): void {
-        $data = [];
-        $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $data['seccion'] = '/admin/tareas/edit';
-            $data['tituloDiv'] = 'Editar tarea';
-        } else {
-            $data['seccion'] = '/tareas/editar';
-        }
-
         unset($_POST["enviar"]);
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
@@ -257,6 +249,10 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $esPropietario = $modeloTarea->esPropietario($idTarea);
 
         if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
+            $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+            $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -277,10 +273,28 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $datos["descripcion_tarea"] = null;
             }
 
-            $data["datos"] = $datos;
-            $data["enviar"] = "Editar tarea";
+            $proyectos = $modeloProyecto->mostrarProyectos();
+            $proyectos[] = $modeloProyecto->buscarProyectoPorId($_SESSION["usuario"]["id_proyecto_personal"]);
 
-            $data["modoEdit"] = true;
+            $data = [
+                "datos" => $datos,
+                "colores" => $modeloColor->mostrarColores(),
+                "proyectos" => $proyectos,
+                "usuarios" => $modeloUsuario->mostrarUsuarios(),
+                "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+                "enviar" => "Guardar cambios",
+                "modoEdit" => true,
+                "idTarea" => $idTarea,
+                "titulo" => "Editar tarea"
+            ];
+
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                $data['seccion'] = '/admin/tareas/edit';
+                $data['tituloDiv'] = 'Editar tarea';
+                $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
+            } else {
+                $data['seccion'] = '/tareas/editar';
+            }
 
             $errores = $this->comprobarAddTareas($datos);
 
@@ -289,7 +303,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                     if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                         header("location: /admin/tareas");
                     } else {
-                        header("location: /tareas");
+                        if ($_SESSION["historial"] != "/tareas") {
+                            header("location: " . $_SESSION["historial"]);
+                        } else {
+                            header("location: /tareas");
+                        }
                     }
                 }
             } else {
@@ -297,7 +315,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
             }
         } else {
-            header("location: /tareas");
+            if ($_SESSION["historial"] != "/tareas") {
+                header("location: " . $_SESSION["historial"]);
+            } else {
+                header("location: /tareas");
+            }
         }
     }
 
@@ -337,7 +359,11 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
                 $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
-                $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
+                if ($_SESSION["historial"] != "/tareas") {
+                    header("location: " . $_SESSION["historial"]);
+                } else {
+                    $this->view->showViews(array('public/tareas.view.php', 'public/plantillas/footer.view.php'), $data);
+                }
             }
         } else {
             header("location: /tareas");

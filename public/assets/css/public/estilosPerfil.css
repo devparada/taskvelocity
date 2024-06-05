@@ -130,10 +130,6 @@ main {
     border-radius: 20px;
 }
 
-.estadistica-usuario-clickable {
-    cursor: pointer;
-}
-
 .estadistica-usuario-contraste > p {
     color: black;
 }
@@ -196,6 +192,12 @@ main {
     }
 }
 
+@media only screen and (max-width: 900px) {
+    #fecha-nacimiento {
+        width: unset !important;
+    }
+}
+
 @media only screen and (max-width: 600px) {
     #contenido-principal {
         flex-direction: column;
@@ -226,5 +228,6 @@ main {
 
     #informacion-pie {
         width: 100%;
+        justify-content: center;
     }
 }

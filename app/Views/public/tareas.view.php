@@ -59,9 +59,8 @@
             </div>
             <?php if (isset($informacion)) { ?>
             </div>
-            <div class="alerta-div alert alert-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?> alert-dismissible fade show">
+            <div class="alerta-div alerta-<?php echo ($informacion["estado"] == "success" ? "success" : "danger") ?>">
                 <p><?php echo $informacion["texto"] ?></p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         <?php } ?>
         <div id="contenedor-principal">

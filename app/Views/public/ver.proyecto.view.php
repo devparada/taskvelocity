@@ -62,20 +62,24 @@
                     <img src="/assets/img/proyectos/proyecto-<?php echo $proyecto["id_proyecto"] ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $proyecto["nombre_proyecto"] ?>">
                 <?php } ?>
                 <div class="informacion-proyecto informacion-proyecto-ver">
-                    <p id="fecha-limite">Fecha límite: <?php echo isset($proyecto["fecha_limite_proyecto"]) ? $proyecto["fecha_limite_proyecto"] : "No tiene fecha límite" ?></p>
+                    <?php if (!empty($proyecto["fecha_limite_proyecto"])) { ?>
+                        <p id="fecha-limite">Fecha límite: <?php echo ($proyecto["fecha_limite_proyecto"]) ?></p>
+                    <?php } ?>
                     <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <div id="anadirTareaProyecto">
                         <div class="campo-formulario">
                             <div id="titulo-anadir">
-                                <label for="id_tareas_asociadas[]">Añade una tarea al proyecto</label>
+                                <label for="id_tareas_asociadas">Añade o crea una tarea en el proyecto</label>
                                 <button id="anadir-tarea" class="botones">Añadir tarea</button>
                             </div>
                         </div>
                         <form id="formulario-anadir" action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
-                            <select id="id_tareas_asociadas[]" class="select2" name="id_tareas_asociadas" data-placeholder="Selecciona una tarea" multiple>
+                            <select id="id_tareas_asociadas" class="select2" data-placeholder="Selecciona o crea una tarea" name="id_tareas_asociadas[]" multiple>
                                 <option value=""></option>
-                                <?php foreach ($todasTareas as $tarea) { ?>
-                                    <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
+                                <?php if (count($todasTareas) != 0) { ?>
+                                    <?php foreach ($todasTareas as $tarea) { ?>
+                                        <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
+                                    <?php } ?>
                                 <?php } ?>
                             </select>
 
@@ -102,7 +106,7 @@
                             <?php foreach ($tareas as $t) { ?>
                                 <tr>
                                     <td><?php echo $t["nombre_tarea"] ?></a></td>
-                                    <td><?php echo $t["fecha_limite_tarea"] ?? "No tiene" ?></td>
+                                    <td class="fecha-limite"><?php echo $t["fecha_limite_tarea"] ?? "No tiene" ?></td>
                                     <td><?php echo $t["nombre_etiqueta"] ?></td>
                                     <td><a href="/tareas/editar/<?php echo $t["id_tarea"] ?>" class="botones boton-anadir"><i class="fa-solid fa-pen"></i></a>
                                         <a href="/tareas/borrar/<?php echo $t["id_tarea"] ?>" class="botones boton-anadir"><i class="fa-solid fa-trash"></i></a></td>
@@ -134,15 +138,23 @@
             <script src="plugins/jquery/jquery.min.js"></script>
             <!-- Select2 -->
             <script src="plugins/select2/js/select2.full.min.js"></script>
+            <script src="plugins/select2/js/i18n/es.js"></script>
             <script src="assets/js/admin/pages/main.js"></script>
 
-            <script src="assets/js/public/fechasTareasProyectosVer.js"></script>
+            <script src="assets/js/public/fechasTareasProyectos.js"></script>
 
             <script>
-                document.getElementById("anadir-tarea").addEventListener("click", function () {
-                    document.getElementById("formulario-anadir").style.display = "block";
-                    document.getElementById("anadir-tarea").style.display = "none";
-                    document.getElementById("id_tareas_asociadas").style.textAlign = "center";
+                document.querySelector("#anadir-tarea").addEventListener("click", function () {
+                    document.querySelector("#formulario-anadir").style.display = "block";
+                    document.querySelector("#anadir-tarea").style.display = "none";
+                    document.querySelector("#id_tareas_asociadas").style.textAlign = "center";
+                });
+            </script>
+            <script>
+                $(document).ready(function () {
+                    $("#id_tareas_asociadas").select2({
+                        tags: true
+                    });
                 });
             </script>
         </main> <!-- Continua en plantillas/footer -->

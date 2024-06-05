@@ -26,9 +26,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
                     . "ORDER BY pr.id_proyecto DESC");
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
-                    . "OR up.id_usuarioPAsoc = ? GROUP BY up.id_proyectoPAsoc "
+                    . "AND up.id_usuarioPAsoc = ? AND editable = ? GROUP BY up.id_proyectoPAsoc "
                     . "ORDER BY pr.nombre_proyecto ASC");
-            $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
+            $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"], 1]);
         }
         $datos = $stmt->fetchAll();
 
@@ -75,16 +75,28 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
+     * Procesa los usuarios asociados a un proyecto por el id del proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array Retorna un array con los usuarios del proyecto asociado
+     */
+    public function procesarUsuariosPorProyecto(int $idProyecto): array {
+        $proyecto = $this->buscarProyectoPorId($idProyecto);
+
+        $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
+                . "WHERE up.id_proyectoPAsoc  = ? AND up.id_usuarioPAsoc != ? AND up.id_usuarioPAsoc != ?");
+        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"], $proyecto["id_usuario_proyecto_prop"]]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Muestra los usuarios asociados a un proyecto por el id del proyecto
      * @param int $idProyecto el id del proyecto
      * @return array Retorna un array con los usuarios del proyecto asociado
      */
     public function mostrarUsuariosPorProyecto(int $idProyecto): array {
-        $proyecto = $this->buscarProyectoPorId($idProyecto);
-        
         $stmt = $this->pdo->prepare("SELECT * FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
-                . "WHERE up.id_proyectoPAsoc  = ? AND up.id_usuarioPAsoc != ? AND up.id_usuarioPAsoc != ?");
-        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"], $proyecto["id_usuario_proyecto_prop"]]);
+                . "WHERE up.id_proyectoPAsoc  = ?");
+        $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
     }
 
@@ -232,17 +244,17 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         foreach ($idUsuarios as $idUsuario) {
             $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
 
-              $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-              $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
 
-              foreach ($tareas as $tarea) {
-              $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc = ? AND id_usuarioTAsoc = ?");
-              $stmt->execute([$tarea["id_tarea"], $idUsuario]);
+            foreach ($tareas as $tarea) {
+                $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc = ? AND id_usuarioTAsoc = ?");
+                $stmt->execute([$tarea["id_tarea"], $idUsuario]);
 
-              $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
-              . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
-              $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
-              }
+                $stmt = $this->pdo->prepare("INSERT INTO usuarios_tareas "
+                        . "(id_usuarioTAsoc, id_tareaTAsoc) VALUES(?, ?)");
+                $stmt->execute([$idUsuario, $tarea["id_tarea"]]);
+            }
         }
     }
 
@@ -258,8 +270,8 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function contadorPorUsuarioPropietario(int $idUsuario): int {
-        $stmt = $this->pdo->prepare(self::contadorConsulta . "WHERE pr.id_usuario_proyecto_prop = ?");
-        $stmt->execute([$idUsuario]);
+        $stmt = $this->pdo->prepare(self::contadorConsulta . "WHERE pr.id_usuario_proyecto_prop = ? AND pr.editable = ?");
+        $stmt->execute([$idUsuario, 1]);
         return $stmt->fetchColumn();
     }
 

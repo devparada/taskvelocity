@@ -347,14 +347,29 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $data["tareaPropietario"] = $modeloTarea->contadorPorUsuarioPropietario($idUsuario);
 
-        $data["tareasPendientes"] = $modeloTarea->contadorTareasPorEtiqueta("1");
-        $data["tareasProgresos"] = $modeloTarea->contadorTareasPorEtiqueta("2");
-        $data["tareasFinalizadas"] = $modeloTarea->contadorTareasPorEtiqueta("3");
+        $data["tareasPendientes"] = $modeloTarea->contadorTareasPorEtiqueta(1, $idUsuario);
+        $data["tareasProgresos"] = $modeloTarea->contadorTareasPorEtiqueta(2, $idUsuario);
+        $data["tareasFinalizadas"] = $modeloTarea->contadorTareasPorEtiqueta(3, $idUsuario);
 
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
         $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
         $data["idUsuario"] = $idUsuario;
+
+        $data["meses"] = [
+            'January' => 'enero',
+            'February' => 'febrero',
+            'March' => 'marzo',
+            'April' => 'abril',
+            'May' => 'mayo',
+            'June' => 'junio',
+            'July' => 'julio',
+            'August' => 'agosto',
+            'September' => 'septiembre',
+            'October' => 'octubre',
+            'November' => 'noviembre',
+            'December' => 'diciembre'
+        ];
 
         $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
     }
@@ -367,14 +382,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["username"])) {
             $errores["username"] = "El nombre de usuario no debe estar vacío";
-        } else if (!preg_match("/^[a-z0-9]{4,}$/", $data["username"])) {
-            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres (letras y numeros)";
+        } else if (!preg_match("/^[a-zA-Z0-9]{4,32}$/", $data["username"])) {
+            $errores["username"] = "El nombre de usuario no cumple los mínimos. Mínimo 4 caracteres y máximo 32 caracteres";
         }
 
         if (!empty($_FILES["imagen_avatar"]["name"])) {
-            if ($_FILES["imagen_avatar"]["type"] != "image/jpeg" && $_FILES["imagen_avatar"]["type"] != "image/png") {
-                $errores["imagen_avatar"] = "Tipo de imagen no aceptado";
-            } else if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
+            if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
         }
@@ -425,8 +438,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $errores["email"] = "El email ya existe";
         }
 
-        if (!empty($data["contrasena"]) && !preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,15}$/", $data["contrasena"])) {
-            $errores["contrasena"] = "La contraseña no cumple los mínimos. Tiene que contener 1 letra mayúscula, 1 minúscula y 1 número. Mínimo 8 caracteres";
+        if (!empty($data["contrasena"]) && !preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{8,64}$/", $data["contrasena"])) {
+            $errores["contrasena"] = "La contraseña no cumple los mínimos. Tiene que contener 1 letra mayúscula, 1 minúscula y 1 número. Mínimo 8 caracteres y máximo 64 caracteres";
         }
 
         if (!empty($data["contrasena"]) && empty($data["confirmarContrasena"])) {

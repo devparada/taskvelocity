@@ -23,7 +23,6 @@
     align-items: center;
     border-radius: 20px;
     margin-top: 16px;
-    padding: 16px;
     cursor: pointer;
 }
 
@@ -46,7 +45,12 @@
     row-gap: 1.5px;
 }
 
+.proyectos-con-imagen {
+    border: none;
+}
+
 .proyectos-con-imagen > .informacion-proyecto {
+    /* var(--color-secundario-principal) con opacidad del 60% */
     background-color: rgba(51, 108, 174, 0.6);
 }
 

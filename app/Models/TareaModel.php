@@ -44,6 +44,16 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
+    public function mostrarTareasAddProyecto(int $idProyecto): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE ta.id_proyecto != ? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) "
+                . "GROUP BY ut.id_tareaTAsoc "
+                . "ORDER BY ta.id_etiqueta ASC, ta.nombre_tarea DESC");
+
+        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
+        $tareas = $stmt->fetchAll();
+        return $tareas;
+    }
+
     private function recogerNombresUsuarios(array $datos) {
         for ($i = 0; $i < count($datos); $i++) {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
@@ -64,7 +74,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @param array $tareas las tareas
      * @return array Devuelve un array con arrays de cada proyecto y dentro las tareas
      */
-    private function agruparTareaProyecto(array $tareas) {
+    private function agruparTareaProyecto(array $tareas): array {
         $tareasGrupo = [];
 
         foreach ($tareas as $tarea) {
@@ -75,13 +85,26 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $tareasGrupo;
     }
 
-    public function addTareasProyecto($idTareas, $idProyecto): bool {
+    /**
+     * Añade tareas al proyecto
+     * @param string $idTareas los valores del select2 (pueden ser los ids o un stirng que se utiliza como nombre de la tarea)
+     * @param string $idProyecto el id del proyecto
+     * @return void
+     */
+    public function addTareasProyecto(string $idTareas, string $idProyecto): void {
         foreach ($idTareas as $idTarea) {
-            $stmt = $this->pdo->prepare("UPDATE tareas SET id_proyecto = ? WHERE id_tarea = ?");
-            $stmt->execute([$idProyecto, $idTarea]);
-            return true;
+            $tarea = $this->buscarTareaPorId((int) $idTarea);
+
+            if (!is_null($tarea)) {
+                $stmt = $this->pdo->prepare("UPDATE tareas SET id_proyecto = ? WHERE id_tarea = ?");
+                $stmt->execute([$idProyecto, $idTarea]);
+            } else {
+                // Si la tarea no existe se crea
+                foreach ($idTareas as $idTarea) {
+                    $this->addTarea((string) $idTarea, null, (string) $_SESSION["usuario"]["id_color_favorito"], (string) $idProyecto, null, "", (string) 1);
+                }
+            }
         }
-        return false;
     }
 
     public function esPropietario(int $idTarea): bool {
@@ -150,16 +173,20 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     /**
      * Muestra los usuarios asociados a una tarea por el id de la tarea
      * @param int $idTarea el id de la tarea
-     * @return array Retorna un array con los usuarios de la tarea asociada
+     * @return array|null Retorna un array con los usuarios de la tarea asociada o null
      */
-    public function mostrarUsuariosPorTarea(int $idTarea): array {
+    public function mostrarUsuariosPorTarea(int $idTarea): ?array {
         $tarea = $this->buscarTareaPorId($idTarea);
 
-        $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
-                . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc = ? GROUP BY id_usuarioTAsoc");
-        $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"], $tarea["id_usuario_tarea_prop"]]);
-        return $stmt->fetchAll();
+        if (!is_null($tarea)) {
+            $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
+                    . "ON u.id_usuario = ut.id_usuarioTAsoc "
+                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc = ? GROUP BY id_usuarioTAsoc");
+            $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"], $tarea["id_usuario_tarea_prop"]]);
+            return $stmt->fetchAll();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -258,8 +285,6 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             }
 
             $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas WHERE id_tareaTAsoc=" . $idTarea);
-            var_dump($stmt->fetchAll());
-            //           die();
 
             if (!empty($_FILES["imagen_tarea"]["name"])) {
                 $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
@@ -299,11 +324,12 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
-    public function contadorTareasPorEtiqueta(string $idEtiqueta): array {
+    public function contadorTareasPorEtiqueta(int $idEtiqueta, int $idUsuario): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
-                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
+                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) "
+                . "GROUP BY ut.id_tareaTAsoc");
 
-        $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
+        $stmt->execute([$idEtiqueta, $idUsuario, $idUsuario]);
 
         return $stmt->fetchAll();
     }

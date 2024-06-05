@@ -77,7 +77,7 @@
                             ?>
                             <img src="/assets/img/tareas/tarea-<?php echo $idTarea ?>" class="imagen-proyecto-tarea" alt="Imagen Tarea <?php echo $idTarea ?>">
                         <?php } ?>
-                        <input type="file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
+                        <input type="file" id="imagen_tarea" name="imagen_tarea">
                         <?php
                         if (isset($idTarea) && file_exists("./assets/img/tareas/tarea-$idTarea.jpg")) {
                             ?>
@@ -121,12 +121,12 @@
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" 
                                     <?php
-                                    if (!isset($datos["id_proyecto"]) && $proyecto["id_proyecto"] == $_SESSION["usuario"]["id_proyecto_personal"]) {
+                                    if (!isset($datos["id_proyecto"]) && $proyecto["id_proyecto"] == $_SESSION["usuario"]["id_proyecto_personal"] || (isset($_GET["proyecto"]) && $proyecto["id_proyecto"] == $_GET["proyecto"])) {
                                         echo "selected";
                                     } else if (isset($datos["id_proyecto"]) && $datos["id_proyecto"] == $proyecto["id_proyecto"]) {
                                         echo "selected";
                                     }
-                                    ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
+                                    ?>><?php echo $proyecto["nombre_proyecto"] ?></option>
                                         <?php } ?>
                             </select>
                         </div>
@@ -141,7 +141,7 @@
                     </div>
 
                     <?php if (isset($modoEdit)) { ?>
-                        <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
+                        <input type="hidden" id="usuarios_selecionados" value='<?php echo (is_string($usuarios)) ? html_entity_decode($usuarios) : "" ?>'>
                     <?php } ?>
 
                     <div class="campo-formulario">
@@ -155,4 +155,14 @@
                 <script src="assets/js/admin/pages/main.js"></script>
 
                 <script src="assets/js/public/mostrarUsuariosAsync.js"></script>
+
+                <script>
+                    $(document).ready(function () {
+                        $("#id_proyecto_asociado").select2({
+                            theme: 'bootstrap4',
+                            allowClear: true,
+                            closeOnSelect: true
+                        });
+                    });
+                </script>
         </main> <!-- Continua en plantillas/footer -->

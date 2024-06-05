@@ -54,21 +54,27 @@
                             <?php if ($usuario["fecha_nacimiento"]) { ?>
                                 <p><i class="fa-solid fa-cake-candles"></i> <?php
                                     setlocale(LC_TIME, 'es_ES.UTF-8');
-                                    $fechaNacimiento = new DateTimeImmutable($usuario["fecha_nacimiento"]);
-                                    echo strftime("%e de %B", $fechaNacimiento->getTimestamp())
+                                    $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
+                                    $fechaFormateada = strftime("%e de %B", $fechaUsuario->getTimestamp());
+                                    // Traduce los meses
+                                    $fechaFormateadaDefinitiva = str_replace(array_keys($meses), array_values($meses), $fechaFormateada);
+                                    echo $fechaFormateadaDefinitiva;
                                     ?></p>
                             <?php } ?>
                             <p><i class="fa-solid fa-user-plus"></i> <?php
                                 setlocale(LC_TIME, 'es_ES.UTF-8');
                                 $fechaUsuario = new DateTimeImmutable($usuario["fecha_usuario_creado"]);
-                                echo strftime("%e de %B", $fechaUsuario->getTimestamp())
+                                $fechaFormateada = strftime("%e de %B", $fechaUsuario->getTimestamp());
+                                // Traduce los meses
+                                $fechaFormateadaDefinitiva = str_replace(array_keys($meses), array_values($meses), $fechaFormateada);
+                                echo $fechaFormateadaDefinitiva;
                                 ?></p>
                         <?php } ?>
                         <p>Color favorito: <span style="background-color: <?php echo $usuario["valor_color"] ?>" class="color-circulo"></span> <?php echo $usuario["nombre_color"] ?></p>
                     </div>
                 </div>
                 <div id="informacion-usuario">
-                    <h2 class="apartados-inicio">Hola, <?php echo ($_SESSION["usuario"]["id_usuario"] != $usuario["id_usuario"]) ? "este es el perfl de" : "" ?> <?php echo $usuario["username"] ?></h2>
+                    <h2 class="apartados-inicio">Hola, <?php echo ($_SESSION["usuario"]["id_usuario"] != $usuario["id_usuario"]) ? "este es el perfil de" : "" ?> <?php echo $usuario["username"] ?></h2>
                     <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> correo electrónico es: <?php echo $usuario["email"] ?></p>                   
                     <?php if ($usuario["descripcion_usuario"] != "") { ?>
                         <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> descripción es:</p> 
@@ -109,7 +115,7 @@
                         <div id="informacion-pie">
                             <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
                                 <button type="button" class="botones botones-perfil" data-bs-toggle="modal" data-bs-target="#modalBorrarUsuario"id="boton-borrar"><i class="fa-solid fa-user-minus"></i> Borrar cuenta</button>
-                                <button id="boton-editar" onclick="window.location.href='/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>'" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</button>        
+                                <button id="boton-editar" onclick="window.location.href = '/perfil/editar/<?php echo $_SESSION["usuario"]["id_usuario"] ?>'" class="botones botones-perfil"><i class="fa-solid fa-user-pen"></i> Editar perfil</button>        
                             <?php } else { ?>
                                 <a id="boton-editar" href="/proyectos" class="botones botones-perfil"><i class="fa-solid fa-arrow-left"></i> Volver</a>
                             <?php } ?>
@@ -136,17 +142,23 @@
                     </div>
                 </div>
             </div>
-            <script>
-                var idUsuario = document.getElementById("contenedor-estadisticas-usuario").className;
+            <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                <script>
+                    const estadisticasClickable = document.querySelectorAll(".estadistica-usuario-clickable");
 
-                document.getElementById("etiqueta-pendiente").addEventListener("click", function () {
-                    window.location.href = "/tareas?etiqueta=1";
-                });
-                document.getElementById("etiqueta-progreso").addEventListener("click", function () {
-                    window.location.href = "/tareas?etiqueta=2";
-                });
-                document.getElementById("etiqueta-finalizada").addEventListener("click", function () {
-                    window.location.href = "/tareas?etiqueta=3";
-                });
-            </script>
+                    for (var i = 0; i < estadisticasClickable.length; i++) {
+                        estadisticasClickable[i].style.cursor = "pointer";
+                    }
+
+                    document.querySelector("#etiqueta-pendiente").addEventListener("click", function () {
+                        window.location.href = "/tareas?etiqueta=1";
+                    });
+                    document.querySelector("#etiqueta-progreso").addEventListener("click", function () {
+                        window.location.href = "/tareas?etiqueta=2";
+                    });
+                    document.querySelector("#etiqueta-finalizada").addEventListener("click", function () {
+                        window.location.href = "/tareas?etiqueta=3";
+                    });
+                </script>
+            <?php } ?>
         </main> <!-- Continua en plantillas/footer -->

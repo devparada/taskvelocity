@@ -63,7 +63,7 @@
                             ?>
                             <img src="/assets/img/proyectos/proyecto-<?php echo $idProyecto ?>" class="imagen-proyecto-tarea" alt="Imagen Proyecto <?php echo $idProyecto ?>">
                         <?php } ?>
-                        <input type="file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png">
+                        <input type="file" id="imagen_proyecto" name="imagen_proyecto">
                         <?php
                         if (isset($idProyecto) && file_exists("./assets/img/proyectos/proyecto-$idProyecto.jpg")) {
                             ?>

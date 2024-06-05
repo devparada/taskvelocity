@@ -169,7 +169,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
             $fechaNacimiento = null;
         }
 
-        // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
+// Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
         if (is_null($contrasena)) {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
                     . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?, descripcion_usuario=?, id_color_favorito=? "
@@ -185,6 +185,20 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
                 return false;
             }
         }
+
+        if ($_SESSION["usuario"]["id_rol"] == \Com\TaskVelocity\Controllers\UsuarioController::ROL_USUARIO && $_SESSION["usuario"]["username"] != $username) {
+            $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+            $proyectoPersonal = $modeloProyecto->buscarProyectoPorId($_SESSION["usuario"]["id_proyecto_personal"]);
+
+            if (strpos($proyectoPersonal["nombre_proyecto"], "Personal") !== false) {
+                $stmt = $this->pdo->prepare("UPDATE proyectos SET nombre_proyecto = ? WHERE id_proyecto = ?");
+                $stmt->execute(["Personal " . $username, $proyectoPersonal["id_proyecto"]]);
+            }
+        }
+
+        // Se sobrescribe el usuario con los nuevos datos en la sesión
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $_SESSION["usuario"] = $modeloUsuario->buscarUsuarioPorId($_SESSION["usuario"]["id_usuario"]);
 
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
         $modeloLog->crearLog("Editado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);

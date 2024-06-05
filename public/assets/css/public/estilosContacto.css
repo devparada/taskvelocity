@@ -25,7 +25,7 @@ li {
 }
 
 #contacto {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .pregunta {
@@ -37,6 +37,10 @@ li {
     border: 1px solid var(--color-secundario-principal);
     border-radius: 25px;
     line-height: 1.5em;
+}
+
+#formas-contacto-titulo {
+    margin-bottom: 16px;
 }
 
 #formas-contacto {

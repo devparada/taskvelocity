@@ -87,6 +87,10 @@
     margin-bottom: 10px;
 }
 
+#crear-tarea {
+    display: none;
+}
+
 .boton-anadir {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -96,20 +100,20 @@
 
 @media only screen and (max-width: 1400px) {
     .imagen-proyecto-tarea {
-        width: 100%
+        width: 80%
     }
 
-    .informacion-proyecto {
-        width: 80%;
+    .proyectos > .informacion-proyecto {
+        width: 100%;
     }
 }
 
 @media only screen and (max-width: 600px) {
     .imagen-proyecto-tarea {
-        width: 100%
+        width: 80%
     }
 
-    .informacion-proyecto {
+    .proyectos > .informacion-proyecto {
         width: 100%;
     }
 }

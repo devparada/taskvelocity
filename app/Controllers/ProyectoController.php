@@ -85,12 +85,13 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $data["tareas"] = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
-            $data["todasTareas"] = $modeloTarea->mostrarTareas();
+            $data["todasTareas"] = $modeloTarea->mostrarTareasAddProyecto($idProyecto);
 
             $data["usuarios"] = $modeloProyecto->mostrarUsuariosPorProyecto($idProyecto);
 
             $data["modoVer"] = true;
             $data["idProyecto"] = $idProyecto;
+            $_SESSION["historial"] = $_SERVER["REQUEST_URI"];
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -214,9 +215,9 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $esPropietario = $modeloProyecto->esPropietario($idProyecto);
         if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
             $data = [
-                "enviar" => "Editar proyecto",
+                "enviar" => "Guardar cambios",
                 "datos" => $modeloProyecto->buscarProyectoPorId($idProyecto),
-                "usuarios" => json_encode($modeloProyecto->mostrarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                "usuarios" => json_encode($modeloProyecto->procesarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
                 "idProyecto" => $idProyecto,
                 "modoEdit" => true
             ];
@@ -245,12 +246,13 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function procesarEdit(int $idProyecto): void {
         $data = [];
-        $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $data['seccion'] = '/admin/proyectos/edit';
+            $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
             $data['tituloDiv'] = 'Editar proyecto ' . $idProyecto;
+            $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
         } else {
-            $data['seccion'] = '/proyectos/editar';
+            $data['seccion'] = '/proyectos/editar/' . $idProyecto;
+            $data["titulo"] = "Editar proyecto";
         }
 
         unset($_POST["enviar"]);
@@ -264,7 +266,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
             $data["datos"] = $datos;
-
+            $data["usuarios"] = json_encode($modeloProyecto->procesarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             $data["modoEdit"] = true;
 
             $errores = $this->comprobarEdit($datos);
@@ -287,7 +289,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 }
             } else {
                 $data["errores"] = $errores;
-                $data["enviar"] = "Editar proyecto";
+                $data["idProyecto"] = $idProyecto;
+                $data["enviar"] = "Guardar cambios";
 
                 if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                     $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -315,14 +318,10 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $_SESSION["error_addTareasProyecto"] = "";
 
         if (!empty($datos["id_tareas_asociadas"])) {
-            if ($modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto)) {
-                header("location: /proyectos/ver/$idProyecto");
-            } else {
-                $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar una tarea válida";
-                $this->verProyecto($idProyecto);
-            }
+            $modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto);
+            header("location: /proyectos/ver/$idProyecto");
         } else {
-            $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar una tarea";
+            $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar o crear una tarea";
             $this->verProyecto($idProyecto);
         }
     }

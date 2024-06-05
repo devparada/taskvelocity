@@ -110,15 +110,18 @@ class FileModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
+    /**
+     * Elimina la imagen cuando el usuario le da al botón Eliminar imagen al editar un proyecto o tarea
+     * @param int $idImagen el id de la imagen
+     * @return void
+     */
     public function eliminarImagenProyectoTarea(int $idImagen): void {
         switch ($_SESSION["historial"]) {
-            case strpos(ltrim($_SESSION["historial"]), "/proyectos"):
+            case strpos(ltrim($_SESSION["historial"]), "/proyectos") !== false:
                 $this->eliminarImagen("proyectos", "proyecto", $idImagen);
-                header("location: /proyectos/editar/$idImagen");
                 break;
-            case strpos(ltrim($_SESSION["historial"]), "/tareas"):
+            case strpos(ltrim($_SESSION["historial"]), "/tareas") !== false:
                 $this->eliminarImagen("tareas", "tarea", $idImagen);
-                header("location: /tareas/editar/$idImagen");
                 break;
         }
     }
