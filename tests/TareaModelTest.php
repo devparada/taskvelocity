@@ -26,19 +26,28 @@ class TareaModelTest extends TestCase {
     }
 
     public function testmostrarUsuariosPorTarea() {
-        $model = new \Com\TaskVelocity\Models\TareaModel();
+        $modelTarea = new \Com\TaskVelocity\Models\TareaModel();
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
 
-        $this->assertIsArray($model->mostrarUsuariosPorTarea(1));
-        $this->assertNull($model->mostrarUsuariosPorTarea(-1));
+        $this->assertIsArray($modelTarea->mostrarUsuariosPorTarea(1));
+        $this->assertNull($modelTarea->mostrarUsuariosPorTarea(-1));
+    }
+    
+        public function testmostrarTareas() {
+        $modelTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
+
+        $this->assertIsArray($modelTarea->mostrarTareas());
     }
 
     public function testbuscarTareaPorId() {
-        $model = new \Com\TaskVelocity\Models\TareaModel();
+        $modelTarea = new \Com\TaskVelocity\Models\TareaModel();
 
-        $this->assertNull($model->buscarTareaPorId(-1));
-        $this->assertIsArray($model->buscarTareaPorId(1));
+        $this->assertNull($modelTarea->buscarTareaPorId(-1));
+        $this->assertIsArray($modelTarea->buscarTareaPorId(1));
     }
 }

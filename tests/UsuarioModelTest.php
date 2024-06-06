@@ -18,25 +18,25 @@ class UsuarioModelTest extends TestCase {
     }
 
     public function testprocesarLogin() {
-        $model = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        $this->assertTrue($model->procesarLogin("admin", "TaskVelocity1"));
-        $this->assertFalse($model->procesarLogin("karpiña@personal.com", "asds"));
-        $this->assertFalse($model->procesarLogin("tractor", "password1"));
-        $this->assertFalse($model->procesarLogin("rauliño@personal.com", "TaskVelocity1"));
+        $this->assertTrue($modelUsuario->procesarLogin("admin", "TaskVelocity1"));
+        $this->assertFalse($modelUsuario->procesarLogin("karpiña@personal.com", "asds"));
+        $this->assertFalse($modelUsuario->procesarLogin("tractor", "password1"));
+        $this->assertFalse($modelUsuario->procesarLogin("rauliño@a.com", "TaskVelocity1"));
     }
 
     public function testbuscarUsuarioPorId() {
-        $model = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        $this->assertIsArray($model->buscarUsuarioPorId(1));
-        $this->assertNull($model->buscarUsuarioPorId(100));
+        $this->assertIsArray($modelUsuario->buscarUsuarioPorId(1));
+        $this->assertNull($modelUsuario->buscarUsuarioPorId(100));
     }
 
     public function testbuscarUsuarioPorUsername() {
-        $model = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        $this->assertFalse($model->comprobarUsuariosNumero([1, 2, 3, "usuario1"]));
-        $this->assertTrue($model->comprobarUsuariosNumero([1, 2, 3, 4]));
+        $this->assertFalse($modelUsuario->comprobarUsuariosNumero([1, 2, 3, "usuario1"]));
+        $this->assertTrue($modelUsuario->comprobarUsuariosNumero([1, 2, 3, 4]));
     }
 }

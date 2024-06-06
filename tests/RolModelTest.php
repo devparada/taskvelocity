@@ -18,15 +18,15 @@ class RolModelTest extends TestCase {
     }
 
     public function testmostrarRoles() {
-        $model = new \Com\TaskVelocity\Models\RolModel();
+        $modelRol = new \Com\TaskVelocity\Models\RolModel();
 
-        $this->assertIsArray($model->mostrarRoles());
+        $this->assertIsArray($modelRol->mostrarRoles());
     }
 
     public function testcomprobarRol() {
-        $model = new \Com\TaskVelocity\Models\RolModel();
+        $modelRol = new \Com\TaskVelocity\Models\RolModel();
 
-        $this->assertTrue($model->comprobarRol("1"));
-        $this->assertFalse($model->comprobarRol("-1"));
+        $this->assertTrue($modelRol->comprobarRol("1"));
+        $this->assertFalse($modelRol->comprobarRol("-1"));
     }
 }
