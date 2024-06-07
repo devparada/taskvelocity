@@ -15,6 +15,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->query(self::baseConsulta);
         return $stmt->fetchAll();
     }
+    
+    public function mostrarUsuariosLogs(): array {
+        $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN logs as l ON us.id_usuario = l.id_usuario_prop GROUP by us.id_usuario");
+        return $stmt->fetchAll();
+    }
 
     /**
      * Muestra los nombres de los usuarios de forma asincrona cuando se busca en el select2

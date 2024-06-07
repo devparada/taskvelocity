@@ -78,7 +78,7 @@
                                 <option value=""></option>
                                 <?php if (count($todasTareas) != 0) { ?>
                                     <?php foreach ($todasTareas as $tarea) { ?>
-                                        <option value="<?php echo $tarea[0]["id_tarea"] ?>" ><?php echo $tarea[0]["nombre_tarea"]; ?></option>
+                                        <option value="<?php echo $tarea["id_tarea"] ?>" ><?php echo $tarea["nombre_tarea"]; ?></option>
                                     <?php } ?>
                                 <?php } ?>
                             </select>

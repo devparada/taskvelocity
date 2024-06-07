@@ -10,10 +10,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * Consulta base para los métodos que recogen datos
      */
     private const baseConsulta = "SELECT *, COUNT(id_usuarioTAsoc) FROM tareas ta JOIN proyectos p "
-            . "ON ta.id_proyecto=p.id_proyecto LEFT JOIN usuarios us "
-            . "ON ta.id_usuario_tarea_prop=us.id_usuario LEFT JOIN colores c "
+            . "ON ta.id_proyecto = p.id_proyecto LEFT JOIN usuarios us "
+            . "ON ta.id_usuario_tarea_prop = us.id_usuario LEFT JOIN colores c "
             . "ON ta.id_color_tarea = c.id_color LEFT JOIN usuarios_tareas ut "
-            . "ON ta.id_tarea=ut.id_tareaTAsoc ";
+            . "ON ta.id_tarea = ut.id_tareaTAsoc ";
 
     /**
      * Recoge el valor del id de rol de admin de UsuarioController
@@ -33,17 +33,21 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
         $tareas = $stmt->fetchAll();
 
-        $tareasUsuarios = $this->recogerNombresUsuarios($tareas);
+        $tareasConUsuarios = $this->recogerIdsUsuariosTarea($tareas);
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            return $tareasUsuarios;
+            return $tareasConUsuarios;
         } else {
-            $tareasProyecto = $this->agruparTareaProyecto($tareasUsuarios);
-
-            return $tareasProyecto;
+            $tareasAgrupadasProyecto = $this->agruparTareaProyecto($tareasConUsuarios);
+            return $tareasAgrupadasProyecto;
         }
     }
 
+    /**
+     * Obtiene las tareas que no están en el mismo proyecto
+     * @param int $idProyecto el id del proyecto
+     * @return array Devuelve el array con las tareas
+     */
     public function mostrarTareasAddProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE ta.id_proyecto != ? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) "
                 . "GROUP BY ut.id_tareaTAsoc "
@@ -54,19 +58,34 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $tareas;
     }
 
-    private function recogerNombresUsuarios(array $datos) {
-        for ($i = 0; $i < count($datos); $i++) {
-            for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
+    private function recogerIdsUsuariosTarea(array $tarea) {
+        for ($i = 0; $i < count($tarea); $i++) {
+            for ($j = 0; $j < $tarea[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
                         . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
-                        . " WHERE id_tareaTAsoc =" . $datos[$i]["id_tareaTAsoc"]);
+                        . " WHERE id_tareaTAsoc =" . $tarea[$i]["id_tareaTAsoc"]);
 
                 $usuariosTareas = $stmt->fetchAll();
 
-                $datos[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
+                $tarea[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
             }
         }
-        return $datos;
+        return $tarea;
+    }
+
+    /**
+     * Añade los nombres de los usuarios en la tarea recibida
+     * @param array $tareaIdUsuarioTarea el array de la tarea con los idUsuario y idTarea
+     * @return array
+     */
+    private function mostrarUsernamesTarea(array $tareaIdUsuarioTarea): array {
+        $usuarios = [];
+
+        foreach ($tareaIdUsuarioTarea as $tareaUsuario) {
+            $usuarios[] = $tareaUsuario["username"];
+        }
+
+        return $usuarios;
     }
 
     /**
@@ -75,14 +94,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Devuelve un array con arrays de cada proyecto y dentro las tareas
      */
     private function agruparTareaProyecto(array $tareas): array {
-        $tareasGrupo = [];
+        $tareasAgrupadasPorProyecto = [];
 
-        foreach ($tareas as $tarea) {
-            $nombreProyecto = $tarea["nombre_proyecto"];
-            $tareasGrupo[$nombreProyecto][] = $tarea;
+        if (!empty($tareas)) {
+            foreach ($tareas as $tarea) {
+                $nombreProyecto = $tarea["nombre_proyecto"];
+                // Añade la tarea al array del nombre_proyecto y esté se añade a su vez en un array llamado tareasGrupo
+                $tareasAgrupadasPorProyecto[$nombreProyecto][] = $tarea;
+            }
         }
 
-        return $tareasGrupo;
+        return $tareasAgrupadasPorProyecto;
     }
 
     /**
@@ -91,7 +113,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @param string $idProyecto el id del proyecto
      * @return void
      */
-    public function addTareasProyecto(string $idTareas, string $idProyecto): void {
+    public function addTareasProyecto(array $idTareas, int $idProyecto): void {
         foreach ($idTareas as $idTarea) {
             $tarea = $this->buscarTareaPorId((int) $idTarea);
 
@@ -108,10 +130,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function esPropietario(int $idTarea): bool {
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas t WHERE t.id_tarea = ? AND t.id_usuario_tarea_prop = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas t "
+                . "WHERE t.id_tarea = ? AND t.id_usuario_tarea_prop = ?");
         $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
 
-        return (!is_null($stmt->fetch()));
+        return !is_null($stmt->fetch());
     }
 
     /**
@@ -121,27 +144,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function mostrarTareasPorEtiqueta(string $idEtiqueta): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
-                . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) GROUP BY ut.id_tareaTAsoc");
+                . "ON ta.id_etiqueta=et.id_etiqueta "
+                . "WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) "
+                . "GROUP BY ut.id_tareaTAsoc");
 
         $stmt->execute([$idEtiqueta, $_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"]]);
 
-        $datos = $stmt->fetchAll();
+        $tareas = $stmt->fetchAll();
+        $tareasIdsUsuariosTareas = $this->recogerIdsUsuariosTarea($tareas);
+        $tareasPorProyecto = $this->agruparTareaProyecto($tareasIdsUsuariosTareas);
 
-        $datosFinal = $this->recogerNombresUsuarios($datos);
-
-        $grupos = $this->agruparTareaProyecto($datosFinal);
-
-        return $grupos;
-    }
-
-    private function mostrarUsernamesTarea(array $usuariosTareas): array {
-        $usuarios = [];
-
-        for ($index = 0; $index < count($usuariosTareas); $index++) {
-            $usuarios[$index] = $usuariosTareas[$index]["username"];
-        }
-
-        return $usuarios;
+        return $tareasPorProyecto;
     }
 
     /**
@@ -175,13 +188,13 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @param int $idTarea el id de la tarea
      * @return array|null Retorna un array con los usuarios de la tarea asociada o null
      */
-    public function mostrarUsuariosPorTarea(int $idTarea): ?array {
+    public function procesarUsuariosPorTarea(int $idTarea): ?array {
         $tarea = $this->buscarTareaPorId($idTarea);
 
         if (!is_null($tarea)) {
             $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
                     . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc = ? GROUP BY id_usuarioTAsoc");
+                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc != ?");
             $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"], $tarea["id_usuario_tarea_prop"]]);
             return $stmt->fetchAll();
         } else {
@@ -195,8 +208,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna un array con las tareas del proyecto asociado
      */
     public function mostrarTareasPorProyecto(int $idProyecto): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p ON ta.id_proyecto=p.id_proyecto "
-                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_proyecto = ? ORDER BY ta.id_etiqueta ASC");
+        $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p "
+                . "ON ta.id_proyecto=p.id_proyecto "
+                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta "
+                . "WHERE ta.id_proyecto = ? ORDER BY ta.id_etiqueta ASC");
         $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
     }

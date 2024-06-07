@@ -9,22 +9,19 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function indexAdmin(): void {
-        $data = array(
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $modeloTareas = new \Com\TaskVelocity\Models\TareaModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
+
+        $data = [
             "titulo" => "Inicio admin",
             "seccion" => "/admin",
-        );
-
-        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data['numProyectos'] = $modeloProyecto->contador();
-
-        $modeloTareas = new \Com\TaskVelocity\Models\TareaModel();
-        $data['numTareas'] = $modeloTareas->contador();
-
-        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data['numUsuarios'] = $modeloUsuario->contador();
-
-        $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-        $data["logs"] = $modeloLog->mostrarLogsInicio();
+            "numProyectos" => $modeloProyecto->contador(),
+            "numTareas" => $modeloTareas->contador(),
+            "numUsuarios" => $modeloUsuario->contador(),
+            "logs" => $modeloLog->mostrarLogsInicio(),
+        ];
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/inicio.view.php', 'admin/templates/footer.view.php'), $data);
     }
@@ -34,9 +31,9 @@ class InicioController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function index(): void {
-        $data = array(
+        $data = [
             "titulo" => "Inicio"
-        );
+        ];
 
         $this->view->showViews(array('public/inicio.view.php', 'public/plantillas/footer.view.php'), $data);
     }

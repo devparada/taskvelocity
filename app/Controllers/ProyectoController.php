@@ -245,16 +245,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function procesarEdit(int $idProyecto): void {
-        $data = [];
-        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
-            $data['tituloDiv'] = 'Editar proyecto ' . $idProyecto;
-            $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
-        } else {
-            $data['seccion'] = '/proyectos/editar/' . $idProyecto;
-            $data["titulo"] = "Editar proyecto";
-        }
-
         unset($_POST["enviar"]);
 
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
@@ -265,9 +255,20 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-            $data["datos"] = $datos;
-            $data["usuarios"] = json_encode($modeloProyecto->procesarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            $data["modoEdit"] = true;
+            $data = [
+                "datos" => $datos,
+                "usuarios" => json_encode($modeloProyecto->procesarUsuariosPorProyecto($idProyecto), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                "modoEdit" => true
+            ];
+
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                $data['seccion'] = '/admin/proyectos/edit/' . $idProyecto;
+                $data['tituloDiv'] = 'Editar proyecto ' . $idProyecto;
+                $data['titulo'] = 'Editar proyecto con el id ' . $idProyecto;
+            } else {
+                $data['seccion'] = '/proyectos/editar/' . $idProyecto;
+                $data["titulo"] = "Editar proyecto";
+            }
 
             $errores = $this->comprobarEdit($datos);
 
@@ -304,11 +305,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function procesarAddTareasProyecto(int $idProyecto): void {
-        $data["titulo"] = "Añadir tareas al proyecto $idProyecto";
-        $data["seccion"] = "/proyectos/addTareasProyecto/$idProyecto";
-
-        $data["idProyecto"] = $idProyecto;
-
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
         if (isset($_POST)) {
@@ -318,7 +314,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $_SESSION["error_addTareasProyecto"] = "";
 
         if (!empty($datos["id_tareas_asociadas"])) {
-            $modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], $idProyecto);
+            $modeloTarea->addTareasProyecto($datos["id_tareas_asociadas"], (int) $idProyecto);
             header("location: /proyectos/ver/$idProyecto");
         } else {
             $_SESSION["error_addTareasProyecto"] = "Tienes que selecionar o crear una tarea";
@@ -340,6 +336,15 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         $esPropietario = $modeloProyecto->esPropietario($idProyecto);
         if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
+            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+
+            $data = [
+                "titulo" => "Todos los proyectos",
+                "seccion" => "/admin/proyectos",
+                "usuarios" => $modeloUsuario->mostrarUsuarios(),
+                "proyectos" => $modeloProyecto->mostrarProyectos()
+            ];
+
             if ($modeloProyecto->deleteProyecto($idProyecto)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " ha sido eliminado correctamente";
@@ -348,13 +353,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " no ha sido eliminado correctamente";
             }
 
-            $data['titulo'] = 'Todos los proyectos';
-            $data['seccion'] = '/admin/proyectos';
-
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
-
-            $data['proyectos'] = $modeloProyecto->mostrarProyectos();
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
@@ -401,10 +399,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         if (!empty($_FILES["imagen_proyecto"]["name"])) {
-            if ($_FILES["imagen_proyecto"]["type"] != "image/jpeg" && $_FILES["imagen_proyecto"]["type"] != "image/png") {
+            if ($_FILES["imagen_proyecto"]["type"] == "image/gif") {
                 $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_proyecto"]["tmp_name"])[1] > 1624) {
-                $errores["imagen_proyecto"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1624";
             } else if ($_FILES["imagen_proyecto"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_proyecto"] = "Imagen demasiada pesada";
             }

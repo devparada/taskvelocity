@@ -10,12 +10,13 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     public const ROL_USUARIO = 2;
 
     public function mostrarUsuarios() {
-        $data = [];
-        $data['titulo'] = 'Todos los usuarios';
-        $data['seccion'] = '/admin/usuarios';
-
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
+
+        $data = [
+            "titulo" => "Todos los usuarios",
+            "seccion" => "/admin/usuarios",
+            "usuarios" => $modeloUsuario->mostrarUsuarios()
+        ];
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
@@ -26,15 +27,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function mostrarLogin() {
-        $data = [];
-        $data["titulo"] = "Login";
+        $data = [
+            "titulo" => "Login"
+        ];
 
         $this->view->show('public/login.view.php', $data);
     }
 
     public function procesarLogin(): void {
-        $data = [];
-        $data["titulo"] = "Login";
+        $data = [
+            "titulo" => "Login"
+        ];
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -57,7 +60,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-        $modeloLog->crearLog("El usuario " . $usuarioEncontrado["username"] . "ha iniciado sesión", self::ROL_ADMIN);
+        $modeloLog->crearLog("El usuario " . $usuarioEncontrado["username"] . " ha iniciado sesión", self::ROL_ADMIN);
 
         $_SESSION["usuario"] = $usuarioEncontrado;
         $_SESSION["permisos"] = $this->verPermisos($usuarioEncontrado["id_rol"]);
@@ -75,26 +78,27 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function mostrarRegister() {
-        $data = [];
-        $data["titulo"] = "Register";
-
         $modeloColores = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColores->mostrarColores();
+
+        $data = [
+            "titulo" => "Register",
+            "colores" => $modeloColores->mostrarColores()
+        ];
 
         $this->view->show('public/register.view.php', $data);
     }
 
     public function mostrarAddUsuario() {
-        $data = [];
-        $data['titulo'] = 'Añadir usuario';
-        $data['seccion'] = '/admin/usuarios/add';
-        $data['tituloDiv'] = 'Añadir usuario';
-
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
-        $data["roles"] = $modeloRol->mostrarRoles();
-
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColor->mostrarColores();
+
+        $data = [
+            "titulo" => "Añadir usuario",
+            "seccion" => "/admin/usuarios/add",
+            "tituloDiv" => "Añadir usuario",
+            "roles" => $modeloRol->mostrarRoles(),
+            "colores" => $modeloColor->mostrarColores()
+        ];
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
@@ -275,28 +279,25 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function verUsuarioAdmin(int $idUsuario): void {
-        $data = [];
-        $data['titulo'] = 'Ver usuario ' . $idUsuario;
-        $data['seccion'] = '/admin/usuarios/view/' . $idUsuario;
-        $data['tituloDiv'] = 'Mostrando los datos del usuario ' . $idUsuario;
-
         $modeloRol = new \Com\TaskVelocity\Models\RolModel();
-        $data["roles"] = $modeloRol->mostrarRoles();
-
         $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
-        $data["colores"] = $modeloColor->mostrarColores();
-
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data["datos"] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
-        $data["idUsuario"] = $idUsuario;
-        $data["modoVer"] = true;
+
+        $data = [
+            "titulo" => "Ver usuario " . $idUsuario,
+            "seccion" => "/admin/usuarios/view/" . $idUsuario,
+            "tituloDiv" => "Mostrando los datos del usuario " . $idUsuario,
+            "roles" => $modeloRol->mostrarRoles(),
+            "colores" => $modeloColor->mostrarColores(),
+            "datos" => $modeloUsuario->buscarUsuarioPorId($idUsuario),
+            "idUsuario" => $idUsuario,
+            "modoVer" => true
+        ];
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
 
     public function procesarDelete(int $idUsuario): void {
-        $data = [];
-
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
@@ -306,6 +307,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $nombreUsuario = "con el id " . $idUsuario;
         }
 
+        $data = [
+            "titulo" => "Todos los usuarios",
+            "seccion" => '/admin/usuarios',
+            "usuarios" => $modeloUsuario->mostrarUsuarios()
+        ];
+
         if ($modeloUsuario->deleteUsuario($idUsuario)) {
             $data["informacion"]["estado"] = "success";
             $data["informacion"]["texto"] = "El usuario ha sido eliminado correctamente";
@@ -313,11 +320,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $data["informacion"]["estado"] = "danger";
             $data["informacion"]["texto"] = "El usuario no ha sido eliminado correctamente";
         }
-
-        $data['titulo'] = 'Todos los usuarios';
-        $data['seccion'] = '/admin/usuarios';
-
-        $data['usuarios'] = $modeloUsuario->mostrarUsuarios();
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -329,32 +331,22 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     public function mostrarPerfil(int $idUsuario): void {
-        $data = [];
-        $data['seccion'] = '/perfil/' . $idUsuario;
-
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-        $data['usuario'] = $modeloUsuario->buscarUsuarioPorId($idUsuario);
-
-        if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
-            $data["titulo"] = "Tu perfil";
-        } else {
-            $data["titulo"] = "Perfil de " . $data["usuario"]["username"];
-        }
-
         $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-        $data["proyectoPropietario"] = $modeloProyecto->contadorPorUsuarioPropietario($idUsuario);
-
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-        $data["tareaPropietario"] = $modeloTarea->contadorPorUsuarioPropietario($idUsuario);
-
-        $data["tareasPendientes"] = $modeloTarea->contadorTareasPorEtiqueta(1, $idUsuario);
-        $data["tareasProgresos"] = $modeloTarea->contadorTareasPorEtiqueta(2, $idUsuario);
-        $data["tareasFinalizadas"] = $modeloTarea->contadorTareasPorEtiqueta(3, $idUsuario);
-
         $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
-        $data["etiquetas"] = $modeloEtiqueta->mostrarEtiquetas();
 
-        $data["idUsuario"] = $idUsuario;
+        $data = [
+            "seccion" => "/perfil/" . $idUsuario,
+            "usuario" => $modeloUsuario->buscarUsuarioPorId($idUsuario),
+            "proyectoPropietario" => $modeloProyecto->contadorPorUsuarioPropietario($idUsuario),
+            "tareaPropietario" => $modeloTarea->contadorPorUsuarioPropietario($idUsuario),
+            "tareasPendientes" => $modeloTarea->contadorTareasPorEtiqueta(1, $idUsuario),
+            "tareasProgresos" => $modeloTarea->contadorTareasPorEtiqueta(2, $idUsuario),
+            "tareasFinalizadas" => $modeloTarea->contadorTareasPorEtiqueta(3, $idUsuario),
+            "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+            "idUsuario" => $idUsuario
+        ];
 
         $data["meses"] = [
             'January' => 'enero',
@@ -370,6 +362,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             'November' => 'noviembre',
             'December' => 'diciembre'
         ];
+
+        if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+            $data["titulo"] = "Tu perfil";
+        } else {
+            $data["titulo"] = "Perfil de " . $data["usuario"]["username"];
+        }
 
         $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
     }
@@ -387,7 +385,9 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         if (!empty($_FILES["imagen_avatar"]["name"])) {
-            if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
+            if ($_FILES["imagen_proyecto"]["type"] == "image/gif") {
+                $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
+            } else if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
         }

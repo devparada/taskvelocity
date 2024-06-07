@@ -19,7 +19,7 @@
                         <div class="mb-3 col-sm-5">
                             <label for="imagen_avatar">Avatar</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
+                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea">
                             <?php } else { ?>
                                 <?php
                                 if (file_exists("assets/img/usuarios/avatar-$idUsuario.jpg")) {

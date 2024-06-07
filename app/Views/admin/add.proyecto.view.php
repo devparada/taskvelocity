@@ -19,7 +19,7 @@
                         <div class="mb-3 col-sm-4">
                             <label for="imagen_proyecto">Imagen</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_proyecto" name="imagen_proyecto" accept=".jpg,.png" <?php echo isset($modoVer) ? "disabled" : "" ?>>
+                                <input type="file" class="form-control-file" id="imagen_proyecto" name="imagen_proyecto" <?php echo isset($modoVer) ? "disabled" : "" ?>>
                             <?php } else { ?>
                                 <?php
                                 if (file_exists("assets/img/proyectos/proyecto-$idProyecto.jpg")) {

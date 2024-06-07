@@ -29,7 +29,7 @@
                         <div class="mb-3 col-sm-3">
                             <label for="imagen_tarea">Imagen</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea" accept=".jpg,.png">
+                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea">
                             <?php } else { ?>
                                 <?php
                                 if (file_exists("assets/img/tareas/tarea-$idTarea.jpg")) {

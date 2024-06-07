@@ -141,7 +141,7 @@
                     </div>
 
                     <?php if (isset($modoEdit)) { ?>
-                        <input type="hidden" id="usuarios_selecionados" value='<?php echo (is_string($usuarios)) ? html_entity_decode($usuarios) : "" ?>'>
+                        <input type="hidden" id="usuarios_selecionados" value='<?php echo html_entity_decode($usuarios) ?>'>
                     <?php } ?>
 
                     <div class="campo-formulario">

@@ -58,7 +58,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
         $_SESSION["historial"] = "/tareas";
-        
+
         return $data;
     }
 
@@ -143,7 +143,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data['tituloDiv'] = 'Añadir tarea';
         }
 
-        $errores = $this->comprobarAddTareas($datos);
+        $errores = $this->comprobarAdd($datos);
 
         if (empty($errores)) {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
@@ -207,7 +207,6 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 "datos" => $modeloTarea->buscarTareaPorId($idTarea),
                 "colores" => $modeloColor->mostrarColores(),
                 "proyectos" => $proyectos,
-                "usuarios" => $modeloUsuario->mostrarUsuarios(),
                 "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
                 "enviar" => "Guardar cambios",
                 "modoEdit" => true,
@@ -218,15 +217,13 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
                 $data['seccion'] = '/admin/tareas/edit/' . $idTarea;
                 $data['tituloDiv'] = 'Editar tarea';
+                $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
 
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/add.tarea.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $data['seccion'] = '/tareas/editar/' . $idTarea;
                 $data['titulo'] = 'Editar tarea';
-
-                $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-
-                $data["usuarios"] = json_encode($modeloTarea->mostrarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $data["usuarios"] = json_encode($modeloTarea->procesarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
             }
@@ -296,7 +293,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['seccion'] = '/tareas/editar';
             }
 
-            $errores = $this->comprobarAddTareas($datos);
+            $errores = $this->comprobarAdd($datos);
 
             if (empty($errores)) {
                 if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"], $idTarea)) {
@@ -393,7 +390,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
             $data["datos"] = $modeloTarea->buscarTareaPorId($idTarea);
             $data["tarea"] = $data["datos"];
-            $data["usuarios"] = $modeloTarea->mostrarUsuariosPorTarea($idTarea);
+            $data["usuarios"] = $modeloTarea->procesarUsuariosPorTarea($idTarea);
 
             $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
             $data["colores"] = $modeloColor->mostrarColores();
@@ -414,7 +411,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    private function comprobarAddTareas(array $data): array {
+    private function comprobarAdd(array $data): array {
         $errores = [];
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
@@ -433,10 +430,8 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         if (!empty($_FILES["imagen_tarea"]["name"])) {
-            if ($_FILES["imagen_tarea"]["type"] != "image/jpeg" && $_FILES["imagen_tarea"]["type"] != "image/png") {
+            if ($_FILES["imagen_tarea"]["type"] == "image/gif") {
                 $errores["imagen_tarea"] = "Tipo de imagen no aceptado";
-            } else if (getimagesize($_FILES["imagen_tarea"]["tmp_name"])[0] > 2048 || getimagesize($_FILES["imagen_tarea"]["tmp_name"])[1] > 1624) {
-                $errores["imagen_tarea"] = "Dimensiones de imagen no válidas. Las dimensiones máximas son 2048 x 1624";
             } else if ($_FILES["imagen_tarea"]["size"] > 20 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_tarea"] = "Imagen demasiada pesada";
             }
