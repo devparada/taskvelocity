@@ -31,11 +31,11 @@ class TareaModelTest extends TestCase {
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
 
-        $this->assertIsArray($modelTarea->mostrarUsuariosPorTarea(1));
-        $this->assertNull($modelTarea->mostrarUsuariosPorTarea(-1));
+        $this->assertIsArray($modelTarea->procesarUsuariosPorTarea(1));
+        $this->assertNull($modelTarea->procesarUsuariosPorTarea(-1));
     }
     
-        public function testmostrarTareas() {
+    public function testmostrarTareas() {
         $modelTarea = new \Com\TaskVelocity\Models\TareaModel();
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 

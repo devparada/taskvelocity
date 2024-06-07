@@ -25,20 +25,26 @@ class ProyectoControllerTest extends TestCase {
         $_SESSION = [];
     }
 
-    public function testmostrarProyectos() {
+    public function testmostrarProyectosAsync() {
         // Simular una solicitud al controlador ProyectoController
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/proyectos';
+        $_SERVER['REQUEST_URI'] = '/proyectos-ajax';
 
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modelProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
 
-        $modelProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
         $proyectos = $modelProyecto->mostrarProyectos();
+        $usuarios = $modelUsuario->mostrarUsuarios();
 
-        foreach ($proyectos as $proyecto) {
-            $this->assertStringContainsString((string) 1, (string) $proyecto["editable"]);
-            $this->assertStringNotContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $proyecto["id_proyecto"]);
-        }
+        // Muestra la salida del controlador (en formato HTML)
+        ob_start();
+        require "../app/Views/public/proyectos-ajax.view.php";
+        // Guarda la salida del controlador y la elimina para futuras pruebas
+        $output = ob_get_clean();
+
+        $this->assertNotNull($output);
+        $this->assertStringNotContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $output);
     }
 }
