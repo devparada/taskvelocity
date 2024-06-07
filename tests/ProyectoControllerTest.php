@@ -18,9 +18,6 @@ class ProyectoControllerTest extends TestCase {
 
         // Inicia la variable $_SESSION
         $_SESSION = [];
-
-        // Crea la conexión de la base de datos usando las variables $_ENV
-        $this->pdo = new PDO('mysql:host=' . $_ENV["db.host"] . ';dbname=' . $_ENV["db.schema"], $_ENV["db.user"], $_ENV["db.pass"]);
     }
 
     protected function tearDown(): void {
