@@ -15,7 +15,6 @@ class ProyectoControllerTest extends TestCase {
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
         $_ENV["db.host"] = "localhost:33006";
-        $_ENV["db.schema"] = "proxecto";
 
         // Inicia la variable $_SESSION
         $_SESSION = [];
