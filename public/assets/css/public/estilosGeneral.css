@@ -67,13 +67,14 @@ nav ul li a {
     padding-right: 20px;
     margin:2px;
     background-color: var(--color-secundario-principal);
+    transition: background-color 0.5s;
 }
 
 .apartado-activo {
     background-color: var(--color-secundario-complementario);
 }
 
-nav ul li a:hover {
+nav ul li a:hover, #perfil-cerrar > .botones-header:hover {
     background-color: var(--color-secundario-complementario);
 }
 
@@ -83,8 +84,9 @@ nav ul li a:hover {
     width: 213px;
 }
 
-#logo h2 {
+#logo h1 {
     margin-left: 6px;
+    font-size: 1.7rem;
 }
 
 #perfil-cerrar {
@@ -96,6 +98,10 @@ nav ul li a:hover {
 #perfil {
     display: flex;
     align-items: center;
+}
+
+#perfil-cerrar > .botones-header {
+    transition: background-color 0.5s;
 }
 
 .enlace-perfil {

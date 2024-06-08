@@ -42,9 +42,9 @@ class ProyectoControllerTest extends TestCase {
         ob_start();
         require "../app/Views/public/proyectos-ajax.view.php";
         // Guarda la salida del controlador y la elimina para futuras pruebas
-        $output = ob_get_clean();
+        $salida = ob_get_clean();
 
-        $this->assertNotNull($output);
-        $this->assertStringNotContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $output);
+        $this->assertNotNull($salida);
+        $this->assertStringNotContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $salida);
     }
 }

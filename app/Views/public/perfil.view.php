@@ -22,7 +22,7 @@
             <div id="logo">
                 <a href="/"  class="logo-enlace">
                     <img src="assets/img/logo.png" alt="Logo de TaskVelocity" class="imagenes-pequenas">
-                    <h2>TaskVelocity</h2>
+                    <h1>TaskVelocity</h1>
                 </a>
             </div>
             <nav>
