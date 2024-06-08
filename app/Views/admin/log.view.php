@@ -8,9 +8,29 @@
             </div>
             <!-- Card Body -->
             <div class="card-body table-responsive" id="card_table">
-                <div class="col-12">
-                    <input type="hidden" name="page" id="page" value="<?php echo isset($_GET["pagina"]) ? $_GET["pagina"] : "1"; ?>">
-                </div>
+                <form action="/admin/logs/?pagina=<?php echo $paginaActual ?>" method="get">
+                    <div class="row">
+                        <div class="col-12 col-lg-4">
+                            <div class="mb-2">
+                                <label for="id_usuario">Usuario</label>
+                                <select name="id_usuario" id="id_usuario" class="form-control select2" data-placeholder="Usuario">
+                                    <?php foreach ($usuarios as $usuario) { ?>
+                                        <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($_GET['id_usuario']) && $usuario['id_usuario'] == $_GET['id_usuario']) ? 'selected' : ''; ?>><?php echo $usuario['username'] ?></option>
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <input type="hidden" name="page" id="page" value="<?php echo isset($_GET["pagina"]) ? $_GET["pagina"] : "1"; ?>">
+                        </div>
+                    </div>
+                    <div class="col-12 text-right">                     
+                        <a href="/admin/logs/?pagina=<?php echo $paginaActual ?>" value="" name="reiniciar" class="btn btn-danger">Reiniciar</a>
+                        <input type="submit" value="Enviar" class="btn btn-success ml-2"/>
+                    </div>
+                </form>
                 <?php
                 if (count($logs) > 0) {
                     ?>
@@ -93,4 +113,8 @@
             ?>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+
+    </script>
 </div>

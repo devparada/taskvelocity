@@ -11,17 +11,27 @@ class LogController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function mostrarLogs(): void {
-        $data = [];
-        $data['titulo'] = 'Todos los logs';
-        $data['seccion'] = '/admin/logs?pagina=1';
-
         $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-        $data['logs'] = $modeloLog->consultarPagina((int) $_GET["pagina"]++);
-        $data["paginaActual"] = $_GET["pagina"] - 1;
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        $data["maxPagina"] = floor($modeloLog->obtenerPáginas());
-        $data["contarLogs"] = count($modeloLog->mostrarLogs());
-        
+        if (empty($_GET["pagina"])) {
+            $_GET["pagina"] = 0;
+        }
+
+        $data = [
+            "titulo" => "Todos los logs",
+            "seccion" => "/admin/logs?pagina=1",
+            "logs" => $modeloLog->consultarPagina((int) $_GET["pagina"]++),
+            "paginaActual" => $_GET["pagina"] - 1,
+            "maxPagina" => floor($modeloLog->obtenerPáginas()),
+            "contarLogs" => count($modeloLog->mostrarLogs()),
+            "usuarios" => $modeloUsuario->mostrarUsuariosLogs()
+        ];
+
+        if (!empty($_GET["id_usuario"])) {
+            $data["logs"] = $modeloLog->filtrarPorUsuario($_GET["id_usuario"], $data["paginaActual"]);
+        }
+
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/log.view.php', 'admin/templates/footer.view.php'), $data);
     }
 }

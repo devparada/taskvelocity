@@ -51,7 +51,17 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
     public function consultarPagina(int $numeroPagina): array {
         $stmt = $this->pdo->query("SELECT * FROM logs l"
                 . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " ORDER BY fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+
+        return $stmt->fetchAll();
+    }
+
+    public function filtrarPorUsuario($idUsuario, $numeroPagina) {
+        $stmt = $this->pdo->prepare("SELECT * FROM logs l"
+                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
+                . " WHERE l.id_usuario_prop = ?"
+                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+        $stmt->execute([$idUsuario]);
 
         return $stmt->fetchAll();
     }
