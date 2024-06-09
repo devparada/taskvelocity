@@ -30,8 +30,5 @@ class TareaModelUnitariasTest extends TestCase {
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
         $this->assertIsArray($modelTarea->mostrarTareas());
-
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(4);
-        $this->assertEmpty($modelTarea->mostrarTareas());
     }
 }

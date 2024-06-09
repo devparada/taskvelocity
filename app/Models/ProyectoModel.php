@@ -32,21 +32,19 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         }
         $datos = $stmt->fetchAll();
 
-        if (!empty($datos)) {
-            for ($i = 0; $i < count($datos); $i++) {
-                for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioPAsoc)"]; $j++) {
-                    $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
-                            . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                            . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyectoPAsoc"]);
+        for ($i = 0; $i < count($datos); $i++) {
+            for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioPAsoc)"]; $j++) {
+                $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
+                        . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
+                        . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyectoPAsoc"]);
 
-                    $usuariosProyectos = $stmt->fetchAll();
+                $usuariosProyectos = $stmt->fetchAll();
 
-                    $datos[$i]["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
-                }
-
-                $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
-                $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
+                $datos[$i]["nombresUsuarios"] = $this->mostrarUsernameProyecto($usuariosProyectos);
             }
+
+            $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+            $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
         }
 
         return $datos;

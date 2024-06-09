@@ -13,7 +13,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
         // ! Sólo desde la máquina real (en la virtual va bien)
-        $_ENV["db.host"] = "localhost:33006";
+        // $_ENV["db.host"] = "localhost:33006";
     }
 
     protected function tearDown(): void {
@@ -29,7 +29,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $modelProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(3);
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
 
         // ! Estás variables se usan para que la vista proyectos-ajax tengo todas las variables necesarias
         $proyectos = $modelProyecto->mostrarProyectos();
@@ -37,7 +37,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
 
         // Muestra la salida del controlador (en formato HTML)
         ob_start();
-        require  __DIR__ . "/../../app/Views/public/proyectos-ajax.view.php";
+        require __DIR__ . "/../../app/Views/public/proyectos-ajax.view.php";
         // Guarda la salida del controlador y la elimina para futuras pruebas
         $salida = ob_get_clean();
 

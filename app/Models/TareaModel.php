@@ -32,18 +32,14 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
 
         $tareas = $stmt->fetchAll();
-        
-        if (!empty($tareas)) {
-            $tareasConUsuarios = $this->recogerIdsUsuariosTarea($tareas);
 
-            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-                return $tareasConUsuarios;
-            } else {
-                $tareasAgrupadasProyecto = $this->agruparTareaProyecto($tareasConUsuarios);
-                return $tareasAgrupadasProyecto;
-            }
+        $tareasConUsuarios = $this->recogerIdsUsuariosTarea($tareas);
+
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+            return $tareasConUsuarios;
         } else {
-            return $tareas;
+            $tareasAgrupadasProyecto = $this->agruparTareaProyecto($tareasConUsuarios);
+            return $tareasAgrupadasProyecto;
         }
     }
 
