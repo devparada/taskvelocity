@@ -157,7 +157,7 @@
                 <script src="assets/js/public/mostrarUsuariosAsync.js"></script>
 
                 <script>
-                    $(document).ready(function () {
+                    $(function () {
                         $("#id_proyecto_asociado").select2({
                             theme: 'bootstrap4',
                             allowClear: true,

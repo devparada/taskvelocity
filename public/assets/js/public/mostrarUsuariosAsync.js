@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
     $('#id_usuarios_asociados').select2({
         ajax: {
             url: "/async/buscarUsuarios",

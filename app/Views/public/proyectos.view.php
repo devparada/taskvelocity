@@ -62,39 +62,38 @@
             <script src="plugins/jquery/jquery.min.js"></script>
             <script>
                 function cargarProyectos() {
-                    const divProyecto = document.getElementById('proyectos-grid');
+                    const divProyecto = $('#proyectos-grid');
 
-                    // Realizar la solicitud AJAX
-                    let xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/async/proyectos', true);
+                    $.ajax({
+                        url: "/async/proyectos",
+                        success: function (response) {
+                            // Insertar el HTML obtenido en el contenedor                            
+                            divProyecto.html(response);
 
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            // Insertar el HTML obtenido en el contenedor
-                            divProyecto.innerHTML = xhr.responseText;
-
-                            var proyectos = document.getElementsByClassName("proyectos");
+                            var proyectos = $(".proyectos");
 
                             for (let i = 0; i < proyectos.length; i++) {
                                 // Al hacer click en el proyecto va a la siguiente url
+                                // ! Sólo funciona con addEventListener() no funciona con on() de JQuery
                                 proyectos[i].addEventListener("click", function () {
-                                    console.log(proyectos[i]);
                                     window.location.href = "/proyectos/ver/" + proyectos[i].id;
                                 });
                             }
 
-                            const script = document.createElement('script');
-                            script.src = 'assets/js/public/fechasTareasProyectos.js';
-                            script.id = "scriptFechas";
-                            document.body.appendChild(script);
+                            let script = $("<script>", {
+                                src: "assets/js/public/fechasTareasProyectos.js",
+                                id: "scriptFechas"
+                            });
 
-                            if (document.getElementById("scriptFechas") !== null) {
-                                document.body.removeChild(document.getElementById("scriptFechas"));
+                            $("body").append(script);
+
+                            let scriptFechas = $("#scriptFechas");
+                            // Se compruba si el script existe en el HTML
+                            if (scriptFechas.length > 0) {
+                                scriptFechas.remove();
                             }
                         }
-                    };
-
-                    xhr.send();
+                    });
                 }
 
                 cargarProyectos();

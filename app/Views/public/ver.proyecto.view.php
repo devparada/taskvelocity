@@ -141,17 +141,18 @@
             <script src="plugins/select2/js/i18n/es.js"></script>
             <script src="assets/js/admin/pages/main.js"></script>
 
+            <script src="plugins/jquery/jquery.min.js"></script>
             <script src="assets/js/public/fechasTareasProyectos.js"></script>
 
             <script>
-                document.querySelector("#anadir-tarea").addEventListener("click", function () {
-                    document.querySelector("#formulario-anadir").style.display = "block";
-                    document.querySelector("#anadir-tarea").style.display = "none";
-                    document.querySelector("#id_tareas_asociadas").style.textAlign = "center";
+                #("#anadir-tarea").on("click", function () {
+                    #("#formulario-anadir").css({"display": "block"});
+                    #("#anadir-tarea").css({"display": "none"});
+                    #("#id_tareas_asociadas").css({"textAlign": "center"});
                 });
             </script>
             <script>
-                $(document).ready(function () {
+                $(function () {
                     $("#id_tareas_asociadas").select2({
                         tags: true
                     });

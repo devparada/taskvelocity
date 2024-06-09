@@ -65,33 +65,58 @@
         <?php } ?>
         <div id="contenedor-principal">
         </div>
+        <script src="plugins/jquery/jquery.min.js"></script>
         <script>
             function ajaxTareas() {
-                const divContenedor = document.getElementById('contenedor-principal');
+                const divContenedor = $('#contenedor-principal');
 
-                // Realizar la solicitud AJAX
-                let xhr = new XMLHttpRequest();
-                xhr.open('GET', '/async/tareas', true);
-
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
+                $.ajax({
+                    url: "/async/tareas",
+                    success: function (response) {
                         // Insertar el HTML obtenido en el contenedor
-                        divContenedor.innerHTML = xhr.responseText;
+                        divContenedor.html(response);
 
-                        const scriptMover = document.createElement('script');
-                        scriptMover.src = 'assets/js/public/moverTareas.js';
-                        document.body.appendChild(scriptMover);
+                        let scriptFecha = $("<script>", {
+                            src: "assets/js/public/fechasTareasProyectos.js",
+                            id: "scriptFecha"
+                        });
 
-                        const scriptFecha = document.createElement('script');
-                        scriptFecha.src = 'assets/js/public/fechasTareasProyectos.js';
-                        document.body.appendChild(scriptFecha);
+                        $("body").append(scriptFecha);
+
+                        let scriptFechaScript = $("#scriptFecha");
+                        // Se compruba si el script existe en el HTML
+                        if (scriptFechaScript.length > 0) {
+                            scriptFechaScript.remove();
+                        }
+
+                        const divTareas = $("#tareas-grid");
+
+                        var inicialX, offsetX;
+
+                        function moverTareas(evento) {
+                            var distanciaX = evento.clientX - inicialX;
+                            var nuevaPosicionX = offsetX - distanciaX;
+
+                            // Establece la nueva posición del elemento
+                            divTareas.scrollLeft(nuevaPosicionX);
+                        }
+
+                        divTareas.on("mousedown", function (evento) {
+                            // Guarda la posición inicial del ratón y la posición inicial del elemento
+                            inicialX = evento.clientX;
+                            offsetX = divTareas.scrollLeft();
+
+                            divTareas.on("mousemove", moverTareas);
+                        });
+
+                        $(document).on("mouseup", function () {
+                            $(document).off("mousemove", moverTareas);
+                        });
                     }
-                };
-
-                xhr.send();
+                });
             }
 
             ajaxTareas();
-            setInterval(ajaxTareas, 1000000);
+            setInterval(ajaxTareas, 20000);
         </script>
     </main> <!-- Continua en plantillas/footer -->

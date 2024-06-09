@@ -147,22 +147,23 @@
                 </div>
             </div>
             <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
+                <script src="plugins/jquery/jquery.min.js"></script>
                 <script>
-                    const estadisticasClickable = document.querySelectorAll(".estadistica-usuario-clickable");
+                                    const estadisticasClickable = $(".estadistica-usuario-clickable");
 
-                    for (var i = 0; i < estadisticasClickable.length; i++) {
-                        estadisticasClickable[i].style.cursor = "pointer";
-                    }
+                                    for (var i = 0; i < estadisticasClickable.length; i++) {
+                                        estadisticasClickable[i].css(["cursor:pointer"]);
+                                    }
 
-                    document.querySelector("#etiqueta-pendiente").addEventListener("click", function () {
-                        window.location.href = "/tareas?etiqueta=1";
-                    });
-                    document.querySelector("#etiqueta-progreso").addEventListener("click", function () {
-                        window.location.href = "/tareas?etiqueta=2";
-                    });
-                    document.querySelector("#etiqueta-finalizada").addEventListener("click", function () {
-                        window.location.href = "/tareas?etiqueta=3";
-                    });
+                                    $("#etiqueta-pendiente").on("click", function () {
+                                        window.location.href = "/tareas?etiqueta=1";
+                                    });
+                                    $("#etiqueta-progreso").on("click", function () {
+                                        window.location.href = "/tareas?etiqueta=2";
+                                    });
+                                    $("#etiqueta-finalizada").on("click", function () {
+                                        window.location.href = "/tareas?etiqueta=3";
+                                    });
                 </script>
             <?php } ?>
         </main> <!-- Continua en plantillas/footer -->
