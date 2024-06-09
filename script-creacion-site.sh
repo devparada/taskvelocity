@@ -5,14 +5,14 @@ else
     folder=$1
     conf_filename="777-$folder.localhost.conf"
     conf_file="/etc/apache2/sites-available/$conf_filename"
-    public_folder="/home/dev/$folder/public"
+    public_folder="/home/dev/$1/public"
     if [ -d "$public_folder" ]
     then
         echo "Creando $1.localhost en fichero $conf_file"
         sudo echo "<VirtualHost *:80>
             ServerName $folder.localhost
-            DocumentRoot /home/dev/$folder/public
-            <Directory /home/dev/$folder/public/>
+            DocumentRoot /home/dev/$1/public
+            <Directory /home/dev/$1/public/>
                 Options +Indexes +FollowSymLinks +MultiViews
                 AllowOverride All
                 Require all granted

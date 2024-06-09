@@ -1,0 +1,4 @@
+# Arquivo de opcións para o backup de mySQL
+[mysqldump]
+# Configura a password do usuario para que o backup se xenere automáticamente
+password=daw2pass
