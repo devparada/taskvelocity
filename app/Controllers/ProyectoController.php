@@ -151,7 +151,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
         $data["datos"] = $datos;
 
-        $errores = $this->comprobarAdd($datos);
+        $errores = $this->comprobarComun($datos);
 
         if (empty($datos["id_usuarios_asociados"])) {
             $datos["id_usuarios_asociados"] = null;
@@ -270,7 +270,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $data["titulo"] = "Editar proyecto";
             }
 
-            $errores = $this->comprobarEdit($datos);
+            $errores = $this->comprobarComun($datos);
 
             if (empty($datos["id_usuarios_asociados"])) {
                 $datos["id_usuarios_asociados"] = null;
@@ -365,26 +365,6 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     /**
-     * Comprueba si los datos están bien introducidos al añadir un proyecto
-     * @param array $data los datos a comprobar
-     * @return array el array de los errores si hay errores
-     */
-    private function comprobarAdd(array $data): array {
-        $errores = $this->comprobarComun($data);
-        return $errores;
-    }
-
-    /**
-     * Comprueba si los datos están bien introducidos al editar el proyecto
-     * @param array $data los datos a comprobar
-     * @return array el array de los errores si hay errores
-     */
-    private function comprobarEdit(array $data): array {
-        $errores = $this->comprobarComun($data);
-        return $errores;
-    }
-
-    /**
      * Comprueba si los datos están bien introducidos al añadir y editar el proyecto
      * @param array $data los datos a comprobar
      * @return array el array de los errores si hay errores
@@ -408,7 +388,7 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         if (!empty($data["fecha_limite_proyecto"])) {
             if (!preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_limite_proyecto"])) {
-                $errores["fecha_limite_proyecto"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-29";
+                $errores["fecha_limite_proyecto"] = "La fecha límite no tiene un formato válido. Ejemplo: 2024-04-29";
             }
         }
 

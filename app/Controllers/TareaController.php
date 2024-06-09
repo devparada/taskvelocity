@@ -143,7 +143,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data['tituloDiv'] = 'Añadir tarea';
         }
 
-        $errores = $this->comprobarAdd($datos);
+        $errores = $this->comprobarComun($datos);
 
         if (empty($errores)) {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
@@ -293,7 +293,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 $data['seccion'] = '/tareas/editar';
             }
 
-            $errores = $this->comprobarAdd($datos);
+            $errores = $this->comprobarComun($datos);
 
             if (empty($errores)) {
                 if ($modeloTarea->editTarea($datos["nombre_tarea"], $datos["fecha_limite_tarea"], $datos["id_color_tarea"], $datos["id_proyecto_asociado"], $datos["id_usuarios_asociados"], $datos["descripcion_tarea"], $datos["id_etiqueta"], $idTarea)) {
@@ -411,7 +411,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
     }
 
-    private function comprobarAdd(array $data): array {
+    private function comprobarComun(array $data): array {
         $errores = [];
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
@@ -438,7 +438,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         if (!empty($data["fecha_limite_tarea"] && !preg_match("/^[0-9]{4}[-][0-9]{2}[-][0-9]{2}$/", $data["fecha_limite_tarea"]))) {
-            $errores["fecha_limite_tarea"] = "La fecha de nacimiento no tiene un formato válido. Ejemplo: 2024-04-09";
+            $errores["fecha_limite_tarea"] = "La fecha límite no tiene un formato válido. Ejemplo: 2024-04-09";
         }
 
         if (!filter_var($data["id_color_tarea"], FILTER_VALIDATE_INT)) {

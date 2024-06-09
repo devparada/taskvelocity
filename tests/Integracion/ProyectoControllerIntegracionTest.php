@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-require_once "../app/Controllers/UsuarioController.php";
-
-class ProyectoControllerTest extends TestCase {
+class ProyectoControllerIntegracionTest extends TestCase {
 
     protected function setUp(): void {
         // Carga las variables env
-        $dotenv = Dotenv\Dotenv::createImmutable('../');
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../../");
         $dotenv->load();
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
+        // ! Sólo desde la máquina real (en la virtual va bien)
         $_ENV["db.host"] = "localhost:33006";
-
-        // Inicia la variable $_SESSION
-        $_SESSION = [];
     }
 
     protected function tearDown(): void {
@@ -33,14 +29,15 @@ class ProyectoControllerTest extends TestCase {
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $modelProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(3);
 
+        // ! Estás variables se usan para que la vista proyectos-ajax tengo todas las variables necesarias
         $proyectos = $modelProyecto->mostrarProyectos();
         $usuarios = $modelUsuario->mostrarUsuarios();
 
         // Muestra la salida del controlador (en formato HTML)
         ob_start();
-        require "../app/Views/public/proyectos-ajax.view.php";
+        require  __DIR__ . "/../../app/Views/public/proyectos-ajax.view.php";
         // Guarda la salida del controlador y la elimina para futuras pruebas
         $salida = ob_get_clean();
 

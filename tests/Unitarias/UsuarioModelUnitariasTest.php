@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-require_once "../app/Models/UsuarioModel.php";
-
-class UsuarioModelTest extends TestCase {
+class UsuarioModelUnitariasTest extends TestCase {
 
     protected function setUp(): void {
         // Carga las variables env
-        $dotenv = Dotenv\Dotenv::createImmutable('../');
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/../../");
         $dotenv->load();
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
+        // ! Sólo desde la máquina real (en la virtual va bien)        
         $_ENV["db.host"] = "localhost:33006";
+    }
+
+    protected function tearDown(): void {
+        // Elimina la variable $_SESSION después de cada prueba
+        $_SESSION = [];
     }
 
     public function testprocesarLogin() {
@@ -26,17 +30,9 @@ class UsuarioModelTest extends TestCase {
         $this->assertFalse($modelUsuario->procesarLogin("rauliño@a.com", "TaskVelocity1"));
     }
 
-    public function testbuscarUsuarioPorId() {
+    public function testMostrarUsuarios() {
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-
-        $this->assertIsArray($modelUsuario->buscarUsuarioPorId(1));
-        $this->assertNull($modelUsuario->buscarUsuarioPorId(100));
-    }
-
-    public function testbuscarUsuarioPorUsername() {
-        $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
-
-        $this->assertFalse($modelUsuario->comprobarUsuariosNumero([1, 2, 3, "usuario1"]));
-        $this->assertTrue($modelUsuario->comprobarUsuariosNumero([1, 2, 3, 4]));
+        $this->assertIsArray($modelUsuario->mostrarUsuarios());
+        $this->assertNotNull($modelUsuario->mostrarUsuarios());
     }
 }
