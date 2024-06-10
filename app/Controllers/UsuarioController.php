@@ -11,12 +11,25 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarUsuarios() {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $modeloRol = new \Com\TaskVelocity\Models\RolModel();
+
+        if (empty($_GET["pagina"])) {
+            $_GET["pagina"] = 0;
+        }
 
         $data = [
             "titulo" => "Todos los usuarios",
             "seccion" => "/admin/usuarios",
-            "usuarios" => $modeloUsuario->mostrarUsuarios()
+            "paginaActual" => $_GET["pagina"],
+            "maxPagina" => $modeloUsuario->obtenerPaginas(),
+            "usuarios" => $modeloUsuario->mostrarUsuarios((int) $_GET["pagina"]++),
+            "roles" => $modeloRol->mostrarRoles(),
+            "contarUsuarios" => $modeloUsuario->contador()
         ];
+        
+        if (!empty($_GET["id_rol"])) {
+            $data["usuarios"] = $modeloUsuario->filtrarPorRol((int) $_GET["id_rol"],(int) $data["paginaActual"]);
+        }
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
     }
@@ -24,6 +37,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     public function buscarUsuariosAsync() {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         echo json_encode($modeloUsuario->buscarUsuariosAsync());
+    }
+
+    public function obtenerPaginas(): float {
+        $numeroPaginas = ceil($this->contador() / $_ENV["tabla.filasPagina"]);
+
+        return $numeroPaginas;
     }
 
     public function mostrarLogin() {
@@ -230,16 +249,15 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $datos["id_rol"] = (string) $_SESSION["usuario"]["id_rol"];
         $data["idUsuario"] = $idUsuario;
 
         $data["datos"] = $datos;
         $data["modoEdit"] = true;
 
-        $errores = $this->comprobarEdit($datos);
+        $errores = $this->comprobarEdit($datos, $idUsuario);
 
         if (empty($errores)) {
-            if (!empty($_SESSION["usuario"]) && $_SESSION["usuario"]["id_usuario"] == $idUsuario) {
+            if (!empty($_SESSION["usuario"]) && ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN || $_SESSION["usuario"]["id_usuario"] == $idUsuario)) {
                 // Si está vacío se actualiza el usuario sin cambiar la contraseña
                 if (empty($datos["contrasena"])) {
                     if ($modeloUsuario->editUsuario($datos["username"], null, $datos["email"], $datos["id_rol"], $datos["fecha_nacimiento"], $datos["descripcion_usuario"], $datos["id_color"], $idUsuario)) {
@@ -257,7 +275,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                     }
                 }
             } else {
-                header("location : /");
+                header("location: /");
             }
         } else {
             $modeloRol = new \Com\TaskVelocity\Models\RolModel();
@@ -307,10 +325,18 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $nombreUsuario = "con el id " . $idUsuario;
         }
 
+        if (empty($_GET["pagina"])) {
+            $_GET["pagina"] = 0;
+        }
+
         $data = [
             "titulo" => "Todos los usuarios",
             "seccion" => '/admin/usuarios',
-            "usuarios" => $modeloUsuario->mostrarUsuarios()
+            "usuarios" => $modeloUsuario->mostrarUsuarios(),
+            "paginaActual" => $_GET["pagina"],
+            "maxPagina" => $modeloUsuario->obtenerPaginas(),
+            "usuarios" => $modeloUsuario->mostrarUsuarios((int) $_GET["pagina"]++),
+            "contarProyectos" => $modeloUsuario->contador()
         ];
 
         if ($modeloUsuario->deleteUsuario($idUsuario)) {
@@ -319,9 +345,10 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $data["informacion"]["estado"] = "danger";
             $data["informacion"]["texto"] = "El usuario no ha sido eliminado correctamente";
-        }
-
+        }        
+        
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
+            $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
         } else {
             session_destroy();
@@ -369,7 +396,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $data["titulo"] = "Perfil de " . $data["usuario"]["username"];
         }
 
-        $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+        $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorId($idUsuario);
+        if ($usuarioEncontrado["id_rol"] == self::ROL_ADMIN) {
+            $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);
+        } else {
+            $this->view->showViews(array('public/perfil.view.php', 'public/plantillas/footer.view.php'), $data);
+        }
     }
 
     private function comprobarComun(array $data): array {
@@ -385,8 +417,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         if (!empty($_FILES["imagen_avatar"]["name"])) {
-            if ($_FILES["imagen_proyecto"]["type"] == "image/gif") {
-                $errores["imagen_proyecto"] = "Tipo de imagen no aceptado";
+            if ($_FILES["imagen_avatar"]["type"] == "image/gif") {
+                $errores["imagen_avatar"] = "Tipo de imagen no aceptado";
             } else if ($_FILES["imagen_avatar"]["size"] > 10 * \Com\TaskVelocity\Models\FileModel::MB) {
                 $errores["imagen_avatar"] = "Imagen demasiada pesada";
             }
@@ -425,16 +457,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         return $errores;
     }
 
-    private function comprobarEdit(array $data): array {
+    private function comprobarEdit(array $data, int $idUsuario): array {
         $errores = $this->comprobarComun($data);
 
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+        $usuarioEncontrado = $modeloUsuario->buscarUsuarioPorId($idUsuario);
 
-        if ($data["username"] != $_SESSION["usuario"]["username"] && !is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
+        if ($data["username"] != $usuarioEncontrado["username"] && !is_null($modeloUsuario->buscarUsuarioPorUsername($data["username"]))) {
             $errores["username"] = "El nombre de usuario ya existe";
         }
 
-        if ($data["email"] != $_SESSION["usuario"]["email"] && !is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
+        if ($data["email"] != $usuarioEncontrado["email"] && !is_null($modeloUsuario->buscarUsuarioPorEmail($data["email"]))) {
             $errores["email"] = "El email ya existe";
         }
 

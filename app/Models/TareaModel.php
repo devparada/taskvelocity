@@ -20,9 +20,15 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
 
-    public function mostrarTareas(): array {
+    /**
+     * Muestra las tareas según seas administrador o usuario
+     * @param int $numero pagina parametro opcional para la paginación (por defecto es 0)
+     * @return array Devuelve un array con las tareas
+     */
+    public function mostrarTareas(int $numeroPagina = 0): array {
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
-            $stmt = $this->pdo->query(self::baseConsulta . "GROUP BY ut.id_tareaTAsoc");
+            $stmt = $this->pdo->query(self::baseConsulta . "GROUP BY ut.id_tareaTAsoc "
+                    . "LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas et ON ta.id_etiqueta = et.id_etiqueta "
                     . "WHERE us.id_usuario = ? OR ut.id_usuarioTAsoc = ? GROUP BY ut.id_tareaTAsoc "
@@ -122,11 +128,29 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
                 $stmt->execute([$idProyecto, $idTarea]);
             } else {
                 // Si la tarea no existe se crea
-                foreach ($idTareas as $idTarea) {
-                    $this->addTarea((string) $idTarea, null, (string) $_SESSION["usuario"]["id_color_favorito"], (string) $idProyecto, null, "", (string) 1);
-                }
+                $this->addTarea((string) $idTarea, null, (string) $_SESSION["usuario"]["id_color_favorito"], (string) $idProyecto, null, "", (string) 1);
             }
         }
+    }
+
+    public function filtrarPorPropietario($idUsuario, $numeroPagina): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE ta.id_usuario_tarea_prop = ? GROUP BY ut.id_tareaTAsoc"
+                . " LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
+        $stmt->execute([$idUsuario]);
+
+        $tareas = $stmt->fetchAll();
+        $tareasConUsuarios = $this->recogerIdsUsuariosTarea($tareas);
+
+        return $tareasConUsuarios;
+    }
+
+    /**
+     * Obtiene el número de páginas contando todas las tareas
+     * @return float Retorna un floor por el ceil (redondea hacia arriba)
+     */
+    public function obtenerPaginas(): float {
+        $numeroPaginas = ceil($this->contador() / $_ENV["tabla.filasPagina"]);
+        return $numeroPaginas;
     }
 
     public function esPropietario(int $idTarea): bool {

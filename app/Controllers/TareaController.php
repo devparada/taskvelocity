@@ -13,16 +13,33 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
     public function mostrarTareas(): void {
         $data = $this->mostrarTareasComun();
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+
+        if (empty($_GET["pagina"])) {
+            $_GET["pagina"] = 0;
+        }
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todas las tareas';
             $data['seccion'] = '/admin/tareas';
+            $data["paginaActual"] = $_GET["pagina"];
+            $data["maxPagina"] = $modeloTarea->obtenerPaginas();
+            $data["tareas"] = $modeloTarea->mostrarTareas((int) $_GET["pagina"]++);
+            $data["contarTareas"] = $modeloTarea->contador();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuariosFiltrosTareas();
         } else {
             $data['titulo'] = 'Tus tareas';
             $data['seccion'] = '/tareas';
         }
 
-        $_SESSION["etiqueta"] = $_GET;
+        if (array_key_exists("etiqueta", $_GET)) {
+            $_SESSION["etiqueta"] = $_GET["etiqueta"];
+        }
+
+        if (!empty($_GET["id_usuario"])) {
+            $data["tareas"] = $modeloTarea->filtrarPorPropietario($_GET["id_usuario"], $data["paginaActual"]);
+        }
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
@@ -42,9 +59,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
-        if (!empty($_SESSION["etiqueta"])) {
+        if (isset($_SESSION["etiqueta"])) {
             $data['tareas'] = $modeloTarea->mostrarTareasPorEtiqueta($_SESSION["etiqueta"]["etiqueta"]);
-        } else {
+        } else if ($_SESSION["usuario"]["id_rol"] == 2) {
             $data['tareas'] = $modeloTarea->mostrarTareas();
         }
 
@@ -329,8 +346,10 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
+
         $esPropietario = $modeloTarea->esPropietario($idTarea);
 
         if (!is_null($miembrosTarea) && $this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
@@ -348,6 +367,15 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
             $data['tareas'] = $modeloTarea->mostrarTareas();
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                if (!array_key_exists("pagina", $_GET)) {
+                    $_GET["pagina"] = 0;
+                }
+
+                $data["paginaActual"] = $_GET["pagina"];
+                $data["maxPagina"] = $modeloTarea->obtenerPaginas();
+                $data["tareas"] = $modeloTarea->mostrarTareas((int) $_GET["pagina"]++);
+                $data["contarTareas"] = $modeloTarea->contador();
+                $data["usuarios"] = $modeloUsuario->mostrarUsuariosFiltrosTareas();
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/tarea.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $modeloEiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();

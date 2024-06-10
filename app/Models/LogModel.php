@@ -38,20 +38,21 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO logs"
                 . " (asunto, id_usuario_prop)"
                 . " VALUES(?, ?)");
+        
         $stmt->execute([$asunto, $idUsuario]);
     }
 
-    public function obtenerPáginas() {
+    public function obtenerPaginas() {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM logs l");
 
-        $numeroPaginas = floor($stmt->fetchColumn() / $_ENV["table.rowsPerPage"]);
+        $numeroPaginas = ceil($stmt->fetchColumn() / $_ENV["tabla.filasPagina"]);
         return $numeroPaginas;
     }
 
     public function consultarPagina(int $numeroPagina): array {
         $stmt = $this->pdo->query("SELECT * FROM logs l"
                 . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
 
         return $stmt->fetchAll();
     }
@@ -60,7 +61,7 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("SELECT * FROM logs l"
                 . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
                 . " WHERE l.id_usuario_prop = ?"
-                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["table.rowsPerPage"] . "," . $_ENV["table.rowsPerPage"]);
+                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         $stmt->execute([$idUsuario]);
 
         return $stmt->fetchAll();

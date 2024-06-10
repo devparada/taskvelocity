@@ -13,7 +13,8 @@
                         <div class="col-12 col-lg-4">
                             <div class="mb-2">
                                 <label for="id_usuario">Usuario</label>
-                                <select name="id_usuario" id="id_usuario" class="form-control select2" data-placeholder="Usuario">
+                                <select name="id_usuario" id="id_usuario" class="form-control select2">
+                                    <option value="">Selecciona un usuario</option>
                                     <?php foreach ($usuarios as $usuario) { ?>
                                         <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($_GET['id_usuario']) && $usuario['id_usuario'] == $_GET['id_usuario']) ? 'selected' : ''; ?>><?php echo $usuario['username'] ?></option>
                                         <?php
@@ -28,7 +29,7 @@
                     </div>
                     <div class="col-12 text-right">                     
                         <a href="/admin/logs/?pagina=<?php echo $paginaActual ?>" value="" name="reiniciar" class="btn btn-danger">Reiniciar</a>
-                        <input type="submit" value="Enviar" class="btn btn-success ml-2"/>
+                        <input type="submit" value="Enviar" class="btn btn-info ml-2"/>
                     </div>
                 </form>
                 <?php
@@ -93,7 +94,7 @@
                                     </a>
                                 </li>
                                 <li class="page-item">
-                                    <a class="page-link" href="/admin/logs?pagina=<?php echo $maxPagina ?>" aria-label="Último">
+                                    <a class="page-link" href="/admin/logs?pagina=<?php echo $maxPagina - 1?>" aria-label="Último">
                                         <span aria-hidden="true">&raquo;</span>
                                         <span class="sr-only">Último</span>
                                     </a>
@@ -113,8 +114,4 @@
             ?>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-
-    </script>
 </div>

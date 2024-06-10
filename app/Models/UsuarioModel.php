@@ -11,13 +11,29 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     private const baseConsulta = "SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color ";
 
-    public function mostrarUsuarios(): array {
-        $stmt = $this->pdo->query(self::baseConsulta);
+    public function mostrarUsuarios(int $numeroPagina = 0): array {
+        $stmt = $this->pdo->query(self::baseConsulta . " ORDER BY id_usuario DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         return $stmt->fetchAll();
     }
-    
-    public function mostrarUsuariosLogs(): array {
+
+    public function mostrarUsuariosFiltrosLogs(): array {
         $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN logs as l ON us.id_usuario = l.id_usuario_prop GROUP by us.id_usuario");
+        return $stmt->fetchAll();
+    }
+
+    public function mostrarUsuariosFiltrosTareas(): array {
+        $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN tareas as ta ON us.id_usuario = ta.id_usuario_tarea_prop GROUP by us.id_usuario");
+        return $stmt->fetchAll();
+    }
+
+    public function mostrarUsuariosFiltrosProyectos(): array {
+        $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN proyectos as pr ON us.id_usuario = pr.id_usuario_proyecto_prop GROUP by us.id_usuario");
+        return $stmt->fetchAll();
+    }
+
+    public function filtrarPorRol(int $idRol, int $numeroPagina): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE us.id_rol = ? LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
+        $stmt->execute([$idRol]);
         return $stmt->fetchAll();
     }
 
@@ -34,12 +50,16 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
                     . "AND (us.id_rol != 1 AND us.id_usuario !=" . $_SESSION["usuario"]["id_usuario"] . ")");
             $stmt->execute(['search' => "$search%"]);
 
-            $usuarios = array();
+            $usuarios = [];
             while ($row = $stmt->fetch($this->pdo::FETCH_ASSOC)) {
-                $usuarios[] = ['id' => $row['id_usuario'], 'text' => $row['username']];
+                $usuarios[] = [
+                    'id' => $row['id_usuario'],
+                    'text' => $row['username']];
             }
 
-            $resultado = ['results' => $usuarios];
+            $resultado = [
+                'results' => $usuarios
+            ];
         }
 
         return $resultado;
@@ -48,6 +68,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
     public function mostrarUsuariosFormulario(): array {
         $stmt = $this->pdo->query(self::baseConsulta . "WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
         return $stmt->fetchAll();
+    }
+
+    public function obtenerPaginas(): float {
+        $numeroPaginas = ceil($this->contador() / $_ENV["tabla.filasPagina"]);
+        return $numeroPaginas;
     }
 
     /**
@@ -169,12 +194,12 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si el usuario se edita correctamente
      */
     public function editUsuario(string $username, ?string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
-
+        
         if (empty($fechaNacimiento)) {
             $fechaNacimiento = null;
         }
-
-// Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
+        
+        // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
         if (is_null($contrasena)) {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
                     . "SET username=?, email=?, id_rol=?, fecha_nacimiento=?, descripcion_usuario=?, id_color_favorito=? "
@@ -227,9 +252,13 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si borra el usuario y el avatar y si no false
      */
     public function deleteUsuario(int $idUsuario): bool {
-        if (!is_null($this->buscarUsuarioPorId($idUsuario))) {
+        if (!is_null($this->buscarUsuarioPorId($idUsuario)) && $idUsuario != 1) {
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-            $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $_SESSION["usuario"]["id_usuario"]);
+            if ($_SESSION["usuario"]["id_rol"] == 1) {
+                $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", 1);
+            } else {
+                $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $idUsuario);
+            }
             $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
             $stmt->execute([$idUsuario]);
             $modeloFiles = new \Com\TaskVelocity\Models\FileModel();

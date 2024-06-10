@@ -61,7 +61,6 @@
                         <div class="mb-3 col-sm-5">
                             <label for="id_proyecto_asociado">Proyecto asociado <span class="campo-obligatorio">*</span></label>
                             <select class="form-control" id="id_proyecto_asociado" required name="id_proyecto_asociado" <?php echo isset($modoVer) ? "disabled" : "" ?>>
-                                <option value="">Selecciona un proyecto</option>
                                 <?php foreach ($proyectos as $proyecto) { ?>
                                     <option value="<?php echo $proyecto["id_proyecto"] ?>" <?php echo isset($datos["id_proyecto"]) && ($proyecto["id_proyecto"] == $datos["id_proyecto"]) ? "selected" : "" ?>><?php echo $proyecto["nombre_proyecto"]; ?></option>
                                 <?php } ?>

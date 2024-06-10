@@ -12,14 +12,14 @@
                     <div class="row">
                         <div class="mb-3 col-sm-4">
                             <label for="username">Nombre de usuario <span class="campo-obligatorio">*</span></label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduce un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) || isset($modoEdit) ? "readonly" : "" ?> >
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Introduce un nombre de usuario" autocomplete="username" value="<?php echo isset($datos["username"]) ? $datos["username"] : "" ?>" <?php echo isset($modoVer) ? "readonly" : "" ?> >
                             <p class="text-danger"><?php echo isset($errores['username']) ? $errores['username'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-5">
                             <label for="imagen_avatar">Avatar</label>
                             <?php if (!isset($modoVer)) { ?>
-                                <input type="file" class="form-control-file" id="imagen_tarea" name="imagen_tarea">
+                                <input type="file" class="form-control-file" id="imagen_avatar" name="imagen_avatar">
                             <?php } else { ?>
                                 <?php
                                 if (file_exists("assets/img/usuarios/avatar-$idUsuario.jpg")) {
@@ -29,7 +29,7 @@
                                     <p>Esta tarea no tiene imagen</p>
                                 <?php } ?>
                             <?php } ?>
-                                    <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
+                            <p class="text-danger"><?php echo isset($errores['imagen_avatar']) ? $errores['imagen_avatar'] : ''; ?></p>
                         </div>
 
                         <div class="mb-3 col-sm-3">

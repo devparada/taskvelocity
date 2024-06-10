@@ -20,10 +20,10 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
             . " ON up.id_usuarioPAsoc = u.id_usuario ";
 
-    public function mostrarProyectos(): array {
+    public function mostrarProyectos(int $numeroPagina = 0): array {
         if ($_SESSION["usuario"]["id_rol"] == \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN) {
             $stmt = $this->pdo->query(self::baseConsulta . " GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY pr.id_proyecto DESC");
+                    . "ORDER BY pr.id_proyecto DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         } else {
             $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
                     . "AND up.id_usuarioPAsoc = ? AND editable = ? GROUP BY up.id_proyectoPAsoc "
@@ -72,6 +72,22 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         }
 
         return $usuarios;
+    }
+
+    public function obtenerPaginas(): float {
+        $numeroPaginas = ceil($this->contador() / $_ENV["tabla.filasPagina"]);
+        return $numeroPaginas;
+    }
+
+    public function filtrarPorPropietario($idUsuario, $numeroPagina): array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE pr.id_usuario_proyecto_prop = ? GROUP BY up.id_proyectoTAsoc"
+                . " LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
+        $stmt->execute([$idUsuario]);
+
+        $tareas = $stmt->fetchAll();
+        $tareasConUsuarios = $this->recogerIdsUsuariosTarea($tareas);
+
+        return $tareasConUsuarios;
     }
 
     /**

@@ -20,12 +20,12 @@ class LogController extends \Com\TaskVelocity\Core\BaseController {
 
         $data = [
             "titulo" => "Todos los logs",
-            "seccion" => "/admin/logs?pagina=1",
+            "seccion" => "/admin/logs",
             "logs" => $modeloLog->consultarPagina((int) $_GET["pagina"]++),
             "paginaActual" => $_GET["pagina"] - 1,
-            "maxPagina" => floor($modeloLog->obtenerPáginas()),
+            "maxPagina" => $modeloLog->obtenerPaginas(),
             "contarLogs" => count($modeloLog->mostrarLogs()),
-            "usuarios" => $modeloUsuario->mostrarUsuariosLogs()
+            "usuarios" => $modeloUsuario->mostrarUsuariosFiltrosLogs()
         ];
 
         if (!empty($_GET["id_usuario"])) {

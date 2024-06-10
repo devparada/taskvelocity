@@ -14,15 +14,31 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
      */
     public function mostrarProyectos(): void {
         $data = $this->mostrarProyectosComun();
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
+
+        if (empty($_GET["pagina"])) {
+            $_GET["pagina"] = 0;
+        }
+
         // Elimina el error al añadir una tarea a un proyecto
         $_SESSION["error_addTareasProyecto"] = "";
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
             $data['titulo'] = 'Todos los proyectos';
             $data['seccion'] = '/admin/proyectos';
+            $data["paginaActual"] = $_GET["pagina"];
+            $data["maxPagina"] = $modeloProyecto->obtenerPaginas();
+            $data["proyectos"] = $modeloProyecto->mostrarProyectos((int) $_GET["pagina"]++);
+            $data["contarProyectos"] = $modeloProyecto->contador();
+            $data["usuarios"] = $modeloUsuario->mostrarUsuariosFiltrosProyectos();
         } else {
             $data["titulo"] = "Tus proyectos";
             $data["seccion"] = "/proyectos";
+        }
+
+        if (!empty($_GET["id_usuario"])) {
+            $data["tareas"] = $modeloProyecto->filtrarPorPropietario($_GET["id_usuario"], $data["paginaActual"]);
         }
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
@@ -353,8 +369,17 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
                 $data["informacion"]["texto"] = "El proyecto " . $proyectoEncontrado["nombre_proyecto"] . " no ha sido eliminado correctamente";
             }
 
-
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                if (!array_key_exists("pagina", $_GET)) {
+                    $_GET["pagina"] = 0;
+                }
+
+                $data["paginaActual"] = $_GET["pagina"];
+                $data["maxPagina"] = $modeloProyecto->obtenerPaginas();
+                $data["proyectos"] = $modeloProyecto->mostrarProyectos((int) $_GET["pagina"]++);
+                $data["contarProyectos"] = $modeloProyecto->contador();
+                $data["usuarios"] = $modeloUsuario->mostrarUsuariosFiltrosProyectos();
+
                 $this->view->showViews(array('admin/templates/header.view.php', 'admin/proyecto.view.php', 'admin/templates/footer.view.php'), $data);
             } else {
                 $this->view->showViews(array('public/proyectos.view.php', 'public/plantillas/footer.view.php'), $data);

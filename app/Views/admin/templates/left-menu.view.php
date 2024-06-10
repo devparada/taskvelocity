@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="/admin/logs?pagina=0" class="nav-link <?php echo isset($seccion) && $seccion === '/admin/logs?pagina=0' ? 'active' : ''; ?>">
+                    <a href="/admin/logs" class="nav-link <?php echo isset($seccion) && $seccion === '/admin/logs' ? 'active' : ''; ?>">
                         <i class="fas fa-cogs nav-icon"></i>
                         <p>Logs</p>
                     </a>

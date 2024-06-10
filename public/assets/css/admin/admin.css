@@ -49,6 +49,11 @@
     color: white;
 }
 
+.imagenes-usuarios {
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
 .dark-mode .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
     color: black;
 }
