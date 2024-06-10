@@ -12,7 +12,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
         $dotenv->load();
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
-        // ! Sólo desde la máquina real (en la virtual va bien)
+        // ! Sólo desde la máquina real (en la virtual la siguiente línea tiene que estar comentada)
         // $_ENV["db.host"] = "localhost:33006";
     }
 
@@ -41,7 +41,9 @@ class ProyectoControllerIntegracionTest extends TestCase {
         // Guarda la salida del controlador y la elimina para futuras pruebas
         $salida = ob_get_clean();
 
+        // Se comprueba que la salida no es null
         $this->assertNotNull($salida);
-        $this->assertStringNotContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $salida);
+        // Se comprueba que al usuario 2 no le salga su proyecto personal
+        $this->assertStringContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $salida);
     }
 }

@@ -12,11 +12,8 @@ class TareaModelUnitariasTest extends TestCase {
         $dotenv->load();
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
-        // ! Sólo desde la máquina real (en la virtual va bien)
-        $_ENV["db.host"] = "localhost:33006";
-
-        // Inicia la variable $_SESSION
-        $_SESSION = [];
+        // ! Sólo desde la máquina real (en la virtual la siguiente línea tiene que estar comentada)
+        // $_ENV["db.host"] = "localhost:33006";
     }
 
     protected function tearDown(): void {
@@ -30,5 +27,8 @@ class TareaModelUnitariasTest extends TestCase {
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
         $this->assertIsArray($modelTarea->mostrarTareas());
+
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(5);
+        $this->assertEmpty($modelTarea->mostrarTareas());
     }
 }

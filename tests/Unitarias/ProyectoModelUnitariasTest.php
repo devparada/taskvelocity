@@ -12,7 +12,7 @@ class ProyectoModelUnitariasTest extends TestCase {
         $dotenv->load();
 
         // Aquí va con el puerto debido a que no se reenvia correctamente el puerto 3306 -> 33006
-        // ! Sólo desde la máquina real (en la virtual va bien)
+        // ! Sólo desde la máquina real (en la virtual la siguiente línea tiene que estar comentada)
         // $_ENV["db.host"] = "localhost:33006";
     }
 
@@ -27,5 +27,8 @@ class ProyectoModelUnitariasTest extends TestCase {
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
         $this->assertIsArray($modelProyecto->mostrarProyectos());
+
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(7);
+        $this->assertEmpty($modelProyecto->mostrarProyectos());
     }
 }
