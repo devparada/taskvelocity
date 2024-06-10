@@ -26,9 +26,9 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             "roles" => $modeloRol->mostrarRoles(),
             "contarUsuarios" => $modeloUsuario->contador()
         ];
-        
+
         if (!empty($_GET["id_rol"])) {
-            $data["usuarios"] = $modeloUsuario->filtrarPorRol((int) $_GET["id_rol"],(int) $data["paginaActual"]);
+            $data["usuarios"] = $modeloUsuario->filtrarPorRol((int) $_GET["id_rol"], (int) $data["paginaActual"]);
         }
 
         $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);
@@ -249,6 +249,10 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
         $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
+        if (!array_key_exists("id_rol", $datos)) {
+            $datos["id_rol"] = (string) $_SESSION["usuario"]["id_rol"];
+        }
+
         $data["idUsuario"] = $idUsuario;
 
         $data["datos"] = $datos;
@@ -345,8 +349,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $data["informacion"]["estado"] = "danger";
             $data["informacion"]["texto"] = "El usuario no ha sido eliminado correctamente";
-        }        
-        
+        }
+
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
             $data["usuarios"] = $modeloUsuario->mostrarUsuarios();
             $this->view->showViews(array('admin/templates/header.view.php', 'admin/usuario.view.php', 'admin/templates/footer.view.php'), $data);

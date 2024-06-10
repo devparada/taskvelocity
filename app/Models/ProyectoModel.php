@@ -9,7 +9,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     /**
      * Consulta base para los métodos que recogen datos
      */
-    private const baseConsulta = "SELECT *, COUNT(id_usuarioPAsoc), COUNT(pr.id_proyecto) FROM proyectos pr LEFT JOIN usuarios us "
+    private const baseConsulta = "SELECT pr.*, us.*, COUNT(id_usuarioPAsoc), COUNT(pr.id_proyecto) FROM proyectos pr LEFT JOIN usuarios us "
             . "ON pr.id_usuario_proyecto_prop = us.id_usuario LEFT JOIN usuarios_proyectos up "
             . "ON pr.id_proyecto = up.id_proyectoPAsoc ";
 
@@ -19,16 +19,17 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     private const contadorConsulta = "SELECT COUNT(*) FROM proyectos pr LEFT JOIN usuarios_proyectos up"
             . " ON pr.id_proyecto = up.id_proyectoPAsoc LEFT JOIN usuarios u"
             . " ON up.id_usuarioPAsoc = u.id_usuario ";
+    private const EDITABLE = 1;
 
     public function mostrarProyectos(int $numeroPagina = 0): array {
         if ($_SESSION["usuario"]["id_rol"] == \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN) {
             $stmt = $this->pdo->query(self::baseConsulta . " GROUP BY up.id_proyectoPAsoc "
                     . "ORDER BY pr.id_proyecto DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         } else {
-            $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE id_usuario_proyecto_prop = ? "
-                    . "AND up.id_usuarioPAsoc = ? AND editable = ? GROUP BY up.id_proyectoPAsoc "
-                    . "ORDER BY pr.nombre_proyecto ASC");
-            $stmt->execute([$_SESSION["usuario"]["id_usuario"], $_SESSION["usuario"]["id_usuario"], 1]);
+            $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE pr.id_usuario_proyecto_prop = ? AND editable = ? "
+                    . "OR (up.id_usuarioPAsoc = ? AND editable = ?) "
+                    . "GROUP BY pr.id_proyecto ORDER BY pr.id_proyecto DESC");
+            $stmt->execute([$_SESSION["usuario"]["id_usuario"], self::EDITABLE, $_SESSION["usuario"]["id_usuario"], self::EDITABLE]);
         }
         $datos = $stmt->fetchAll();
 
@@ -36,7 +37,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             for ($j = 0; $j < $datos[$i]["COUNT(id_usuarioPAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
                         . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                        . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyectoPAsoc"]);
+                        . " WHERE id_proyectoPAsoc =" . $datos[$i]["id_proyecto"]);
 
                 $usuariosProyectos = $stmt->fetchAll();
 
@@ -46,7 +47,6 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $datos[$i]["tareas"] = $modeloTarea->mostrarTareasPorProyecto($datos[$i]["id_proyecto"]);
         }
-
         return $datos;
     }
 
@@ -129,9 +129,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         if (!empty($proyectoEncontrado)) {
             for ($j = 0; $j < $proyectoEncontrado["COUNT(id_usuarioPAsoc)"]; $j++) {
-                $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos JOIN usuarios"
-                        . " ON usuarios_proyectos.id_usuarioPAsoc = usuarios.id_usuario"
-                        . " WHERE id_proyectoPAsoc =" . $proyectoEncontrado["id_proyectoPAsoc"]);
+                $stmt = $this->pdo->query("SELECT * FROM usuarios_proyectos up JOIN usuarios u"
+                        . " ON up.id_usuarioPAsoc = u.id_usuario"
+                        . " WHERE up.id_proyectoPAsoc =" . $proyectoEncontrado["id_proyecto"]);
 
                 $usuariosProyectos = $stmt->fetchAll();
 
@@ -143,10 +143,10 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function esPropietario(int $idProyecto): bool {
-        $stmt = $this->pdo->prepare("SELECT * FROM proyectos p WHERE p.id_proyecto = ? AND p.id_usuario_proyecto_prop = ?");
-        $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"]]);
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $proyectoEncontrado = $modeloProyecto->buscarProyectoPorId($idProyecto);
 
-        return (!is_null($stmt->fetch()));
+        return ($proyectoEncontrado["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? true : false;
     }
 
     public function addProyecto(string $nombreProyecto, ?string $descripcionProyecto, ?string $fechaLimiteProyecto, ?array $idUsuariosAsociados): bool {
@@ -287,7 +287,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
     public function contadorPorUsuarioPropietario(int $idUsuario): int {
         $stmt = $this->pdo->prepare(self::contadorConsulta . "WHERE pr.id_usuario_proyecto_prop = ? AND pr.editable = ?");
-        $stmt->execute([$idUsuario, 1]);
+        $stmt->execute([$idUsuario, self::EDITABLE]);
         return $stmt->fetchColumn();
     }
 
@@ -299,7 +299,7 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
     public function deleteProyecto(int $idProyecto): bool {
         $valorDevuelto = false;
 
-        if (!is_null($this->buscarProyectoPorId($idProyecto)) && $this->buscarProyectoPorId($idProyecto)["editable"] == 1) {
+        if (!is_null($this->buscarProyectoPorId($idProyecto)) && $this->buscarProyectoPorId($idProyecto)["editable"] == self::EDITABLE) {
             $stmt = $this->pdo->prepare("DELETE FROM proyectos WHERE id_proyecto = ?");
             $stmt->execute([$idProyecto]);
             $modeloFiles = new \Com\TaskVelocity\Models\FileModel();

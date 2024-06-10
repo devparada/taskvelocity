@@ -43,14 +43,6 @@
     color: black;
 }
 
-.informacion {
-    margin: 16px;
-    padding: 16px;
-    background: var(--color-secundario-principal);
-    border-radius: 20px;
-    margin-bottom: 16px;
-}
-
 .informacion-warning {
     background-color: #F9E79F;
 }

@@ -37,7 +37,7 @@
         </nav>
         <div id="perfil-cerrar">
             <div id="perfil">
-                <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
+                <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>?v=<?php echo time() ?>" class="enlace-perfil">
                     <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                     <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                 </a>

@@ -32,12 +32,13 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
             $data["proyectos"] = $modeloProyecto->mostrarProyectos((int) $_GET["pagina"]++);
             $data["contarProyectos"] = $modeloProyecto->contador();
             $data["usuarios"] = $modeloUsuario->mostrarUsuariosFiltrosProyectos();
+            $data["proyectos"] = $modeloProyecto->mostrarProyectos();
         } else {
             $data["titulo"] = "Tus proyectos";
             $data["seccion"] = "/proyectos";
         }
 
-        if (!empty($_GET["id_usuario"])) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS && !empty($_GET["id_usuario"])) {
             $data["tareas"] = $modeloProyecto->filtrarPorPropietario($_GET["id_usuario"], $data["paginaActual"]);
         }
 
@@ -351,7 +352,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         $miembrosProyecto = $modeloProyecto->buscarProyectoPorId($idProyecto)["nombresUsuarios"];
         $esPropietario = $modeloProyecto->esPropietario($idProyecto);
-        if ($this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario)) {
+        
+        if (!is_null($miembrosProyecto) && $this->comprobarUsuarioMiembros($miembrosProyecto, $esPropietario) && $esPropietario) {
             $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
             $data = [

@@ -1,4 +1,16 @@
 /* Hoja de estilos que es usada en proyectos y tareas */
+.informacion {
+    margin: 16px;
+    padding: 16px;
+    background: var(--color-secundario-principal);
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.informacion svg path, .informacion p {
+    color: white;
+}
+
 .botones-proyecto-tarea {
     display: flex;
     margin-top: 16px;

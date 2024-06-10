@@ -22,7 +22,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
 
     /**
      * Muestra las tareas según seas administrador o usuario
-     * @param int $numero pagina parametro opcional para la paginación (por defecto es 0)
+     * @param int $numeroPagina parametro opcional para la paginación (por defecto es 0)
      * @return array Devuelve un array con las tareas
      */
     public function mostrarTareas(int $numeroPagina = 0): array {
@@ -154,11 +154,10 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function esPropietario(int $idTarea): bool {
-        $stmt = $this->pdo->prepare("SELECT * FROM tareas t "
-                . "WHERE t.id_tarea = ? AND t.id_usuario_tarea_prop = ?");
-        $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $tareaEncontrada = $modeloTarea->buscarTareaPorId($idTarea);
 
-        return !is_null($stmt->fetch());
+        return ($tareaEncontrada["id_usuario_tarea_prop"] == $_SESSION["usuario"]["id_usuario"]) ? true : false;
     }
 
     /**

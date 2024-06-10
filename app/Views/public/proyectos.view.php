@@ -39,7 +39,7 @@
             <div id="perfil-cerrar">
                 <div id="perfil">
                     <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
-                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>?v=<?php echo time() ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
@@ -57,12 +57,13 @@
                     <p><?php echo $informacion["texto"] ?></p>
                 </div>
             <?php } ?>
-            <div class="proyectos-grid" id="proyectos-grid"></div>
+            <div id="proyectos-contenedor">
+            <div>
 
             <script src="plugins/jquery/jquery.min.js"></script>
             <script>
                 function cargarProyectos() {
-                    const divProyecto = $('#proyectos-grid');
+                    const divProyecto = $('#proyectos-contenedor');
 
                     $.ajax({
                         url: "/async/proyectos",
@@ -97,6 +98,6 @@
                 }
 
                 cargarProyectos();
-                setInterval(cargarProyectos, 20000);
+                setInterval(cargarProyectos, 5000);
             </script>
         </main> <!-- Continua en plantillas/footer -->

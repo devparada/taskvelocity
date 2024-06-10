@@ -31,13 +31,14 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         } else {
             $data['titulo'] = 'Tus tareas';
             $data['seccion'] = '/tareas';
+            $data["tareas"] = $modeloTarea->mostrarTareas();
         }
 
         if (array_key_exists("etiqueta", $_GET)) {
             $_SESSION["etiqueta"] = $_GET["etiqueta"];
         }
 
-        if (!empty($_GET["id_usuario"])) {
+        if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS && !empty($_GET["id_usuario"])) {
             $data["tareas"] = $modeloTarea->filtrarPorPropietario($_GET["id_usuario"], $data["paginaActual"]);
         }
 
@@ -59,8 +60,12 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
 
-        if (isset($_SESSION["etiqueta"])) {
-            $data['tareas'] = $modeloTarea->mostrarTareasPorEtiqueta($_SESSION["etiqueta"]["etiqueta"]);
+        if ($_SERVER["REQUEST_URI"] == "/tareas") {
+            $_SESSION["etiqueta"] = "";
+        }
+
+        if (!empty($_SESSION["etiqueta"])) {
+            $data['tareas'] = $modeloTarea->mostrarTareasPorEtiqueta($_SESSION["etiqueta"]);
         } else if ($_SESSION["usuario"]["id_rol"] == 2) {
             $data['tareas'] = $modeloTarea->mostrarTareas();
         }
@@ -349,10 +354,9 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
         $miembrosTarea = $modeloTarea->buscarTareaPorId($idTarea);
-
         $esPropietario = $modeloTarea->esPropietario($idTarea);
 
-        if (!is_null($miembrosTarea) && $this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
+        if (!is_null($miembrosTarea) && $this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario) && $esPropietario) {
             if ($modeloTarea->deleteTarea($idTarea)) {
                 $data["informacion"]["estado"] = "success";
                 $data["informacion"]["texto"] = "La tarea ha sido eliminada correctamente";

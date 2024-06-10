@@ -117,6 +117,6 @@
             }
 
             ajaxTareas();
-            setInterval(ajaxTareas, 20000);
+            setInterval(ajaxTareas, 5000);
         </script>
     </main> <!-- Continua en plantillas/footer -->

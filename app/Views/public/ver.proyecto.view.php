@@ -45,7 +45,7 @@
             <div id="perfil-cerrar">
                 <div id="perfil">
                     <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>" class="enlace-perfil">
-                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                        <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>?v=<?php echo time() ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                         <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                     </a>
                 </div>
@@ -65,7 +65,6 @@
                     <?php if (!empty($proyecto["fecha_limite_proyecto"])) { ?>
                         <p id="fecha-limite">Fecha límite: <?php echo ($proyecto["fecha_limite_proyecto"]) ?></p>
                     <?php } ?>
-                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <div id="anadirTareaProyecto">
                         <div class="campo-formulario">
                             <div id="titulo-anadir">
@@ -117,15 +116,18 @@
                         <p>No hay tareas asociadas a este proyecto</p>
                     <?php } ?>
                     <p class="enlace-imagen-perfil"><?php foreach ($usuarios as $u) { ?>
-                            <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo $u["username"] ?></a>
+                            <a href="/perfil/<?php echo $u["id_usuario"] ?> " class="enlace-imagen-perfil"><img src="/assets/img/usuarios/avatar-<?php echo $u["id_usuario"] ?>" alt="Avatar usuario <?php echo $u["username"] ?>" class='imagen-perfil-pequena'><?php echo ($_SESSION["usuario"]["username"] == $u["username"]) ? "Tú" : $u["username"] ?></a>
                         <?php }
                         ?></p>
+                    <p>Propietario: <?php echo isset($proyecto["id_usuario_proyecto_prop"]) && ($proyecto["id_usuario_proyecto_prop"] == $_SESSION["usuario"]["id_usuario"]) ? "Tú" : $proyecto["username"] ?></p>
                     <p>Descripción del proyecto: </p>
                     <p><?php echo ($proyecto["descripcion_proyecto"] == "") ? "No tiene descripción" : $proyecto["descripcion_proyecto"] ?></p>
                     <?php if ($proyecto["editable"] == 1) { ?>
                         <div class="botones-proyecto-tarea">
                             <a href="/proyectos" class="botones"><i class="fa-solid fa-arrow-left"></i> Volver</a>
-                            <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                            <?php if ($_SESSION["usuario"]["id_usuario"] == $proyecto["id_usuario_proyecto_prop"]) { ?>
+                                <a href="/proyectos/borrar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-trash"></i> Borrar</a>
+                            <?php } ?>
                             <a href="/proyectos/editar/<?php echo $proyecto["id_proyecto"] ?>" class="botones"><i class="fa-solid fa-pen"></i> Editar</a>
                         </div>
                     <?php } else { ?>
