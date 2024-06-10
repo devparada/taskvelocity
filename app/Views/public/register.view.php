@@ -76,7 +76,7 @@
                         <div class="input-group mb-3">
                             <select class="form-control" name="id_color" id="id_color">
                                 <?php foreach ($colores as $c) { ?>
-                                    <option value="<?php echo $c["id_color"] ?>" <?php echo (isset($datos["id_color"]) && $c["id_color"] == $datos["id_color"]) ? "selected" : "" ?>><?php echo $c["nombre_color"] ?></option>
+                                    <option value="<?php echo $c["id_color"] ?>" <?php echo (isset($datos["id_color"]) && $c["id_color"] == $datos["id_color"]) ? "selected" : "" ?>><?php echo $c["simbolo_color"] . " " . $c["nombre_color"]; ?></option>
                                 <?php } ?>
                             </select>
                             <div class="input-group-append">

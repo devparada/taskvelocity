@@ -29,7 +29,7 @@
                         <div class="col-12 col-lg-4">
                             <div class="mb-2">
                                 <label for="id_usuario">Propietario</label>
-                                <select name="id_usuario" id="id_usuario" class="form-control select2" data-placeholder="Usuario">
+                                <select name="id_usuario" id="id_usuario" class="form-control select2">
                                     <option value="">Selecciona un usuario</option>
                                     <?php foreach ($usuarios as $usuario) { ?>
                                         <option value="<?php echo $usuario['id_usuario']; ?>" <?php echo (isset($_GET['id_usuario']) && $usuario['id_usuario'] == $_GET['id_usuario']) ? 'selected' : ''; ?>><?php echo $usuario['username'] ?></option>

@@ -64,7 +64,7 @@
             <p>Tiene las siguientes caracteristicas:</p>
             <div id="main-caracteristicas">
                 <div class="imagen-caracteristicas">
-                    <img src="assets/img/ejemplo-proyectos.png" alt="Ejemplo Proyectos"></img>
+                    <img src="assets/img/inicio-proyectos.png" alt="Inicio Proyectos"></img>
                 </div>
                 <div id="caracteristica-proyectos" class="caracteristicas-texto">
                     <h3>Gestor de proyectos</h3>
@@ -77,11 +77,11 @@
                         una fecha límite, un proyecto asociado y una imagen y añadir a más personas</p>
                 </div>
                 <div class="imagen-caracteristicas">
-                    <img src="assets/img/ejemplo-tareas.png" alt="Ejemplo Tareas"></img>
+                    <img src="assets/img/inicio-tareas.png" alt="Inicio Tareas"></img>
                 </div>
 
                 <div class="imagen-caracteristicas">
-                    <img src="assets/img/ejemplo-perfil.png" alt="Ejemplo Perfil"></img>
+                    <img src="assets/img/inicio-perfil.png" alt="Inicio Perfil"></img>
                 </div>
                 <div id="caracteristica-perfil" class="caracteristicas-texto">
                     <h3>Tu perfil</h3>
