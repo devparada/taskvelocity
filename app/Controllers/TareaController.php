@@ -235,7 +235,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 "idTarea" => $idTarea
             ];
 
-            if ($_SESSION["usuario"]["id_usuario"] == 1) {
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
                 $data['titulo'] = 'Editar tarea con el id ' . $idTarea;
                 $data['seccion'] = '/admin/tareas/edit/' . $idTarea;
                 $data['tituloDiv'] = 'Editar tarea';
@@ -299,7 +299,7 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 "datos" => $datos,
                 "colores" => $modeloColor->mostrarColores(),
                 "proyectos" => $proyectos,
-                "usuarios" => $modeloUsuario->mostrarUsuarios(),
+                "usuarios" => json_encode($modeloTarea->procesarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
                 "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
                 "enviar" => "Guardar cambios",
                 "modoEdit" => true,

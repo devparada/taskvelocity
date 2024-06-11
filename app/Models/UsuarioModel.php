@@ -11,26 +11,59 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     private const baseConsulta = "SELECT * FROM usuarios us JOIN roles r ON us.id_rol = r.id_rol JOIN colores c ON us.id_color_favorito = c.id_color ";
 
+    /**
+     * El id del usuario admin
+     */
+    private const ID_USUARIO_ADMIN = 1;
+
+    /**
+     * El rol admin
+     */
+    private const ROL_ADMIN_USUARIOS = \Com\TaskVelocity\Controllers\UsuarioController::ROL_ADMIN;
+
+    /**
+     * Muestra los usuarios por paginación del numeroPagina
+     * @param int $numeroPagina el número de la página
+     * @return array Devuelve los usuarios
+     */
     public function mostrarUsuarios(int $numeroPagina = 0): array {
         $stmt = $this->pdo->query(self::baseConsulta . " ORDER BY id_usuario DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         return $stmt->fetchAll();
     }
 
+    /**
+     * Muestra los usuarios que tienen logs
+     * @return array Devuelve los usuarios que tienen logs
+     */
     public function mostrarUsuariosFiltrosLogs(): array {
         $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN logs as l ON us.id_usuario = l.id_usuario_prop GROUP by us.id_usuario");
         return $stmt->fetchAll();
     }
 
+    /**
+     * Muestra las tareas que tienen tareas
+     * @return array Devuelve los usuarios que tienen tareas
+     */
     public function mostrarUsuariosFiltrosTareas(): array {
         $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN tareas as ta ON us.id_usuario = ta.id_usuario_tarea_prop GROUP by us.id_usuario");
         return $stmt->fetchAll();
     }
 
+    /**
+     * Muestra los usuarios que tienen proyectos
+     * @return array Devuelve los usuario que tienen proyectos
+     */
     public function mostrarUsuariosFiltrosProyectos(): array {
         $stmt = $this->pdo->query(self::baseConsulta . " RIGHT JOIN proyectos as pr ON us.id_usuario = pr.id_usuario_proyecto_prop GROUP by us.id_usuario");
         return $stmt->fetchAll();
     }
 
+    /**
+     * Muestra los usuarios según el idRol selecionado
+     * @param int $idRol el id rol selecionado
+     * @param int $numeroPagina el número de la pagina
+     * @return array Devuelve los usuarios del id rol
+     */
     public function filtrarPorRol(int $idRol, int $numeroPagina): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE us.id_rol = ? LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         $stmt->execute([$idRol]);
@@ -44,14 +77,14 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
     public function buscarUsuariosAsync(): array {
         $resultado = "";
 
-        if (!empty($_GET['q'])) {
-            $search = $_GET['q'];
+        if (!empty($_GET['usuarios'])) {
+            $search = $_GET['usuarios'];
             $stmt = $this->pdo->prepare("SELECT id_usuario, username FROM usuarios us WHERE us.username LIKE :search "
                     . "AND (us.id_rol != 1 AND us.id_usuario !=" . $_SESSION["usuario"]["id_usuario"] . ")");
             $stmt->execute(['search' => "$search%"]);
 
             $usuarios = [];
-            while ($row = $stmt->fetch($this->pdo::FETCH_ASSOC)) {
+            while ($row = $stmt->fetch()) {
                 $usuarios[] = [
                     'id' => $row['id_usuario'],
                     'text' => $row['username']];
@@ -65,8 +98,13 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return $resultado;
     }
 
+    /**
+     * Muestra los usuarios seleccionables en los select
+     * @return array Devuelve los usuarios seleccionables
+     */
     public function mostrarUsuariosFormulario(): array {
-        $stmt = $this->pdo->query(self::baseConsulta . "WHERE NOT us.id_rol = 1 XOR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
+        $stmt = $this->pdo->query(self::baseConsulta . "WHERE NOT (us.id_rol = " . self::ROL_ADMIN_USUARIOS . ") "
+                . "OR us.id_usuario = " . $_SESSION["usuario"]["id_usuario"]);
         return $stmt->fetchAll();
     }
 
@@ -95,7 +133,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null Retorna al usuario si existe si no retorna null
      */
     public function buscarUsuarioPorUsername(string $username): ?array {
-        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE username = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE username LIKE ?");
         $stmt->execute([$username]);
 
         $usuarioEncontrado = $stmt->fetch();
@@ -109,7 +147,7 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array|null Retorna al usuario si existe si no retorna null
      */
     public function buscarUsuarioPorEmail(string $email): ?array {
-        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE email = ?");
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE email LIKE ?");
         $stmt->execute([$email]);
 
         $usuarioEncontrado = $stmt->fetch();
@@ -139,6 +177,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
+    /**
+     * Actualiza la fecha del login cuándo el usuario inicia sesión
+     * @param int $idUsuario el id del usuario
+     * @return void
+     */
     private function actualizarFechaLogin(int $idUsuario): void {
         $stmt = $this->pdo->prepare("UPDATE usuarios SET fecha_login = current_timestamp() WHERE id_usuario = ?");
         $stmt->execute([$idUsuario]);
@@ -194,11 +237,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si el usuario se edita correctamente
      */
     public function editUsuario(string $username, ?string $contrasena, string $email, string $idRol, string $fechaNacimiento, string $descripcionUsuario, string $idColor, int $idUsuario): bool {
-        
+
         if (empty($fechaNacimiento)) {
             $fechaNacimiento = null;
         }
-        
+
         // Si el parámetro contrasena es nulo se actualiza el usuario sin cambiar la contraseña
         if (is_null($contrasena)) {
             $stmt = $this->pdo->prepare("UPDATE usuarios "
@@ -252,13 +295,29 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return bool Retorna true si borra el usuario y el avatar y si no false
      */
     public function deleteUsuario(int $idUsuario): bool {
-        if (!is_null($this->buscarUsuarioPorId($idUsuario)) && $idUsuario != 1) {
+        $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
+        $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
+        $modeloFile = new \Com\TaskVelocity\Models\FileModel();
+        if (!is_null($this->buscarUsuarioPorId($idUsuario)) && $idUsuario != self::ID_USUARIO_ADMIN) {
             $modeloLog = new \Com\TaskVelocity\Models\LogModel();
-            if ($_SESSION["usuario"]["id_rol"] == 1) {
-                $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", 1);
+            if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", self::ID_USUARIO_ADMIN);
+                $modeloLog->crearLog("Eliminados los proyectos y las tareas del usuario con el id $idUsuario", self::ID_USUARIO_ADMIN);
             } else {
                 $modeloLog->crearLog("Eliminado el usuario con el id $idUsuario", $idUsuario);
+                $modeloLog->crearLog("Eliminados los proyectos y las tareas del usuario con el id $idUsuario", $idUsuario);
             }
+
+            $proyectosIdEncontrados = $modeloProyecto->mostrarProyectosPorIdUsuario($idUsuario);
+            foreach ($proyectosIdEncontrados as $proyectoId) {
+                $modeloFile->eliminarImagen("proyectos", "proyecto", $proyectoId["id_proyecto"]);
+            }
+
+            $tareasIdEncontrados = $modeloTarea->mostrarTareasPorIdUsuario($idUsuario);
+            foreach ($tareasIdEncontrados as $tareasId) {
+                $modeloFile->eliminarImagen("tareas", "tarea", $tareasId["id_tarea"]);
+            }
+
             $stmt = $this->pdo->prepare("DELETE FROM usuarios WHERE id_usuario = ?");
             $stmt->execute([$idUsuario]);
             $modeloFiles = new \Com\TaskVelocity\Models\FileModel();
@@ -270,6 +329,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
+    /**
+     * Comprueba si los idUusarios son números
+     * @param array $idUsuarios los ids de los usuarios
+     * @return bool Devuelve true si todos son números o si no false
+     */
     public function comprobarUsuariosNumero(array $idUsuarios): bool {
         foreach ($idUsuarios as $idUsuario) {
             if (!filter_var($idUsuario, FILTER_VALIDATE_INT)) {
@@ -279,6 +343,11 @@ class UsuarioModel extends \Com\TaskVelocity\Core\BaseModel {
         return true;
     }
 
+    /**
+     * Comprueba que los idUsuarios existan en la base de datos
+     * @param array $idUsuarios los ids de los usuarios
+     * @return bool Devuelve true si todos los usuarios existen o si no false
+     */
     public function comprobarUsuarios(array $idUsuarios): bool {
         foreach ($idUsuarios as $idUsuario) {
             if (is_null($this->buscarUsuarioPorId((int) $idUsuario))) {

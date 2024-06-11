@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="col-12 col-lg-4">
                             <div class="mb-2">
-                                <label for="id_rol">Roles</label>
+                                <label for="id_rol">Rol</label>
                                 <select name="id_rol" id="id_rol" class="form-control select2">
                                     <option value="">Selecciona un rol</option>
                                     <?php foreach ($roles as $rol) { ?>

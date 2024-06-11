@@ -6,7 +6,14 @@ namespace Com\TaskVelocity\Controllers;
 
 class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
 
+    /**
+     * El id del rol del admin
+     */
     public const ROL_ADMIN = 1;
+
+    /**
+     * El id del rol del usuario
+     */
     public const ROL_USUARIO = 2;
 
     public function mostrarUsuarios() {
@@ -129,11 +136,12 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      * @return void No devuelve nada
      */
     public function procesarRegister(): void {
-        $data = [];
         if (isset($_SESSION["usuario"]) && $_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
-            $data['titulo'] = 'Añadir usuario';
-            $data['seccion'] = '/admin/usuarios/add';
-            $data['tituloDiv'] = 'Añadir usuario';
+            $data = [
+                "titulo" => "Añadir usuario",
+                "seccion" => "/admin/usuarios/add",
+                "tituloDiv" => "Añadir usuario"
+            ];
         }
 
         unset($_POST["enviar"]);
@@ -187,13 +195,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         $data = [];
 
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
-            $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-            $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
-            $data['tituloDiv'] = 'Editar usuario';
-            $data["titulo"] = "Editando tu perfil";
+            $data = [
+                "titulo" => "Editar usuario con el id " . $idUsuario,
+                "seccion" => "/admin/usuarios/edit/" . $idUsuario,
+                "tituloDiv" => "Editar usuario",
+                "titulo" => "Editando tu perfil"
+            ];
         } else {
-            $data["titulo"] = "Editando tu perfil";
-            $data['seccion'] = '/perfil/editar/' . $idUsuario;
+            $data = [
+                "titulo" => "Editando tu perfil",
+                "seccion" => "/perfil/editar/" . $idUsuario
+            ];
         }
 
 
@@ -227,15 +239,17 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
      * @return void
      */
     public function procesarEdit(int $idUsuario): void {
-        $data = [];
         if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN) {
-            $data['titulo'] = 'Editar usuario con el id ' . $idUsuario;
-            $data['seccion'] = '/admin/usuarios/edit/' . $idUsuario;
-            $data['tituloDiv'] = 'Editar usuario';
+            $data = [
+                "titulo" => "Editar usuario con el id " . $idUsuario,
+                "seccion" => "/admin/usuarios/edit/" . $idUsuario,
+                "tituloDiv" => "Editar usuario"
+            ];
         } else {
-            $data['titulo'] = 'Tu perfil';
-            $data['seccion'] = '/perfil/editar/' . $idUsuario;
-            $data["tituloDiv"] = "Editando tus datos";
+            $data = [
+                "titulo" => "Tu perfil",
+                "seccion" => "/perfil/editar/" . $idUsuario,
+            ];
         }
 
         unset($_POST["enviar"]);
@@ -254,7 +268,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         }
 
         $data["idUsuario"] = $idUsuario;
-
         $data["datos"] = $datos;
         $data["modoEdit"] = true;
 
@@ -380,18 +393,18 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
         ];
 
         $data["meses"] = [
-            'January' => 'enero',
-            'February' => 'febrero',
-            'March' => 'marzo',
-            'April' => 'abril',
-            'May' => 'mayo',
-            'June' => 'junio',
-            'July' => 'julio',
-            'August' => 'agosto',
-            'September' => 'septiembre',
-            'October' => 'octubre',
-            'November' => 'noviembre',
-            'December' => 'diciembre'
+            'January' => 'Enero',
+            'February' => 'Febrero',
+            'March' => 'Marzo',
+            'April' => 'Abril',
+            'May' => 'Mayo',
+            'June' => 'Junio',
+            'July' => 'Julio',
+            'August' => 'Agosto',
+            'September' => 'Septiembre',
+            'October' => 'Octubre',
+            'November' => 'Noviembre',
+            'December' => 'Diciembre'
         ];
 
         if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) {
@@ -526,28 +539,23 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     private function verPermisos(int $idRol): array {
-        $permisos = array(
+        $permisos = [
             "inicio" => "",
             "usuarios" => "",
             "tareas" => "",
             "proyectos" => "",
             "logs" => "",
-        );
+        ];
 
         switch ($idRol) {
             case self::ROL_ADMIN:
-                $permisos["inicio"] = "rwd";
-                $permisos["usuarios"] = "rwd";
-                $permisos["tareas"] = "rwd";
-                $permisos["proyectos"] = "rwd";
-                $permisos["logs"] = "rwd";
-                break;
-            case self::ROL_USUARIO:
-                $permisos["inicio"] = "";
-                $permisos["usuarios"] = "";
-                $permisos["tareas"] = "";
-                $permisos["proyectos"] = "";
-                $permisos["logs"] = "";
+                $permisos = [
+                    "inicio" => "rwd",
+                    "usuarios" => "rwd",
+                    "tareas" => "rwd",
+                    "proyectos" => "rwd",
+                    "logs" => "rwd",
+                ];
                 break;
         }
 

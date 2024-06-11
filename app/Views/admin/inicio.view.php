@@ -50,7 +50,7 @@
                 <h3 class="card-title">Logs (los últimos 6 logs)</h3>
                 <div class="card-tools">
                     <a href="/admin/logs">
-                        <button class="btn btn-primary mr-2"><i class="fas fa-cogs nav-icon"></i> Ver todos los logs</button> 
+                        <button class="btn btn-primary mr-2"><i class="fas fa-cogs nav-icon"></i> Ver todos</button> 
                     </a>        
                     <!--
                     <a href="#" class="btn btn-success">

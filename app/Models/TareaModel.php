@@ -50,6 +50,17 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
+     * Recoge las tareas de los que el usuario es propietario
+     * @param int $idUsuario el id del usuario
+     * @return array Devuelve las tareas de los que el usuario es propietario
+     */
+    public function mostrarTareasPorIdUsuario(int $idUsuario): array {
+        $stmt = $this->pdo->prepare("SELECT id_tarea FROM tareas ta WHERE ta.id_usuario_tarea_prop = ?");
+        $stmt->execute([$idUsuario]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Obtiene las tareas que no están en el mismo proyecto
      * @param int $idProyecto el id del proyecto
      * @return array Devuelve el array con las tareas
@@ -64,25 +75,32 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $tareas;
     }
 
-    private function recogerIdsUsuariosTarea(array $tarea) {
-        for ($i = 0; $i < count($tarea); $i++) {
-            for ($j = 0; $j < $tarea[$i]["COUNT(id_usuarioTAsoc)"]; $j++) {
+    /**
+     * Recoge los idUsuario y idTarea de las tareas
+     * @param array $tareas las tareas
+     * @return array Devuelve las tareas con los idUsuario y idTarea
+     */
+    private function recogerIdsUsuariosTarea(array $tareas): array {
+        $tareasDefinitivas = [];
+        foreach ($tareas as $tarea) {
+            for ($j = 0; $j < $tarea["COUNT(id_usuarioTAsoc)"]; $j++) {
                 $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
                         . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
-                        . " WHERE id_tareaTAsoc =" . $tarea[$i]["id_tareaTAsoc"]);
+                        . " WHERE id_tareaTAsoc =" . $tarea["id_tareaTAsoc"]);
 
                 $usuariosTareas = $stmt->fetchAll();
 
-                $tarea[$i]["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
+                $tarea["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosTareas);
             }
+            $tareasDefinitivas[] = $tarea;
         }
-        return $tarea;
+        return $tareasDefinitivas;
     }
 
     /**
      * Añade los nombres de los usuarios en la tarea recibida
      * @param array $tareaIdUsuarioTarea el array de la tarea con los idUsuario y idTarea
-     * @return array
+     * @return array Devuelve un array con los nombres de los usuarios del proyecto
      */
     private function mostrarUsernamesTarea(array $tareaIdUsuarioTarea): array {
         $usuarios = [];
@@ -105,7 +123,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!empty($tareas)) {
             foreach ($tareas as $tarea) {
                 $nombreProyecto = $tarea["nombre_proyecto"];
-                // Añade la tarea al array del nombre_proyecto y esté se añade a su vez en un array llamado tareasGrupo
+                // Añade la tarea al array del nombre_proyecto y esté se añade a su vez en un array llamado tareasAgrupadasPorProyecto
                 $tareasAgrupadasPorProyecto[$nombreProyecto][] = $tarea;
             }
         }
@@ -133,6 +151,12 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
+    /**
+     * Muestra las tareas de las cuál el usuario es propietario (se utiliza en administracion)
+     * @param type $idUsuario el id del usuario
+     * @param type $numeroPagina el número de la pagina
+     * @return array Devuelve las tareas de las que el id del usuario es propietario
+     */
     public function filtrarPorPropietario($idUsuario, $numeroPagina): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE ta.id_usuario_tarea_prop = ? GROUP BY ut.id_tareaTAsoc"
                 . " LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
@@ -153,6 +177,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $numeroPaginas;
     }
 
+    /**
+     * Comprueba si el usuario logeado es propietario de la tarea
+     * @param int $idTarea el id de la tarea
+     * @return bool Devuelve true si es propietario y si no
+     */
     public function esPropietario(int $idTarea): bool {
         $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
         $tareaEncontrada = $modeloTarea->buscarTareaPorId($idTarea);
@@ -217,8 +246,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         if (!is_null($tarea)) {
             $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
                     . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ? AND ut.id_usuarioTAsoc != ?");
-            $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"], $tarea["id_usuario_tarea_prop"]]);
+                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ?");
+            $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
             return $stmt->fetchAll();
         } else {
             return null;
@@ -232,8 +261,8 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function mostrarTareasPorProyecto(int $idProyecto): array {
         $stmt = $this->pdo->prepare("SELECT * FROM tareas ta JOIN proyectos p "
-                . "ON ta.id_proyecto=p.id_proyecto "
-                . "LEFT JOIN etiquetas et ON ta.id_etiqueta=et.id_etiqueta "
+                . "ON ta.id_proyecto = p.id_proyecto "
+                . "LEFT JOIN etiquetas et ON ta.id_etiqueta LIKE et.id_etiqueta "
                 . "WHERE ta.id_proyecto = ? ORDER BY ta.id_etiqueta ASC");
         $stmt->execute([$idProyecto]);
         return $stmt->fetchAll();
@@ -336,6 +365,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return false;
     }
 
+    /**
+     * Elimina los usuarios de las tareas para volverlos a añadir
+     * @param array $idUsuarios los ids de los usuarios
+     * @param int $idTarea el id de la tarea
+     */
     private function editarUsuariosTareas(array $idUsuarios, int $idTarea) {
         foreach ($idUsuarios as $idUsuario) {
             $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc=? AND id_usuarioTAsoc=?");
@@ -344,11 +378,20 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         }
     }
 
+    /**
+     * Devuelve cuántas tareas hay en la base de datos (se utiliza en administración)
+     * @return int Devuelve cuántas tareas hay
+     */
     public function contador(): int {
         $stmt = $this->pdo->query("SELECT COUNT(*) FROM tareas");
         return $stmt->fetchColumn();
     }
 
+    /**
+     * Muestra cuántas tareas tiene asignado el usuario
+     * @param int $idUsuario el id del usuario
+     * @return int Devuelve el número de tareas
+     */
     public function contadorPorUsuario(int $idUsuario): int {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta LEFT JOIN usuarios_tareas ut "
                 . "ON ta.id_tarea=ut.id_tareaTAsoc WHERE ut.id_usuarioTAsoc = ?");
@@ -356,12 +399,23 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchColumn();
     }
 
+    /**
+     * Muestra cuántas tareas es propietario el usuario
+     * @param int $idUsuario el id del usuario
+     * @return int Devuelve el número de tareas
+     */
     public function contadorPorUsuarioPropietario(int $idUsuario): int {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM tareas ta WHERE ta.id_usuario_tarea_prop = ?");
         $stmt->execute([$idUsuario]);
         return $stmt->fetchColumn();
     }
 
+    /**
+     * Muestra las tareas que hay por etiqueta del usuario
+     * @param int $idEtiqueta el id de la etiqueta
+     * @param int $idUsuario el id del usuario
+     * @return array Devuelve las tareas
+     */
     public function contadorTareasPorEtiqueta(int $idEtiqueta, int $idUsuario): array {
         $stmt = $this->pdo->prepare(self::baseConsulta . "LEFT JOIN etiquetas as et "
                 . "ON ta.id_etiqueta=et.id_etiqueta WHERE ta.id_etiqueta=? AND (us.id_usuario = ? OR ut.id_usuarioTAsoc = ?) "
@@ -372,6 +426,11 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
         return $stmt->fetchAll();
     }
 
+    /**
+     * Borra la tarea y la imagen asociada (si la hay) del almacenamiento y de la base de datos
+     * @param int $idTarea el id de la tarea
+     * @return bool Devuelve true si elimino la tarea o false si no
+     */
     public function deleteTarea(int $idTarea): bool {
         $valorDevuelto = false;
 

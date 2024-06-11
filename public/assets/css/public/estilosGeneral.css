@@ -184,6 +184,8 @@ input, select, option, textarea {
 }
 
 .campo-obligatorio, .texto-error {
+    margin-top: 6px;
+    margin-bottom: 6px;
     color: #FF8080;
 }
 

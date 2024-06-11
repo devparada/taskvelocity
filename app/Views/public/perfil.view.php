@@ -48,7 +48,7 @@
             </div>
             <div id="contenido-principal">
                 <div id="imagen-editar">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $usuario["username"] ?>" id="imagen-perfil">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>?v=<?php echo time() ?>" alt="Avatar usuario <?php echo $usuario["username"] ?>" id="imagen-perfil">
                     <div id="informacion-adicional">
                         <?php if ($_SESSION["usuario"]["id_usuario"] == $idUsuario) { ?>
                             <?php if ($usuario["fecha_nacimiento"]) { ?>

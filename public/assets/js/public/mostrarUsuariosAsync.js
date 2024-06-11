@@ -6,7 +6,7 @@ $(function () {
             delay: 250,
             data: function (params) {
                 return {
-                    q: params.term
+                    usuarios: params.term
                 };
             },
             processResults: function (usuarios) {

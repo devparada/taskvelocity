@@ -7,13 +7,17 @@ namespace Com\TaskVelocity\Models;
 class LogModel extends \Com\TaskVelocity\Core\BaseModel {
 
     /**
+     * Consulta base para los métodos que recogen datos
+     */
+    private const baseConsulta = "SELECT * FROM logs l "
+            . "JOIN usuarios u ON l.id_usuario_prop = u.id_usuario ";
+
+    /**
      * Muestra los registros de la base de datos
      * @return array Retorna el array de los registros
      */
     public function mostrarLogs(): array {
-        $stmt = $this->pdo->query("SELECT * FROM logs l"
-                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " ORDER BY fecha_log DESC");
+        $stmt = $this->pdo->query(self::baseConsulta . " ORDER BY fecha_log DESC");
         return $stmt->fetchAll();
     }
 
@@ -22,9 +26,7 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna el array de los registros
      */
     public function mostrarLogsInicio(): array {
-        $stmt = $this->pdo->query("SELECT * FROM logs l"
-                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " ORDER BY fecha_log DESC LIMIT 6");
+        $stmt = $this->pdo->query(self::baseConsulta . " ORDER BY fecha_log DESC LIMIT 6");
         return $stmt->fetchAll();
     }
 
@@ -38,7 +40,7 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("INSERT INTO logs"
                 . " (asunto, id_usuario_prop)"
                 . " VALUES(?, ?)");
-        
+
         $stmt->execute([$asunto, $idUsuario]);
     }
 
@@ -50,18 +52,18 @@ class LogModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     public function consultarPagina(int $numeroPagina): array {
-        $stmt = $this->pdo->query("SELECT * FROM logs l"
-                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
+        $stmt = $this->pdo->query(self::baseConsulta
+                . "ORDER BY l.fecha_log DESC "
+                . "LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
 
         return $stmt->fetchAll();
     }
 
     public function filtrarPorUsuario($idUsuario, $numeroPagina) {
-        $stmt = $this->pdo->prepare("SELECT * FROM logs l"
-                . " JOIN usuarios u ON l.id_usuario_prop = u.id_usuario"
-                . " WHERE l.id_usuario_prop = ?"
-                . " ORDER BY l.fecha_log DESC LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
+        $stmt = $this->pdo->prepare(self::baseConsulta
+                . "WHERE l.id_usuario_prop = ? "
+                . "ORDER BY l.fecha_log DESC "
+                . "LIMIT " . $numeroPagina * $_ENV["tabla.filasPagina"] . "," . $_ENV["tabla.filasPagina"]);
         $stmt->execute([$idUsuario]);
 
         return $stmt->fetchAll();
