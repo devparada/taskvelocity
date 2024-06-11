@@ -38,7 +38,7 @@
         <div id="perfil-cerrar">
             <div id="perfil">
                 <a href="/perfil/<?php echo $_SESSION["usuario"]["id_usuario"] ?>?v=<?php echo time() ?>" class="enlace-perfil">
-                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
+                    <img src="/assets/img/usuarios/avatar-<?php echo $_SESSION["usuario"]["id_usuario"] ?>?v=<?php echo time() ?>" alt="Avatar usuario <?php echo $_SESSION["usuario"]["username"] ?>">
                     <p><?php echo $_SESSION["usuario"]["username"] ?></p>
                 </a>
             </div>
@@ -51,7 +51,7 @@
         </div>
         <div id="contenido-principal">
             <div id="imagen-editar">
-                <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>" alt="Avatar usuario <?php echo $datos["username"] ?>" id="imagen-perfil">
+                <img src="/assets/img/usuarios/avatar-<?php echo $idUsuario ?>?v=<?php echo time() ?>" alt="Avatar usuario <?php echo $datos["username"] ?>" id="imagen-perfil">
                 <div id="editar-avatar">
                     <form action="<?php echo $seccion; ?>" method="post" enctype="multipart/form-data">
                         <div class="campo-formulario">

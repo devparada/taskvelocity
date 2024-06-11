@@ -139,7 +139,7 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
      */
     public function addTareasProyecto(array $idTareas, int $idProyecto): void {
         foreach ($idTareas as $idTarea) {
-            $tarea = $this->buscarTareaPorId((int) $idTarea);
+            $tarea = $this->buscarTareaPorNombre($idTarea);
 
             if (!is_null($tarea)) {
                 $stmt = $this->pdo->prepare("UPDATE tareas SET id_proyecto = ? WHERE id_tarea = ?");
@@ -147,6 +147,23 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
             } else {
                 // Si la tarea no existe se crea
                 $this->addTarea((string) $idTarea, null, (string) $_SESSION["usuario"]["id_color_favorito"], (string) $idProyecto, null, "", (string) 1);
+            }
+
+            // Vuelve a buscar la tarea para tener su id
+            $tarea = $this->buscarTareaPorNombre($idTarea);
+
+            $stmt = $this->pdo->prepare("SELECT id_usuarioPAsoc FROM usuarios_proyectos up "
+                    . "JOIN proyectos pr ON up.id_proyectoPAsoc = pr.id_proyecto WHERE id_proyecto = ?");
+            $stmt->execute([$idProyecto]);
+
+            $idUsuarios = $stmt->fetchAll();
+
+            // Borra los usuario para volverlos a añadir
+            $stmt = $this->pdo->prepare("DELETE FROM usuarios_tareas WHERE id_tareaTAsoc = ?");
+            $stmt->execute([$tarea["id_tarea"]]);
+
+            foreach ($idUsuarios as $idUsuario) {
+                $this->addUsuarioTarea((int) $idUsuario["id_usuarioPAsoc"], (int) $tarea["id_tarea"]);
             }
         }
     }
@@ -236,22 +253,29 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
-     * Muestra los usuarios asociados a una tarea por el id de la tarea
+     * Busca la información de una tarea específica por el id pasado como parámetro
      * @param int $idTarea el id de la tarea
-     * @return array|null Retorna un array con los usuarios de la tarea asociada o null
+     * @return array|null Devuelve la información de la tarea si la encuentra o null
      */
-    public function procesarUsuariosPorTarea(int $idTarea): ?array {
-        $tarea = $this->buscarTareaPorId($idTarea);
+    public function buscarTareaPorNombre(string $idTarea): ?array {
+        $stmt = $this->pdo->prepare(self::baseConsulta . "WHERE nombre_tarea = ?");
+        $stmt->execute([$idTarea]);
 
-        if (!is_null($tarea)) {
-            $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut "
-                    . "ON u.id_usuario = ut.id_usuarioTAsoc "
-                    . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ?");
-            $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
-            return $stmt->fetchAll();
+        $tareaEncontrada = $stmt->fetch();
+
+        if ($tareaEncontrada["id_tarea"] != null && $tareaEncontrada["id_tareaTAsoc"] != null) {
+            $stmt = $this->pdo->query("SELECT * FROM usuarios_tareas JOIN usuarios"
+                    . " ON usuarios_tareas.id_usuarioTAsoc = usuarios.id_usuario"
+                    . " WHERE id_tareaTAsoc =" . $tareaEncontrada["id_tareaTAsoc"]);
+
+            $usuariosProyectos = $stmt->fetchAll();
+
+            $tareaEncontrada["nombresUsuarios"] = $this->mostrarUsernamesTarea($usuariosProyectos);
         } else {
-            return null;
+            $tareaEncontrada = null;
         }
+
+        return $tareaEncontrada;
     }
 
     /**
