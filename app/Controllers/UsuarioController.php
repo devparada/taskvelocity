@@ -548,6 +548,7 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                     "proyectos" => "rwd",
                     "logs" => "rwd",
                 ];
+                break;
             // Por defecto los permisos son restringidos en la vista administración
             default:
                 $permisos = [
