@@ -81,7 +81,6 @@ nav ul li a:hover, #perfil-cerrar > .botones-header:hover {
 #logo {
     display: flex;
     align-items: center;
-    width: 213px;
 }
 
 #logo h1 {
@@ -159,8 +158,8 @@ input, select, option, textarea {
     border-radius: 20px;
     padding-top: 12px;
     padding-bottom: 10px;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
     background-color: var(--color-secundario-principal);
     border: var(--color-secundario-complementario);
     text-align: center;
@@ -180,7 +179,7 @@ input, select, option, textarea {
 }
 
 .imagenes-pequenas {
-    width: 36px;
+    width: 36px;    
 }
 
 .campo-obligatorio, .texto-error {
@@ -206,7 +205,7 @@ input, select, option, textarea {
     font-weight: bold;
 }
 
-.enlace-imagen-perfil > img {
+.enlace-imagen-perfil > img, .imagenes-pequenas {
     aspect-ratio: 1/1;
     object-fit: cover;
 }
@@ -342,7 +341,7 @@ button, input, optgroup, select, textarea {
         width: 148px;
     }
 
-    #logo h2 {
+    .logo-enlace h1 {
         display: none;
     }
 
@@ -378,7 +377,7 @@ button, input, optgroup, select, textarea {
         padding: 8px;
     }
 
-    #logo h2 {
+    .logo-enlace h1 {
         display: none;
     }
 
@@ -410,18 +409,13 @@ button, input, optgroup, select, textarea {
         margin-bottom: 10px;
     }
 
-    .proyectos-grid {
-        display: flex;
-        flex-direction: column;
-    }
-
     /* FOOTER 600px */
 
     footer > div > p {
         display: none;
     }
 
-    .logo-enlace h2 {
+    .logo-enlace h1 {
         display: none;
     }
 

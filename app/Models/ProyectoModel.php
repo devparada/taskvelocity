@@ -104,8 +104,6 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
      * @return array Retorna un array con los usuarios del proyecto asociado
      */
     public function procesarUsuariosPorProyecto(int $idProyecto): array {
-        $proyecto = $this->buscarProyectoPorId($idProyecto);
-
         $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_proyectos up ON u.id_usuario =up.id_usuarioPAsoc "
                 . "WHERE up.id_proyectoPAsoc  = ? AND up.id_usuarioPAsoc != ?");
         $stmt->execute([$idProyecto, $_SESSION["usuario"]["id_usuario"]]);

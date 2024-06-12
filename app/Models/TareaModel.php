@@ -76,6 +76,18 @@ class TareaModel extends \Com\TaskVelocity\Core\BaseModel {
     }
 
     /**
+     * Procesa los usuarios asociados a una tarea por el id de la tarea
+     * @param int $idTarea el id de la tarea
+     * @return array Retorna un array con los usuarios de la tarea asociada
+     */
+    public function procesarUsuariosPorTarea(int $idTarea): array {
+        $stmt = $this->pdo->prepare("SELECT id_usuario,username FROM usuarios u JOIN usuarios_tareas ut ON u.id_usuario = ut.id_usuarioTAsoc "
+                . "WHERE ut.id_tareaTAsoc  = ? AND ut.id_usuarioTAsoc != ?");
+        $stmt->execute([$idTarea, $_SESSION["usuario"]["id_usuario"]]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Recoge los idUsuario y idTarea de las tareas
      * @param array $tareas las tareas
      * @return array Devuelve las tareas con los idUsuario y idTarea

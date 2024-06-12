@@ -82,6 +82,10 @@
         align-items: center;
     }
 
+    #proyectos-contenedor {
+        width: 100%;
+    }
+    
     .proyectos-grid {
         width: 100%;
         margin: 0px;

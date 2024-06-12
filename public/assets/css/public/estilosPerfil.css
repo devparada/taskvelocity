@@ -190,6 +190,41 @@ main {
     #informacion-usuario-editar {
         width: 60%;
     }
+
+    .botones {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    #informacion-usuario, #informacion-usuario-editar {
+        width: 60%;
+    }
+
+    #informacion-pie {
+        flex-direction: column;
+    }
+
+    #informacion-pie .botones {
+        margin-top: 16px;
+        width: 70%;
+        align-items: center;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    #contenido-principal {
+        column-gap: unset;
+    }
+
+    #informacion-usuario, #informacion-usuario-editar {
+        width: 50%;
+    }
+
+    #imagen-editar {
+        width: 55%;
+    }
 }
 
 @media only screen and (max-width: 900px) {
@@ -226,8 +261,16 @@ main {
         padding-right: 1em;
     }
 
+    #informacion-pie-contenedor {
+        width: 80%;
+    }
+
     #informacion-pie {
-        width: 100%;
-        justify-content: center;
+        align-items: center;
+    }
+
+    .botones {
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }
