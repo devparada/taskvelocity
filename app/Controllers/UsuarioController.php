@@ -539,14 +539,6 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
     }
 
     private function verPermisos(int $idRol): array {
-        $permisos = [
-            "inicio" => "",
-            "usuarios" => "",
-            "tareas" => "",
-            "proyectos" => "",
-            "logs" => "",
-        ];
-
         switch ($idRol) {
             case self::ROL_ADMIN:
                 $permisos = [
@@ -555,6 +547,15 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
                     "tareas" => "rwd",
                     "proyectos" => "rwd",
                     "logs" => "rwd",
+                ];
+            // Por defecto los permisos son restringidos en la vista administración
+            default:
+                $permisos = [
+                    "inicio" => "",
+                    "usuarios" => "",
+                    "tareas" => "",
+                    "proyectos" => "",
+                    "logs" => "",
                 ];
                 break;
         }
