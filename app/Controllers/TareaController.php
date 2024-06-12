@@ -282,7 +282,6 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
         if ($this->comprobarUsuarioMiembros($miembrosTarea, $esPropietario)) {
             $modeloColor = new \Com\TaskVelocity\Models\ColorModel();
             $modeloProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
-            $modeloUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
             $modeloEtiqueta = new \Com\TaskVelocity\Models\EtiquetaModel();
 
             $datos = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
@@ -342,6 +341,26 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                     }
                 }
             } else {
+                unset($datos["id_etiqueta"]);
+
+                $data = [
+                    "datos" => $datos,
+                    "colores" => $modeloColor->mostrarColores(),
+                    "proyectos" => $proyectos,
+                    "usuarios" => json_encode($modeloTarea->procesarUsuariosPorTarea($idTarea), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                    "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+                    "enviar" => "Guardar cambios",
+                    "modoEdit" => true,
+                    "idTarea" => $idTarea,
+                    "titulo" => "Editar tarea"
+                ];
+
+                if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
+                    $data['seccion'] = '/admin/tareas/edit';
+                } else {
+                    $data['seccion'] = '/tareas/editar/' . $idTarea;
+                }
+
                 $data["errores"] = $errores;
                 $this->view->showViews(array('public/crear.tarea.view.php', 'public/plantillas/footer.view.php'), $data);
             }
