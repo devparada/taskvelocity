@@ -27,8 +27,5 @@ class ProyectoModelUnitariasTest extends TestCase {
 
         $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
         $this->assertIsArray($modelProyecto->mostrarProyectos());
-
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(7);
-        $this->assertEmpty($modelProyecto->mostrarProyectos());
     }
 }

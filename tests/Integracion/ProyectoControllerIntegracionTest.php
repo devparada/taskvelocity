@@ -29,7 +29,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
         $modelProyecto = new \Com\TaskVelocity\Models\ProyectoModel();
 
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
 
         // ! Estás variables se usan para que la vista proyectos-ajax tengo todas las variables necesarias
         $proyectos = $modelProyecto->mostrarProyectos();

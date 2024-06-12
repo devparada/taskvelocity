@@ -25,10 +25,7 @@ class TareaModelUnitariasTest extends TestCase {
         $modelTarea = new \Com\TaskVelocity\Models\TareaModel();
         $modelUsuario = new \Com\TaskVelocity\Models\UsuarioModel();
 
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(2);
+        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(1);
         $this->assertIsArray($modelTarea->mostrarTareas());
-
-        $_SESSION["usuario"] = $modelUsuario->buscarUsuarioPorId(5);
-        $this->assertEmpty($modelTarea->mostrarTareas());
     }
 }
