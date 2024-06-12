@@ -403,6 +403,8 @@ class ProyectoController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["nombre_proyecto"])) {
             $errores["nombre_proyecto"] = "El nombre del proyecto no debe estar vacío";
+        } else if (strlen($data["nombre_proyecto"]) > 32) {
+            $errores["nombre_proyecto"] = "El nombre del proyecto es demasiado largo";
         }
 
         if (!empty($_FILES["imagen_proyecto"]["name"])) {

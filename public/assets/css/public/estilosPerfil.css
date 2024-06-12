@@ -116,6 +116,10 @@ main {
     width: 100%;
 }
 
+#descripcion-usuario {
+    word-wrap: break-word;
+}
+
 .campo-formulario {
     width: 96% !important;
 }

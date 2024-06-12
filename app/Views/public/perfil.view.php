@@ -80,7 +80,7 @@
                     <?php } ?>
                     <?php if ($usuario["descripcion_usuario"] != "") { ?>
                         <p><?php echo ($_SESSION["usuario"]["id_usuario"] == $usuario["id_usuario"]) ? "Tú" : "Su" ?> descripción es:</p> 
-                        <p><?php echo $usuario["descripcion_usuario"]; ?></p>
+                        <p id="descripcion-usuario"><?php echo $usuario["descripcion_usuario"] ?></p>
                     <?php } else { ?>
                         <p>No tienes una descripción</p>
                     <?php } ?>

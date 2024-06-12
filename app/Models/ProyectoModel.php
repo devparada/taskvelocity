@@ -234,10 +234,9 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
 
         if ($stmt->execute([$nombreProyecto, $descripcionProyecto, $fechaLimiteProyecto, $idProyecto])) {
             $proyecto = $this->buscarProyectoPorId($idProyecto);
-            $idUsuarioProyectoProp = (int) $proyecto["id_usuario_proyecto_prop"];
 
             if (!empty($idUsuariosAsociados)) {
-                array_push($idUsuariosAsociados, $idUsuarioProyectoProp);
+                array_push($idUsuariosAsociados, $_SESSION["usuario"]["id_usuario"]);
                 $this->editarUsuariosProyectos($idUsuariosAsociados, $idProyecto);
                 // Si en edición de la tarea se queda solo el usuario propietario, se almacena
             } else {
@@ -261,10 +260,10 @@ class ProyectoModel extends \Com\TaskVelocity\Core\BaseModel {
         $stmt = $this->pdo->prepare("DELETE FROM usuarios_proyectos "
                 . "WHERE id_proyectoPAsoc=?");
         $stmt->execute([$idProyecto]);
-
+        
         foreach ($idUsuarios as $idUsuario) {
-            $this->addProyectoUsuario((int) $idUsuario, $idProyecto);
-
+            $this->addProyectoUsuario((int) $idUsuario, $idProyecto);            
+            
             $modeloTarea = new \Com\TaskVelocity\Models\TareaModel();
             $tareas = $modeloTarea->mostrarTareasPorProyecto($idProyecto);
 

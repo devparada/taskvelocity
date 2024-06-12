@@ -467,8 +467,8 @@ class UsuarioController extends \Com\TaskVelocity\Core\BaseController {
             $errores["id_color"] = "Debes seleccionar un color válido";
         }
 
-        if (!empty($data["descripcion_tarea"]) && strlen($data["descripcion_tarea"]) > 255) {
-            $errores["descripcion_tarea"] = "La descripción es muy larga";
+        if (!empty($data["descripcion_usuario"]) && strlen($data["descripcion_usuario"]) > 255) {
+            $errores["descripcion_usuario"] = "La descripción es muy larga";
         }
 
         return $errores;

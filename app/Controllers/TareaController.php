@@ -178,6 +178,18 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
                 }
             }
         } else {
+            unset($datos["id_color_tarea"]);
+            $data = [
+                "titulo" => "Añadir tareas",
+                "colores" => $modeloColor->mostrarColores(),
+                "proyectos" => $proyectos,
+                "usuarios" => $modeloUsuario->mostrarUsuariosFormulario(),
+                "etiquetas" => $modeloEtiqueta->mostrarEtiquetas(),
+                "datos" => $datos,
+                "enviar" => "Crear tarea",
+                "seccion" => '/tareas/crear'
+            ];
+
             $data["errores"] = $errores;
 
             if ($_SESSION["usuario"]["id_rol"] == self::ROL_ADMIN_USUARIOS) {
@@ -453,6 +465,8 @@ class TareaController extends \Com\TaskVelocity\Core\BaseController {
 
         if (empty($data["nombre_tarea"])) {
             $errores["nombre_tarea"] = "El nombre de la tarea no debe estar vacío";
+        } else if (strlen($data["nombre_tarea"]) > 32) {
+            $errores["nombre_tarea"] = "El nombre de la tarea es demasiado largo";
         }
 
         if (empty($data["id_etiqueta"])) {

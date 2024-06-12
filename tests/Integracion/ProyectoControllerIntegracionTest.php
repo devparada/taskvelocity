@@ -43,7 +43,7 @@ class ProyectoControllerIntegracionTest extends TestCase {
 
         // Se comprueba que la salida no es null
         $this->assertNotNull($salida);
-        // Se comprueba que al usuario 2 no le salga su proyecto personal
+        // Se comprueba que al usuario 1 no le salga su proyecto personal
         $this->assertStringContainsString((string) $_SESSION["usuario"]["id_proyecto_personal"], (string) $salida);
     }
 }
