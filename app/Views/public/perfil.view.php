@@ -151,9 +151,7 @@
                 <script>
                                     const estadisticasClickable = $(".estadistica-usuario-clickable");
 
-                                    for (var i = 0; i < estadisticasClickable.length; i++) {
-                                        estadisticasClickable[i].css(["cursor:pointer"]);
-                                    }
+                                    estadisticasClickable.css({"cursor": "pointer"});
 
                                     $("#etiqueta-pendiente").on("click", function () {
                                         window.location.href = "/tareas?etiqueta=1";
